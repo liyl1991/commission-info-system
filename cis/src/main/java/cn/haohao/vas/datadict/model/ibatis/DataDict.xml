@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DataDict">
+
+	<typeAlias alias="DataDict" type="com.newland.vas.core.vo.DataDict" />
+	
+	<resultMap id="DataDictResult" class="DataDict">
+		<result property="dictType" column="DICT_TYPE" />
+		<result property="dictName" column="DICT_NAME" />
+		<result property="classId" column="CLASS_ID" />
+		<result property="className" column="CLASS_NAME" />
+		<result property="entryId" column="ENTRY_ID" />
+		<result property="entryName" column="ENTRY_NAME" />
+		<result property="entryDesc" column="ENTRY_DESC" />
+		<result property="seq" column="SEQ" />
+		<result property="parentId" column="PARENT_ID" />
+		<result property="objStatus" column="OBJ_STATUS" />
+	</resultMap>
+	
+	<select id="DataDict.getById" resultMap="DataDictResult">
+		<![CDATA[
+			select t.*
+			from DATA_DICT t
+			where DICT_TYPE = #dictType#
+		]]>
+	</select>
+	
+	<sql id="DataDict.whereClause">
+	<dynamic>
+		<isNotEmpty prepend="and" property="dictType" >
+			t.DICT_TYPE = #dictType#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="dictName" >
+			t.DICT_NAME = #dictName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="classId" >
+			t.CLASS_ID = #classId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="className" >
+			t.CLASS_NAME = #className#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="entryId" >
+			t.ENTRY_ID = #entryId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="entryName" >
+			t.ENTRY_NAME = #entryName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="entryDesc" >
+			t.ENTRY_DESC = #entryDesc#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="seq" >
+			t.SEQ = #seq#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="parentId" >
+			t.PARENT_ID = #parentId#
+		</isNotEmpty>
+		<!-- <isNotEmpty prepend="and" property="objStatus" > -->
+		and t.OBJ_STATUS = 1
+		<!-- </isNotEmpty> -->
+	</dynamic>
+	</sql>
+	
+	<select id="DataDict.getSequence" resultClass="java.lang.Long">
+		<![CDATA[
+			select SEQ_DATA_DICT.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="DataDict.create">
+		<![CDATA[
+			insert into DATA_DICT (  DICT_TYPE ,  DICT_NAME ,  CLASS_ID ,  CLASS_NAME ,  ENTRY_ID ,  ENTRY_NAME ,  ENTRY_DESC ,  SEQ ,  PARENT_ID ,  OBJ_STATUS   ) 
+			values (  #dictType# ,  #dictName# ,  #classId# ,  #className# ,  #entryId# ,  #entryName# ,  #entryDesc# ,  #seq# ,  #parentId# ,  #objStatus#   )
+		]]>
+	</insert>
+	
+	<update id="DataDict.update">
+		<![CDATA[
+			update DATA_DICT set 
+			 DICT_TYPE=#dictType# , DICT_NAME=#dictName# , CLASS_ID=#classId# , CLASS_NAME=#className# , ENTRY_ID=#entryId# , ENTRY_NAME=#entryName# , ENTRY_DESC=#entryDesc# , SEQ=#seq# , PARENT_ID=#parentId# , OBJ_STATUS=#objStatus# 
+			where DICT_TYPE = #dictType#
+		]]>
+	</update>
+	
+	<update id="DataDict.updateDynamic">
+		update DATA_DICT t 
+		<dynamic prepend="set">
+			<isNotEmpty prepend="," property="newUpdAttObj.dictType" >
+				t.DICT_TYPE = #newUpdAttObj.dictType#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="newUpdAttObj.dictName" >
+				t.DICT_NAME = #newUpdAttObj.dictName#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="newUpdAttObj.classId" >
+				t.CLASS_ID = #newUpdAttObj.classId#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="newUpdAttObj.className" >
+				t.CLASS_NAME = #newUpdAttObj.className#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="newUpdAttObj.entryId" >
+				t.ENTRY_ID = #newUpdAttObj.entryId#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="newUpdAttObj.entryName" >
+				t.ENTRY_NAME = #newUpdAttObj.entryName#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="newUpdAttObj.entryDesc" >
+				t.ENTRY_DESC = #newUpdAttObj.entryDesc#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="newUpdAttObj.seq" >
+				t.SEQ = #newUpdAttObj.seq#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="newUpdAttObj.parentId" >
+				t.PARENT_ID = #newUpdAttObj.parentId#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="newUpdAttObj.objStatus" >
+				t.OBJ_STATUS = #newUpdAttObj.objStatus#
+			</isNotEmpty>
+		</dynamic>
+		where 1=1
+		<include refid="DataDict.whereClause" />
+	</update>
+	
+	<delete id="DataDict.delete">
+		<![CDATA[
+		delete from DATA_DICT t
+		]]>
+		where 1=1
+		<include refid="DataDict.whereClause" />
+	</delete>
+	
+	<select id="DataDict.queryByArgs" resultMap="DataDictResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from DATA_DICT t 
+		]]>
+		where 1=1
+		<include refid="DataDict.whereClause" />
+		order by t.SEQ
+	</select>
+	
+	<select id="DataDict.pageCountByArgs" resultMap="DataDictResult">
+		<![CDATA[
+			SELECT * FROM (SELECT ROWS_.*, ROWNUM ROWNUM_ FROM (
+			select t.*
+		]]>
+			from DATA_DICT t 
+		where 1=1
+		<include refid="DataDict.whereClause" />
+		<![CDATA[
+			) ROWS_ WHERE ROWNUM <= #endRowNum# ) WHERE ROWNUM_ >= #startRowNum#
+		]]>
+	</select>
+	
+	<select id="DataDict.pageCountByArgs.count" resultClass="java.lang.Long">
+		select count(1) from DATA_DICT t 
+		where 1=1
+		<include refid="DataDict.whereClause" />
+	</select>
+	
+	<select id="DataDict.countByArgs" resultClass="java.lang.Long">
+		select count(1) from DATA_DICT t 
+		where 1=1
+		<include refid="DataDict.whereClause" />
+	</select>
+	
+</sqlMap>

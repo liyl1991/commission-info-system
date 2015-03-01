@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                           http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
+>   
+	<!-- Date Source -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="minPoolSize" value="${jdbc.c3p0.min_size}" />
+		<property name="maxPoolSize" value="${jdbc.c3p0.max_size}" />
+		<property name="maxIdleTime" value="${jdbc.c3p0.max_idle_time}" />
+		<property name="acquireIncrement" value="${jdbc.c3p0.acquire_increment}" />
+		<property name="maxStatements" value="${jdbc.c3p0.max_statements}" />
+		<property name="idleConnectionTestPeriod" value="${jdbc.c3p0.idle_connection_test_period}" />
+		<property name="checkoutTimeout" value="${jdbc.c3p0.checkout_timeout}" />
+		<property name="testConnectionOnCheckin" value="${jdbc.c3p0.test_connection_on_checkin}" />
+		<property name="automaticTestTable" value="${jdbc.c3p0.automatic_test_table}" />
+		<property name="preferredTestQuery" value="${jdbc.c3p0.preferred_test_query}" />
+	</bean>
+
+	<!-- Hibernate TransactionManager -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+		<property name="defaultTimeout" value="${jdbc.transation_timeout}" />
+	</bean>
+	<!-- Ibatis SqlMapClient -->
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:cfg/sqlmap-config.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="abstractDao" class="org.springframework.aop.framework.ProxyFactoryBean" abstract="true">
+		<property name="interceptorNames">
+			<list>
+				<value>daoLoggerIntroductor</value>
+				<value>finderIntroductionAdvisor</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="finderIntroductionAdvisor" class="cn.haohao.vas.core.dao.FinderIntroductionInterceptor" />
+
+	<bean id="abstractDaoTarget" class="cn.haohao.vas.core.dao.GenericDaoIbatisImpl" abstract="true">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<!-- Dao Logger -->
+	<bean id="daoLoggerIntroductor" class="cn.haohao.vas.core.dao.DaoLoggerIntroductor" />
+	
+	<!-- Manager Logger -->
+	<bean id="mgmtLoggerIntroductor" class="cn.haohao.vas.core.mgmt.MgmtLoggerIntroductor" />
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>  
+            <!-- 读取数据方法，一般采用只读事务-->  
+        	<tx:method name="get*" propagation="REQUIRED" read-only="true"/>
+        	<tx:method name="find*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="query*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="search*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="list*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="page*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="load*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="read*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="*" propagation="REQUIRED"/>   
+        </tx:attributes>  
+    </tx:advice>  
+       
+     <!-- 定义事务切面 -->
+    <aop:config>
+       <aop:pointcut id="serviceMethod" expression="execution(* cn.haohao.kms..impl.*.*(..))"/> 
+         <!-- <aop:pointcut id="serviceMethod" expression="execution(* cn.haohao.kms.service.*.*(..))"/>  -->
+        <aop:advisor pointcut-ref="serviceMethod" advice-ref="txAdvice" />
+    </aop:config>
+    
+    
+	<bean id="nameParJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource" index="0" />
+	</bean>
+
+</beans>

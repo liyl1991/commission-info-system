@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING/DTD BEAN/EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<!-- 个人日志和项目周报 定时器 -->
+	<bean id="pmsWeeklyTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<bean class="com.newland.pms.common.PmsWeeklyTask">
+				<property name="pmsDailylogMgmt" ref="pmsDailylogMgmt" />
+				<property name="pmsRepWeeklyMgmt" ref="pmsRepWeeklyMgmt"></property>
+			</bean>
+		</property>
+		<property name="targetMethod" value="generate" />
+	</bean>
+	
+	<!-- 定义触发时间 -->        
+	 <bean id="doTime" class="org.springframework.scheduling.quartz.CronTriggerBean">  
+		 <property name="jobDetail"> 
+	                 <ref bean="pmsWeeklyTask"/>             
+	      </property>             
+      <!-- cron表达式 -->             
+	      <property name="cronExpression">       
+	           <!-- 第周日23：00开始执行
+	            <value>0 59 14 ? * WED</value>             
+	           -->           
+	            <value>0 59 22 ? * SUN</value>             
+	      </property>        
+    </bean> 
+	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+	  	<property name="autoStartup">   
+            <value>true</value>   
+        </property> 
+		<property name="waitForJobsToCompleteOnShutdown" value="true" />
+		<property name="triggers">
+			<list>
+				<ref local="doTime" />
+			</list>
+		</property>
+	</bean>
+	<!-- 个人日志和项目周报 定时器 end-->
+	
+</beans>

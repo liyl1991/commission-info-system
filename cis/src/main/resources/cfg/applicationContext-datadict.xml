@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-lazy-init="true" xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
+	
+	<bean id="dataDictSupporter" class="com.newland.vas.datadict.DataDictSupporter" lazy-init="true">
+		<property name="dataDictService" ref="dataDictService" />
+	</bean>
+	<bean id="dataDictTag" lazy-init="false" class="com.newland.vas.core.tags.DataDictTag">
+		<property name="dataDictSupporter" ref="dataDictSupporter" />
+	</bean>  
+	
+	<bean id="dataDictService" class="com.newland.vas.datadict.service.impl.DataDictService" lazy-init="true">
+		<property name="dataDictDao" ref="dataDictDao"></property>
+	</bean>
+	
+	<!-- 数据字典加载定时器 -->
+	<bean id="dataDictTimer" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="dataDictSupporter" />
+		<property name="targetMethod" value="loadFromDb" />
+	</bean>
+	<bean id="dataDictTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="dataDictTimer" />
+		<property name="repeatCount" value="0" />
+	</bean>
+	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+	  	<property name="autoStartup">   
+            <value>true</value>   
+        </property> 
+		<property name="waitForJobsToCompleteOnShutdown" value="true" />
+		<property name="triggers">
+			<list>
+				<!-- 
+				 -->
+				<ref local="dataDictTrigger" />
+			</list>
+		</property>
+	</bean>
+</beans>
