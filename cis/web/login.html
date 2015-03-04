@@ -2,25 +2,21 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>提成模块-登陆</title>
-		<meta name="keywords" content="Bootstrapģ��,Bootstrapģ������,Bootstrap�̳�,Bootstrap����" />
-		<meta name="description" content="վ���ز��ṩBootstrapģ��,Bootstrap�̳�,Bootstrap���ķ�������Bootstrap�������" />
+		<title>提成模块</title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 		<!-- basic styles -->
 
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
-
+		<link rel="stylesheet" href="assets/css/bootstrap-datepicker.min.css" />
 		<!--[if IE 7]>
 		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
 		<![endif]-->
 
 		<!-- page specific plugin styles -->
-
-		<!-- fonts -->
-
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
 
 		<!-- ace styles -->
 
@@ -122,12 +118,12 @@
 										<div class="widget-main">
 											<h4 class="header red lighter bigger">
 												<i class="icon-key"></i>
-												Retrieve Password
+												找回密码
 											</h4>
 
 											<div class="space-6"></div>
 											<p>
-												Enter your email and to receive instructions
+												请输入您的邮箱地址：
 											</p>
 
 											<form>
@@ -142,7 +138,7 @@
 													<div class="clearfix">
 														<button type="button" class="width-35 pull-right btn btn-sm btn-danger">
 															<i class="icon-lightbulb"></i>
-															Send Me!
+															发送!
 														</button>
 													</div>
 												</fieldset>
@@ -151,7 +147,7 @@
 
 										<div class="toolbar center">
 											<a href="#" onclick="show_box('login-box'); return false;" class="back-to-login-link">
-												Back to login
+												返回登陆
 												<i class="icon-arrow-right"></i>
 											</a>
 										</div>
@@ -163,60 +159,73 @@
 										<div class="widget-main">
 											<h4 class="header green lighter bigger">
 												<i class="icon-group blue"></i>
-												New User Registration
+												用户注册
 											</h4>
 
 											<div class="space-6"></div>
-											<p> Enter your details to begin: </p>
+											<p> 请输入您的信息: </p>
 
 											<form>
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="email" class="form-control" placeholder="Email" />
-															<i class="icon-envelope"></i>
-														</span>
-													</label>
-
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" placeholder="Username" />
+															<input type="text" class="form-control" placeholder="姓名" />
 															<i class="icon-user"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="Password" />
+															<input type="password" class="form-control" placeholder="密码" />
 															<i class="icon-lock"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="Repeat password" />
+															<input type="password" class="form-control" placeholder="确认密码" />
 															<i class="icon-retweet"></i>
 														</span>
 													</label>
-
-													<label class="block">
+													
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input class="form-control date-picker" id="id-date-picker-1" placeholder="出生年月" type="text" data-date-format="yyyy-mm-dd" />
+															<i class="icon-calendar bigger-110"></i>
+														</span>
+													</label>
+													
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" placeholder="住址" />
+															<i class="icon-home"></i>
+														</span>
+													</label>
+													
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" placeholder="职业" />
+															<i class="icon-coffee"></i>
+														</span>
+													</label>
+													<!-- <label class="block">
 														<input type="checkbox" class="ace" />
 														<span class="lbl">
 															I accept the
 															<a href="#">User Agreement</a>
 														</span>
-													</label>
+													</label> -->
 
 													<div class="space-24"></div>
 
 													<div class="clearfix">
 														<button type="reset" class="width-30 pull-left btn btn-sm">
 															<i class="icon-refresh"></i>
-															Reset
+															重置
 														</button>
 
 														<button type="button" class="width-65 pull-right btn btn-sm btn-success">
-															Register
+															注册
 															<i class="icon-arrow-right icon-on-right"></i>
 														</button>
 													</div>
@@ -227,7 +236,7 @@
 										<div class="toolbar center">
 											<a href="#" onclick="show_box('login-box'); return false;" class="back-to-login-link">
 												<i class="icon-arrow-left"></i>
-												Back to login
+												返回登陆
 											</a>
 										</div>
 									</div><!-- /widget-body -->
@@ -241,7 +250,6 @@
 
 		<!-- basic scripts -->
 
-		<!--[if !IE]> -->
 
 		<script type="text/javascript">
 			window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
@@ -260,6 +268,16 @@
 		</script>
 
 		<!-- inline scripts related to this page -->
+		<script src="assets/js/date-time/bootstrap-datepicker.js"></script>
+		<script type="text/javascript">
+			function show_box(id) {
+				 jQuery('.widget-box.visible').removeClass('visible');
+				 jQuery('#'+id).addClass('visible');
+			}
+			$('.date-picker').datepicker({autoclose:true}).next().on(ace.click_event, function(){
+				$(this).prev().focus();
+			});
+		</script>
 
 </body>
 </html>
