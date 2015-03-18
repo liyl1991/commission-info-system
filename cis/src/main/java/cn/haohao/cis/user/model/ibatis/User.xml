@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="User">
+	
+	<resultMap id="UserResult" type="cn.haohao.cis.user.model.User">
+		<result property="userId" column="USER_ID" />
+		<result property="idCard" column="ID_CARD" />
+		<result property="name" column="NAME" />
+		<result property="password" column="PASSWORD" />
+		<result property="sex" column="SEX" />
+		<result property="birthday" column="BIRTHDAY" />
+		<result property="address" column="ADDRESS" />
+		<result property="career" column="CAREER" />
+		<result property="level" column="LEVEL" />
+		<result property="status" column="STATUS" />
+		<result property="userRole" column="USER_ROLE" />
+		<result property="uplineUser" column="UPLINE_USER" />
+		<result property="extend1" column="EXTEND1" />
+		<result property="extend2" column="EXTEND2" />
+	</resultMap>
+	
+	<select id="User.getById" resultMap="UserResult">
+		<![CDATA[
+			select t.*
+			from T_USER t
+			where user_id = #{userId}
+		]]>
+	</select>
+
+		
+	<sql id="User.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="userId != null">and t.USER_ID = #{userId}</if>
+		   <if test="idCard != null">and t.ID_CARD = #{idCard}</if>
+		   <if test="name != null">and t.NAME = #{name}</if>
+		   <if test="password != null">and t.PASSWORD = #{password}</if>
+		   <if test="sex != null">and t.SEX = #{sex}</if>
+		   <if test="birthday != null">and t.BIRTHDAY = #{birthday}</if>
+		   <if test="address != null">and t.ADDRESS = #{address}</if>
+		   <if test="career != null">and t.CAREER = #{career}</if>
+		   <if test="level != null">and t.LEVEL = #{level}</if>
+		   <if test="status != null">and t.STATUS = #{status}</if>
+		   <if test="userRole != null">and t.USER_ROLE = #{userRole}</if>
+		   <if test="uplineUser != null">and t.UPLINE_USER = #{uplineUser}</if>
+		   <if test="extend1 != null">and t.EXTEND1 = #{extend1}</if>
+		   <if test="extend2 != null">and t.EXTEND2 = #{extend2}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="User.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_T_USER.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="User.create">
+		<![CDATA[
+			insert into T_USER (  USER_ID ,  ID_CARD ,  NAME ,  PASSWORD ,  SEX ,  BIRTHDAY ,  ADDRESS ,  CAREER ,  LEVEL ,  STATUS ,  USER_ROLE ,  UPLINE_USER ,  EXTEND1 ,  EXTEND2   ) 
+			values (  #{userId} ,  #{idCard} ,  #{name} ,  #{password} ,  #{sex} ,  #{birthday} ,  #{address} ,  #{career} ,  #{level} ,  #{status} ,  #{userRole} ,  #{uplineUser} ,  #{extend1} ,  #{extend2}   )
+		]]>
+	</insert>
+	
+	<update id="User.update">
+		<![CDATA[
+			update T_USER set 
+			 USER_ID=#{userId} , ID_CARD=#{idCard} , NAME=#{name} , PASSWORD=#{password} , SEX=#{sex} , BIRTHDAY=#{birthday} , ADDRESS=#{address} , CAREER=#{career} , LEVEL=#{level} , STATUS=#{status} , USER_ROLE=#{userRole} , UPLINE_USER=#{uplineUser} , EXTEND1=#{extend1} , EXTEND2=#{extend2} 
+			where user_id = #{userId}
+		]]>
+	</update>
+	
+	<update id="User.updateDynamic">
+		update T_USER t 
+		<set>
+			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
+			<if test="newUpdAttObj.idCard != null">t.ID_CARD = #{newUpdAttObj.idCard},</if>	
+			<if test="newUpdAttObj.name != null">t.NAME = #{newUpdAttObj.name},</if>	
+			<if test="newUpdAttObj.password != null">t.PASSWORD = #{newUpdAttObj.password},</if>	
+			<if test="newUpdAttObj.sex != null">t.SEX = #{newUpdAttObj.sex},</if>	
+			<if test="newUpdAttObj.birthday != null">t.BIRTHDAY = #{newUpdAttObj.birthday},</if>	
+			<if test="newUpdAttObj.address != null">t.ADDRESS = #{newUpdAttObj.address},</if>	
+			<if test="newUpdAttObj.career != null">t.CAREER = #{newUpdAttObj.career},</if>	
+			<if test="newUpdAttObj.level != null">t.LEVEL = #{newUpdAttObj.level},</if>	
+			<if test="newUpdAttObj.status != null">t.STATUS = #{newUpdAttObj.status},</if>	
+			<if test="newUpdAttObj.userRole != null">t.USER_ROLE = #{newUpdAttObj.userRole},</if>	
+			<if test="newUpdAttObj.uplineUser != null">t.UPLINE_USER = #{newUpdAttObj.uplineUser},</if>	
+			<if test="newUpdAttObj.extend1 != null">t.EXTEND1 = #{newUpdAttObj.extend1},</if>	
+			<if test="newUpdAttObj.extend2 != null">t.EXTEND2 = #{newUpdAttObj.extend2},</if>	
+		</set>
+		<include refid="User.whereClause" />
+	</update>
+	
+	<delete id="User.delete">
+		<![CDATA[
+		delete from T_USER t
+		]]>
+		<include refid="User.whereClause" />
+	</delete>
+	
+	<select id="User.queryByArgs" resultMap="UserResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from T_USER t 
+		]]>
+		<include refid="User.whereClause" />
+	</select>
+	
+	<select id="User.pageCountByArgs" resultMap="UserResult">
+		<![CDATA[
+			SELECT * FROM (SELECT ROWS_.*, ROWNUM ROWNUM_ FROM (
+			select t.*
+		]]>
+			from T_USER t 
+		<include refid="User.whereClause" />
+		<![CDATA[
+			) ROWS_ WHERE ROWNUM <= #{endRowNum} ) WHERE ROWNUM_ >= #{startRowNum}
+		]]>
+	</select>
+	
+	<select id="User.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from T_USER t 
+		<include refid="User.whereClause" />
+	</select>
+	
+	<select id="User.countByArgs" resultType="java.lang.Long">
+		select count(1) from T_USER t 
+		<include refid="User.whereClause" />
+	</select>
+</mapper>

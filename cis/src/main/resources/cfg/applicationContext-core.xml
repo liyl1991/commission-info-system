@@ -34,38 +34,23 @@
 		<property name="preferredTestQuery" value="${jdbc.c3p0.preferred_test_query}" />
 	</bean>
 
-	<!-- Hibernate TransactionManager -->
+	<!-- TransactionManager -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 		<property name="defaultTimeout" value="${jdbc.transation_timeout}" />
 	</bean>
-	<!-- Ibatis SqlMapClient -->
-	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
-		<property name="configLocation" value="classpath:cfg/sqlmap-config.xml" />
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath:cn/haohao/**/model/ibatis/*.xml"></property>
+		<property name="configLocation" value="classpath:cfg/sqlmap-config.xml"></property>
 	</bean>
-
-	<bean id="abstractDao" class="org.springframework.aop.framework.ProxyFactoryBean" abstract="true">
-		<property name="interceptorNames">
-			<list>
-				<value>daoLoggerIntroductor</value>
-				<value>finderIntroductionAdvisor</value>
-			</list>
-		</property>
-	</bean>
-
-	<bean id="finderIntroductionAdvisor" class="cn.haohao.vas.core.dao.FinderIntroductionInterceptor" />
-
-	<bean id="abstractDaoTarget" class="cn.haohao.vas.core.dao.GenericDaoIbatisImpl" abstract="true">
-		<property name="sqlMapClient" ref="sqlMapClient" />
-	</bean>
-
-	<!-- Dao Logger -->
-	<bean id="daoLoggerIntroductor" class="cn.haohao.vas.core.dao.DaoLoggerIntroductor" />
-	
-	<!-- Manager Logger -->
-	<bean id="mgmtLoggerIntroductor" class="cn.haohao.vas.core.mgmt.MgmtLoggerIntroductor" />
-
+	<!-- <bean id="applicationContextHelper" class="cn.utils.ApplicationContextHelper" /> -->
+	<!-- 配置SQLSession模板 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean> 
+	 
     <tx:advice id="txAdvice" transaction-manager="transactionManager">  
         <tx:attributes>  
             <!-- 读取数据方法，一般采用只读事务-->  
@@ -80,15 +65,11 @@
             <tx:method name="*" propagation="REQUIRED"/>   
         </tx:attributes>  
     </tx:advice>  
-       
      <!-- 定义事务切面 -->
     <aop:config>
-       <aop:pointcut id="serviceMethod" expression="execution(* cn.haohao.kms..impl.*.*(..))"/> 
-         <!-- <aop:pointcut id="serviceMethod" expression="execution(* cn.haohao.kms.service.*.*(..))"/>  -->
+        <aop:pointcut id="serviceMethod" expression="execution(* cn.haohao.cis..impl.*.*(..))"/> 
         <aop:advisor pointcut-ref="serviceMethod" advice-ref="txAdvice" />
-    </aop:config>
-    
-    
+    </aop:config> 
 	<bean id="nameParJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
 		<constructor-arg ref="dataSource" index="0" />
 	</bean>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="UserIncome">
+	
+	<resultMap id="UserIncomeResult" type="cn.haohao.cis.income.model.UserIncome">
+		<result property="userId" column="USER_ID" />
+		<result property="incomeDate" column="INCOME_DATE" />
+		<result property="income" column="INCOME" />
+		<result property="performance" column="PERFORMANCE" />
+		<result property="isEnough" column="IS_ENOUGH" />
+	</resultMap>
+	<resultMap id="UserIncomeSumResult" type="cn.haohao.cis.income.model.UserIncome">
+		<result property="userId" column="USER_ID" />
+		<result property="income" column="INCOME" />
+		<result property="performance" column="PERFORMANCE" />
+	</resultMap>
+	<select id="UserIncome.getById" resultMap="UserIncomeResult">
+		<![CDATA[
+			select t.*
+			from T_USER_INCOME t
+			where user_id = #{userId}
+		]]>
+	</select>
+
+		
+	<sql id="UserIncome.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="userId != null">and t.USER_ID = #{userId}</if>
+		   <if test="incomeDate != null">and t.INCOME_DATE = #{incomeDate}</if>
+		   <if test="income != null">and t.INCOME = #{income}</if>
+		   <if test="performance != null">and t.PERFORMANCE = #{performance}</if>
+		   <if test="isEnough != null">and t.IS_ENOUGH = #{isEnough}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="UserIncome.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_T_USER_INCOME.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="UserIncome.create">
+		<![CDATA[
+			insert into T_USER_INCOME (  USER_ID ,  INCOME_DATE ,  INCOME ,  PERFORMANCE ,  IS_ENOUGH   ) 
+			values (  #{userId} ,  #{incomeDate} ,  #{income} ,  #{performance} ,  #{isEnough}   )
+		]]>
+	</insert>
+	
+	<update id="UserIncome.update">
+		<![CDATA[
+			update T_USER_INCOME set 
+			 USER_ID=#{userId} , INCOME_DATE=#{incomeDate} , INCOME=#{income} , PERFORMANCE=#{performance} , IS_ENOUGH=#{isEnough} 
+			where user_id = #{userId}
+		]]>
+	</update>
+	
+	<update id="UserIncome.updateDynamic">
+		update T_USER_INCOME t 
+		<set>
+			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
+			<if test="newUpdAttObj.incomeDate != null">t.INCOME_DATE = #{newUpdAttObj.incomeDate},</if>	
+			<if test="newUpdAttObj.income != null">t.INCOME = #{newUpdAttObj.income},</if>	
+			<if test="newUpdAttObj.performance != null">t.PERFORMANCE = #{newUpdAttObj.performance},</if>	
+			<if test="newUpdAttObj.isEnough != null">t.IS_ENOUGH = #{newUpdAttObj.isEnough},</if>	
+		</set>
+		<include refid="UserIncome.whereClause" />
+	</update>
+	
+	<delete id="UserIncome.delete">
+		<![CDATA[
+		delete from T_USER_INCOME t
+		]]>
+		<include refid="UserIncome.whereClause" />
+	</delete>
+	
+	<select id="UserIncome.queryByArgs" resultMap="UserIncomeResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from T_USER_INCOME t 
+		]]>
+		<include refid="UserIncome.whereClause" />
+	</select>
+	
+	<select id="UserIncome.pageCountByArgs" resultMap="UserIncomeResult">
+		<![CDATA[
+			select t.*
+		]]>
+			from T_USER_INCOME t 
+		<include refid="UserIncome.whereClause" />
+			order by income_date desc
+		<![CDATA[
+			limit #{startRowNum},#{pageSize}
+		]]>
+	</select>
+	
+	<select id="UserIncome.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from T_USER_INCOME t 
+		<include refid="UserIncome.whereClause" />
+	</select>
+	
+	<select id="UserIncome.countByArgs" resultType="java.lang.Long">
+		select count(1) from T_USER_INCOME t 
+		<include refid="UserIncome.whereClause" />
+	</select>
+	
+	<select id="UserIncome.getIncomeSum" resultMap="UserIncomeSumResult">
+		<![CDATA[
+		select t.USER_ID,SUM(t.INCOME) INCOME,SUM(t.PERFORMANCE) PERFORMANCE
+		from T_USER_INCOME t 
+		group by t.USER_ID
+		having t.USER_ID = #{userId}
+		]]>
+	</select>
+</mapper>

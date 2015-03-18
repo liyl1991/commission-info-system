@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE sqlMapConfig      
-    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
-    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
-<sqlMapConfig>
-	<settings useStatementNamespaces="true" enhancementEnabled="false" lazyLoadingEnabled="false" />
-	<!-- 课程
-	<sqlMap resource="com/newland/eln/course/model/ibatis/Course.xml" />
-	 -->
-	 <!-- 附件 -->
-	<!-- <sqlMap resource="com/newland/kms/attachment/model/ibatis/Attachment.xml" /> -->
-</sqlMapConfig>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="logImpl" value="LOG4J"/> 
+		<setting name="cacheEnabled" value="true" />
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="useColumnLabel" value="true" />
+		<setting name="defaultExecutorType" value="REUSE" />
+		<setting name="defaultStatementTimeout" value="25000" />
+	</settings>
+	
+</configuration>

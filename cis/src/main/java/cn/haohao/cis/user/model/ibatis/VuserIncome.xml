@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="VuserIncome">
+	
+	<resultMap id="VuserIncomeResult" type="cn.haohao.cis.user.model.VuserIncome">
+		<result property="userId" column="USER_ID" />
+		<result property="idCard" column="ID_CARD" />
+		<result property="name" column="NAME" />
+		<result property="sex" column="SEX" />
+		<result property="birthday" column="BIRTHDAY" />
+		<result property="address" column="ADDRESS" />
+		<result property="career" column="CAREER" />
+		<result property="level" column="LEVEL" />
+		<result property="status" column="STATUS" />
+		<result property="uplineUser" column="UPLINE_USER" />
+		<result property="incomeDate" column="INCOME_DATE" />
+		<result property="income" column="INCOME" />
+		<result property="performance" column="PERFORMANCE" />
+	</resultMap>
+	
+	<select id="VuserIncome.getById" resultMap="VuserIncomeResult">
+		<![CDATA[
+			select t.*
+			from V_USER_INCOME t
+			where user_id = #{userId}
+		]]>
+	</select>
+
+		
+	<sql id="VuserIncome.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="userId != null">and t.USER_ID = #{userId}</if>
+		   <if test="idCard != null">and t.ID_CARD = #{idCard}</if>
+		   <if test="name != null">and t.NAME = #{name}</if>
+		   <if test="sex != null">and t.SEX = #{sex}</if>
+		   <if test="birthday != null">and t.BIRTHDAY = #{birthday}</if>
+		   <if test="address != null">and t.ADDRESS = #{address}</if>
+		   <if test="career != null">and t.CAREER = #{career}</if>
+		   <if test="level != null">and t.LEVEL = #{level}</if>
+		   <if test="status != null">and t.STATUS = #{status}</if>
+		   <if test="uplineUser != null">and t.UPLINE_USER = #{uplineUser}</if>
+		   <if test="incomeDate != null">and t.INCOME_DATE = #{incomeDate}</if>
+		   <if test="income != null">and t.INCOME = #{income}</if>
+		   <if test="performance != null">and t.PERFORMANCE = #{performance}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="VuserIncome.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_V_USER_INCOME.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="VuserIncome.create">
+		<![CDATA[
+			insert into V_USER_INCOME (  USER_ID ,  ID_CARD ,  NAME ,  SEX ,  BIRTHDAY ,  ADDRESS ,  CAREER ,  LEVEL ,  STATUS ,  UPLINE_USER ,  INCOME_DATE ,  INCOME ,  PERFORMANCE   ) 
+			values (  #{userId} ,  #{idCard} ,  #{name} ,  #{sex} ,  #{birthday} ,  #{address} ,  #{career} ,  #{level} ,  #{status} ,  #{uplineUser} ,  #{incomeDate} ,  #{income} ,  #{performance}   )
+		]]>
+	</insert>
+	
+	<update id="VuserIncome.update">
+		<![CDATA[
+			update V_USER_INCOME set 
+			 USER_ID=#{userId} , ID_CARD=#{idCard} , NAME=#{name} , SEX=#{sex} , BIRTHDAY=#{birthday} , ADDRESS=#{address} , CAREER=#{career} , LEVEL=#{level} , STATUS=#{status} , UPLINE_USER=#{uplineUser} , INCOME_DATE=#{incomeDate} , INCOME=#{income} , PERFORMANCE=#{performance} 
+			where user_id = #{userId}
+		]]>
+	</update>
+	
+	<update id="VuserIncome.updateDynamic">
+		update V_USER_INCOME t 
+		<set>
+			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
+			<if test="newUpdAttObj.idCard != null">t.ID_CARD = #{newUpdAttObj.idCard},</if>	
+			<if test="newUpdAttObj.name != null">t.NAME = #{newUpdAttObj.name},</if>	
+			<if test="newUpdAttObj.sex != null">t.SEX = #{newUpdAttObj.sex},</if>	
+			<if test="newUpdAttObj.birthday != null">t.BIRTHDAY = #{newUpdAttObj.birthday},</if>	
+			<if test="newUpdAttObj.address != null">t.ADDRESS = #{newUpdAttObj.address},</if>	
+			<if test="newUpdAttObj.career != null">t.CAREER = #{newUpdAttObj.career},</if>	
+			<if test="newUpdAttObj.level != null">t.LEVEL = #{newUpdAttObj.level},</if>	
+			<if test="newUpdAttObj.status != null">t.STATUS = #{newUpdAttObj.status},</if>	
+			<if test="newUpdAttObj.uplineUser != null">t.UPLINE_USER = #{newUpdAttObj.uplineUser},</if>	
+			<if test="newUpdAttObj.incomeDate != null">t.INCOME_DATE = #{newUpdAttObj.incomeDate},</if>	
+			<if test="newUpdAttObj.income != null">t.INCOME = #{newUpdAttObj.income},</if>	
+			<if test="newUpdAttObj.performance != null">t.PERFORMANCE = #{newUpdAttObj.performance},</if>	
+		</set>
+		<include refid="VuserIncome.whereClause" />
+	</update>
+	
+	<delete id="VuserIncome.delete">
+		<![CDATA[
+		delete from V_USER_INCOME t
+		]]>
+		<include refid="VuserIncome.whereClause" />
+	</delete>
+	
+	<select id="VuserIncome.queryByArgs" resultMap="VuserIncomeResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from V_USER_INCOME t 
+		]]>
+		<include refid="VuserIncome.whereClause" />
+	</select>
+	
+	<select id="VuserIncome.pageCountByArgs" resultMap="VuserIncomeResult">
+		<![CDATA[
+			select t.*
+		]]>
+			from V_USER_INCOME t 
+		<include refid="VuserIncome.whereClause" />
+		<![CDATA[
+			limit #{startRowNum},#{pageSize}
+		]]>
+	</select>
+	
+	<select id="VuserIncome.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from V_USER_INCOME t 
+		<include refid="VuserIncome.whereClause" />
+	</select>
+	
+	<select id="VuserIncome.countByArgs" resultType="java.lang.Long">
+		select count(1) from V_USER_INCOME t 
+		<include refid="VuserIncome.whereClause" />
+	</select>
+</mapper>

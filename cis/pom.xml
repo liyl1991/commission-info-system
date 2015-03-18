@@ -3,7 +3,7 @@
   <groupId>cn.haohao</groupId>
   <artifactId>cis</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>ris</name>
+  <name>cis</name>
   <description>commission info system</description>
   <build>
     <outputDirectory>web/WEB-INF/classes</outputDirectory>
@@ -22,7 +22,14 @@
 	    </plugin>
     </plugins>
   </build>
-  <dependencies>
+  <properties>
+  	<java.version>1.7</java.version>
+  	<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+    <springframework-version>4.0.9.RELEASE</springframework-version>
+    <servlet.version>3.0.1</servlet.version>
+    <jsp.version>2.1</jsp.version>
+  </properties>
+   <dependencies>
     <dependency>
       <groupId>c3p0</groupId>
       <artifactId>c3p0</artifactId>
@@ -31,28 +38,18 @@
     <dependency>
       <groupId>cglib</groupId>
       <artifactId>cglib</artifactId>
-      <version>2.1_3</version>
+      <version>3.1</version>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
-      <version>1.6.8</version>
-	</dependency>
-	<!-- <dependency>
-      <groupId>commons-attributes</groupId>
-      <artifactId>commons-attributes-compiler</artifactId>
-      <version>2.2</version>
-	</dependency> -->
-	<dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-      <version>1.6</version>
+      <version>1.8.1</version>
 	</dependency>
 	<dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.3</version>
-    </dependency>
+	  <groupId>commons-beanutils</groupId>
+	  <artifactId>commons-beanutils</artifactId>
+	  <version>1.9.1</version>
+	</dependency>
 	<dependency>
 		<groupId>aopalliance</groupId>
 		<artifactId>aopalliance</artifactId>
@@ -71,22 +68,17 @@
 	<dependency>
 	  <groupId>commons-io</groupId>
 	  <artifactId>commons-io</artifactId>
-	  <version>1.3.1</version>
+	  <version>2.1</version>
 	</dependency>
 	<dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
-      <version>2.2</version>
+      <version>2.5</version>
 	</dependency>
 	<dependency>
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
       <version>1.1.4</version>
-	</dependency>
-	<dependency>
-	  <groupId>commons-logging</groupId>
-	  <artifactId>commons-logging</artifactId>
-	  <version>1.1.1</version>
 	</dependency>
 	<dependency>
       <groupId>dom4j</groupId>
@@ -99,127 +91,92 @@
       <version>4.4</version>
 	</dependency>
 	<dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
-	</dependency>
-	<dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
-      <version>2.3.5</version>
+      <version>3.2.8</version>
     </dependency>
     <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>ojdbc14</artifactId>
-      <version>10.2.0.1.0</version>
+	  <groupId>mysql</groupId>
+	  <artifactId>mysql-connector-java</artifactId>
+	  <version>5.0.5</version>
 	</dependency>
 	<dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
-      <version>3.0.5.RELEASE</version>
-	</dependency>
-	<dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-asm</artifactId>
-      <version>3.0.5.RELEASE</version>
+      <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-aspects</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-beans</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-context</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context-support</artifactId>
-      <version>3.0.5.RELEASE</version>
+      <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-core</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-expression</artifactId>
-      <version>3.0.5.RELEASE</version>
+      <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-instrument</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-instrument-tomcat</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-jdbc</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-jms</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-orm</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-oxm</artifactId>
-	  <version>3.0.5.RELEASE</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-test</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-web</artifactId>
-	  <version>3.0.5.RELEASE</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-servlet</artifactId>
-	  <version>3.0.5.RELEASE</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-transaction</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-webmvc-portlet</artifactId>
-	  <version>3.0.5.RELEASE</version>
+	  <version>${springframework-version}</version>
 	</dependency>
 	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-struts</artifactId>
-	  <version>3.0.5.RELEASE</version>
-	</dependency>
-	<dependency>
-	  <groupId>opensymphony</groupId>
-	  <artifactId>quartz-all</artifactId>
-	  <version>1.6.1</version>
-	</dependency>
-	<dependency>
-	  <groupId>jstl</groupId>
+	  <groupId>javax.servlet</groupId>
 	  <artifactId>jstl</artifactId>
 	  <version>1.1.2</version>
 	</dependency>
@@ -229,19 +186,9 @@
 	  <version>1.1.2</version>
 	</dependency>
 	<dependency>
-	  <groupId>xerces</groupId>
-	  <artifactId>xercesImpl</artifactId>
-	  <version>2.9.0</version>
-	</dependency>
-	<dependency>
 	  <groupId>pull-parser</groupId>
 	  <artifactId>pull-parser</artifactId>
 	  <version>2.1.10</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.slf4j</groupId>
-	  <artifactId>slf4j-api</artifactId>
-	  <version>1.5.6</version>
 	</dependency>
 	<dependency>
 	  <groupId>bouncycastle</groupId>
@@ -259,9 +206,49 @@
 	  <version>1.1</version>
 	</dependency>
 	<dependency>
-	  <groupId>org.apache</groupId>
-	  <artifactId>tm-extractors</artifactId>
-	  <version>0.4</version>
+	  <groupId>ant</groupId>
+	  <artifactId>ant</artifactId>
+	  <version>1.5</version>
+	</dependency>
+	<dependency>
+	  <groupId>net.sf.ehcache</groupId>
+	  <artifactId>ehcache</artifactId>
+	  <version>1.5.0</version>
+	</dependency>
+	<dependency>
+	  <groupId>org.codehaus.jackson</groupId>
+	  <artifactId>jackson-all</artifactId>
+	  <version>1.9.11</version>
+	</dependency>
+	<dependency>
+	  <groupId>com.alibaba</groupId>
+	  <artifactId>fastjson</artifactId>
+	  <version>1.1.33</version>
+	</dependency>
+	<dependency>
+	  <groupId>commons-net</groupId>
+	  <artifactId>commons-net</artifactId>
+	  <version>3.3</version>
+	</dependency>
+	<dependency>
+	  <groupId>com.thoughtworks.xstream</groupId>
+	  <artifactId>xstream</artifactId>
+	  <version>1.3.1</version>
+	</dependency>
+	<dependency>
+		<groupId>org.mybatis</groupId>
+		<artifactId>mybatis-spring</artifactId>
+		<version>1.2.2</version>
+	</dependency>
+	<dependency>
+	  <groupId>org.springframework.data</groupId>
+	  <artifactId>spring-data-commons</artifactId>
+	  <version>1.9.2.RELEASE</version>
+	</dependency>
+	<dependency>
+	  <groupId>org.slf4j</groupId>
+	  <artifactId>slf4j-log4j12</artifactId>
+	  <version>1.7.9</version>
 	</dependency>
   </dependencies>
 </project>
