@@ -31,7 +31,7 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="icon-home home-icon"></i>
-								<a href="#">首页</a>
+								<a href="http://www.haohao.cn">首页</a>
 							</li>
 							<li class="active">密码管理</li>
 						</ul><!-- .breadcrumb -->
@@ -43,7 +43,7 @@
 									密码管理
 									<small>
 										<i class="icon-double-angle-right"></i>
-										请输入您的当前密码并设置新密码${result}
+										请输入您的当前密码并设置新密码
 									</small>
 								</h1>
 							</div><!-- /.page-header -->

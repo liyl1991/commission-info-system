@@ -64,6 +64,10 @@ public class VuserIncome implements Serializable{
 	 */
 	private java.lang.Integer uplineUser;
 	/*
+	 * 角色
+	 */
+	private Integer userRole;
+	/*
 	 * 月份
 	 */
 	private java.util.Date incomeDate;
@@ -234,8 +238,15 @@ public class VuserIncome implements Serializable{
 	public void setPerformance(java.lang.Float performance){
 		this.performance = performance;
 	}
+	
 	//方法 end
 
+	public Integer getUserRole() {
+		return userRole;
+	}
+	public void setUserRole(Integer userRole) {
+		this.userRole = userRole;
+	}
 	public Long getId(){
 		if (userId==null) return null;
 		return Long.valueOf(this.userId);

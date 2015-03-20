@@ -31,7 +31,7 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="icon-home home-icon"></i>
-								<a href="#">首页</a>
+								<a href="http://www.haohao.cn">首页</a>
 							</li>
 							<li class="active">下线人员</li>
 						</ul><!-- .breadcrumb -->
@@ -52,8 +52,9 @@
 														<th>姓名</th>
 														<th>性别</th>
 														<th class="hidden-480">等级</th>
-														<th>上月收入</th>
-														<th>上月业绩</th>
+														<th>上次月份</th>
+														<th>上次收入</th>
+														<th>上次业绩</th>
 														<th class="hidden-480">职业</th>
 														<!-- <th></th> -->
 													</tr>
@@ -103,6 +104,7 @@
 								'</td>'+
 								'<td>'+(r.downlineUsers.content[i].sex=='1'?'男':(r.downlineUsers.content[i].sex=='2'?'女':'保密'))+'</td>'+
 								'<td class="hidden-480">'+r.downlineUsers.content[i].level+'级</td>'+
+								'<td class="hidden-480">'+formatDate(r.downlineUsers.content[i].incomeDate)+'</td>'+
 								'<td>'+(r.downlineUsers.content[i].income?r.downlineUsers.content[i].income:'暂无数据')+'</td>'+
 								'<td>'+(r.downlineUsers.content[i].performance?r.downlineUsers.content[i].performance:'暂无数据')+'</td>'+
 								'<td class="hidden-480">'+

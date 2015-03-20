@@ -30,8 +30,12 @@ public class LoginController extends MultiActionController{
 			loginInfo.setStatus(1);
 			List<User> user = this.userService.queryUser(loginInfo);
 			if(user.size()==1){
-				request.getSession().setAttribute(Constants.LOGINED_USER_BEAN_NAME, user.get(0));
-				return "redirect:/login/goIndex";
+				User current = user.get(0);
+				request.getSession().setAttribute(Constants.LOGINED_USER_BEAN_NAME, current);
+				if(current.isAdmin())
+					return "redirect:/admin/goAdminMgr";
+				else
+					return "redirect:/login/goIndex";
 			}
 		}
 		request.setAttribute("errorMsg", "用户名或者密码错误，请重新输入。");

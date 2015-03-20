@@ -13,6 +13,7 @@ import cn.haohao.cis.user.model.VuserIncome;
 public class VuserIncomeQueryObj extends VuserIncome implements IPageable{
 	
 	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * 页面大小
 	 */

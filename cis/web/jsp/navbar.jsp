@@ -29,7 +29,7 @@
 						</li>
 
 						<li>
-							<img src="<%=path %>/assets/images/ewm.png"/>
+							<img src="<%=path %>/assets/images/ewm.png" width="220" height="220"/>
 						</li>
 					</ul>
 				</li>

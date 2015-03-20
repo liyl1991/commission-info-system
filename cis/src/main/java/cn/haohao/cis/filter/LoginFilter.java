@@ -41,7 +41,7 @@ public class LoginFilter implements Filter {
 				String loginPage = request.getContextPath() + "/jsp/login.jsp";
 				StringBuilder builder = new StringBuilder();
 				builder.append("<script type=\"text/javascript\">");
-				builder.append("alert('登陆会话过时，请重新登陆！');"); 
+				builder.append("alert('登陆超时，请重新登陆！');"); 
 				builder.append("window.top.location.href='");
 				builder.append(loginPage);
 				builder.append("';");
@@ -49,6 +49,7 @@ public class LoginFilter implements Filter {
 				out.print(builder.toString());
 			} else {
 				chain.doFilter(request, response);
+				return;
 			}
 		} else {
 			chain.doFilter(request, response);

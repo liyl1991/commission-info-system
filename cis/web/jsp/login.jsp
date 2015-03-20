@@ -222,17 +222,16 @@
 
 
 		<script type="text/javascript">
-			window.jQuery || document.write("<script src='"+path+"/assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+			window.jQuery || document.write("<script src='"+path+"/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
 		</script>
 
 		<!-- <![endif]-->
 
 		<!--[if IE]>
-<script type="text/javascript">
- window.jQuery || document.write("<script src='"+path+"/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
-</script>
-<![endif]-->
-
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='"+path+"/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
 		<script type="text/javascript">
 			if("ontouchend" in document) document.write("<script src='"+path+"/assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 		</script>
@@ -246,9 +245,9 @@
 				 jQuery('#'+id).addClass('visible');
 			}
 			$(function(){
-				$('.date-picker').datepicker({autoclose:true}).next().on(ace.click_event, function(){
+				/* $('.date-picker').datepicker({autoclose:true}).next().on(ace.click_event, function(){
 					$(this).prev().focus();
-				});
+				}); */
 				//登陆事件绑定
 				$(".loginBtn").click(function(){
 					var idCard = $("#loginForm input[name='idCard']").val();

@@ -70,11 +70,11 @@
 	</listener>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/error-500.html</location>
+		<location>/common/error-500.jsp</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/error-404.html</location>
+		<location>/common/error-404.jsp</location>
 	</error-page>
 	<session-config>
 		<session-timeout>30</session-timeout>

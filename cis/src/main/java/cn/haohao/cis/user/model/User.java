@@ -256,4 +256,12 @@ public class User implements Serializable{
 		if (userId==null) return null;
 		return Long.valueOf(this.userId);
 	}
+	
+	/**
+	 * 是否是管理员
+	 */
+	public Boolean isAdmin(){
+		if(this.userRole==2) return true;
+		else return false;
+	}
 }

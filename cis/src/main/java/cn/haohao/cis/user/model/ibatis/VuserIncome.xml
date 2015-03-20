@@ -13,6 +13,7 @@
 		<result property="level" column="LEVEL" />
 		<result property="status" column="STATUS" />
 		<result property="uplineUser" column="UPLINE_USER" />
+		<result property="userRole" column="USER_ROLE"/>
 		<result property="incomeDate" column="INCOME_DATE" />
 		<result property="income" column="INCOME" />
 		<result property="performance" column="PERFORMANCE" />
@@ -43,6 +44,7 @@
 		   <if test="incomeDate != null">and t.INCOME_DATE = #{incomeDate}</if>
 		   <if test="income != null">and t.INCOME = #{income}</if>
 		   <if test="performance != null">and t.PERFORMANCE = #{performance}</if>
+		   <if test="userRole != null">and t.USER_ROLE = #{userRole}</if>
 	   </trim>
 	 </where>
 	</sql>
