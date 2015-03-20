@@ -1,0 +1,191 @@
+<%@ page language="java" pageEncoding="UTF-8" %>
+<% String path = request.getContextPath();%>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>控制台</title>
+		<jsp:include page="/common/inc.jsp"></jsp:include>
+		
+	</head>
+
+	<body>
+		<jsp:include page="/jsp/navbar.jsp"></jsp:include>
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+				<jsp:include page="/jsp/mgr/sidebar.jsp"></jsp:include>
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="http://www.haohao.cn">首页</a>
+							</li>
+							<li><a href="<%=path%>/admin/goAdminMgr">员工管理</a></li>
+							<li class="active">收入与业绩</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+					<div class="container">
+						<div class="page-header">
+							<h1>
+								无
+								<small>
+									<i class="icon-double-angle-right"></i>
+									<span class="user-level"></span>
+								</small>
+							</h1>
+						</div><!-- /.page-header -->
+						<div class="row clearfix income-content">
+							<div class="col-md-2 column">
+							    <div class="infobox infobox-green infobox-small infobox-dark pre-income">
+									<div class="infobox-data">
+										<div class="infobox-content">上月收入</div>
+										<div class="infobox-content money">暂无数据</div>
+									</div>
+								</div>
+							    <div class="infobox  infobox-green infobox-small infobox-dark pre-performance">
+									<div class="infobox-data">
+										<div class="infobox-content">上月业绩</div>
+										<div class="infobox-content money">暂无数据</div>
+									</div>
+								</div>
+								<div class="infobox infobox-blue infobox-small infobox-dark sum-income">
+									<div class="infobox-data">
+										<div class="infobox-content">总收入</div>
+										<div class="infobox-content money">暂无数据</div>
+									</div>
+								</div>
+								<div class="infobox infobox-blue infobox-small infobox-dark sum-performance">
+									<div class="infobox-data">
+										<div class="infobox-content">总业绩</div>
+										<div class="infobox-content money">暂无数据</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-10 column">
+								<table class="table table-hover table-bordered">
+									<thead>
+										<tr>
+											<th>
+												月份
+											</th>
+											<th>
+												收入
+											</th>
+											<th>
+												业绩
+											</th>
+											<th>
+												是否达标
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!-- <tr class="success">
+											<td>2014年10月</td>
+											<td>1299.8</td>
+											<td>129</td>
+											<td><i class="icon-remove"></i></td>
+										</tr> -->
+									</tbody>
+								</table>
+								<div>
+									<ul class="pagination">
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		   </div>
+		</div>
+		<!-- basic scripts -->
+
+		<jsp:include page="/common/inc_js.jsp"></jsp:include>
+		<script src="<%=path %>/assets/js/jqPaginator.js" type="text/javascript"></script>
+		<script type="text/javascript">
+		var targetId = ${targetId};
+		$(function(){
+			initPagination();
+		});
+		function doQuery(currentPage){
+			var dataObj = { 
+					"currentPage":currentPage?currentPage:1,
+					"pageSize":8,
+					"userId":targetId}; 
+			$.ajax({
+				url:path+"/admin/getIncomeInfo",
+				type:"post",
+				dataType:"json",
+				data:dataObj,
+				success:function(r){
+					$(".container table tbody tr").remove();
+					if(r.incomeList.content.length!=0){
+						$('.pagination').show();
+						for(var i=0;i<r.incomeList.content.length;i++){
+							var isEnough = r.incomeList.content[i].isEnough==1?'ok':'remove';
+							var statusClass = r.incomeList.content[i].isEnough==1?'success':'danger';
+							$('<tr class="'+statusClass+'">'+
+								'<td>'+formatDate(r.incomeList.content[i].incomeDate)+'</td>'+
+								'<td>'+r.incomeList.content[i].income+'</td>'+
+								'<td>'+r.incomeList.content[i].performance+'</td>'+
+								'<td><i class="icon-'+isEnough+'"></i></td>'+
+							  '</tr>').appendTo(".container table tbody");
+						}
+					}
+					else{
+						$('.pagination').hide();
+						$('<tr class="'+statusClass+'">'+
+								'<td colspan="4">暂无数据</td>'+
+							  '</tr>').appendTo(".container table tbody");
+					}
+					//$(".pre-income,.pre-performance").remove infobox-green
+					if(r.preIncome){
+						$(".pre-income .money").text("￥"+r.preIncome.income);
+						$(".pre-performance .money").text("￥"+r.preIncome.performance);
+						if(r.preIncome.isEnough==1) $(".pre-performance").addClass("infobox-green");
+						else $(".pre-performance").addClass("infobox-red");
+					}
+					if(r.incomeSum){
+						$(".sum-income .money").text("￥"+r.incomeSum.income);
+						$(".sum-performance .money").text("￥"+r.incomeSum.performance);
+					}
+					$(".page-header h1").text(r.userInfo.name+"的收入业绩信息");
+					$(".page-header h1 .user-level").text(r.userInfo.level+"级");
+					$('.pagination').jqPaginator('option', {
+						totalPages: r.incomeList.totalPages
+					});
+				},
+				error:function(){}
+			});
+		}
+		function initPagination(totalPages,current){//初始化分页栏
+			$(".pagination").jqPaginator({
+				totalPages: totalPages?totalPages:1,
+				visiblePages: 5,
+				currentPage: current?current:1,
+				first: '<li class="first"><a href="javascript:void(0);">首页<\/a><\/li>',
+				prev: '<li class="prev"><a href="javascript:void(0);"><i class="arrow arrow2"><\/i>上一页<\/a><\/li>',
+				next: '<li class="next"><a href="javascript:void(0);">下一页<i class="arrow arrow3"><\/i><\/a><\/li>',
+				last: '<li class="last"><a href="javascript:void(0);">末页<\/a><\/li>',
+				page: '<li class="page"><a href="javascript:void(0);">{{page}}<\/a><\/li>',
+				onPageChange: function (n) {
+					doQuery(n);
+				}
+			});
+		}
+		</script>
+		
+</body>
+</html>
+
