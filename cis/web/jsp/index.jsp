@@ -91,7 +91,7 @@
 									</tbody>
 								</table>
 								<div>
-									<ul class="pagination hide">
+									<ul class="pagination">
 									</ul>
 								</div>
 							</div>
