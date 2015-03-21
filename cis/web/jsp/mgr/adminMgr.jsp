@@ -56,7 +56,7 @@
 											</thead>
 	
 											<tbody>
-												<tr>
+												<!-- <tr>
 													<td>
 														<a href="#">李四</a>
 													</td>
@@ -86,7 +86,7 @@
 															</a>
 														</div>
 													</td>
-												</tr>
+												</tr> -->
 											</tbody>
 										</table>
 										<div>
@@ -133,13 +133,11 @@
 								'<td>'+(r.downlineUsers.content[i].income?r.downlineUsers.content[i].income:'暂无数据')+'</td>'+
 								'<td>'+(r.downlineUsers.content[i].performance?r.downlineUsers.content[i].performance:'暂无数据')+'</td>'+
 								'<td class="hidden-480">'+
-								'	<span class="label label-sm label-warning">'+r.downlineUsers.content[i].career+'</span>'+
+								'	<span>'+r.downlineUsers.content[i].career+'</span>'+
 								'</td>'+
 								'<td>'+
 								'	<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">'+
-								'		<a class="blue" href="'+path+'/admin/goIncomeInfo/'+r.downlineUsers.content[i].userId+'" title="查看收入与业绩">'+
-								'			<i class="icon-list-alt bigger-130"></i>'+
-								'		</a>'+
+								'		<a class="btn btn-minier btn-primary" href="'+path+'/admin/goIncomeInfo/'+r.downlineUsers.content[i].userId+'" title="查看收入与业绩">业绩</a>'+
 							/* 	'		<a class="green" href="#" title="编辑">'+
 								'			<i class="icon-pencil bigger-130"></i>'+
 								'		</a>'+
