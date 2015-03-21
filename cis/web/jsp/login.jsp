@@ -38,14 +38,14 @@
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="text" name="idCard" class="form-control" placeholder="身份证号" />
+															<input type="text" maxlength="20" name="idCard" class="form-control" placeholder="身份证号" />
 															<i class="icon-user"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password" name="password" class="form-control" placeholder="密码" />
+															<input type="password" maxlength="50" name="password" class="form-control" placeholder="密码" />
 															<i class="icon-lock"></i>
 														</span>
 													</label>

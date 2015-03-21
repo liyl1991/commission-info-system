@@ -19,7 +19,8 @@
 				<a class="menu-toggler" id="menu-toggler" href="#">
 					<span class="menu-text"></span>
 				</a>
-				<jsp:include page="/jsp/mgr/sidebar.jsp"></jsp:include>
+				<jsp:include page="/jsp/sidebar.jsp"></jsp:include>
+				
 				<div class="main-content">
 					<div class="breadcrumbs" id="breadcrumbs">
 						<script type="text/javascript">

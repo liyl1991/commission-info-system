@@ -65,7 +65,7 @@
 												</tbody>
 											</table>
 											<div>
-												<ul class="pagination">
+												<ul class="pagination hide">
 												</ul>
 											</div>
 										</div>
@@ -117,7 +117,7 @@
 						}
 					}else{
 						$('.pagination').hide();
-						$('<tr class="'+statusClass+'">'+
+						$('<tr>'+
 								'<td colspan="7">暂无数据</td>'+
 							  '</tr>').appendTo(".container table tbody");
 					}

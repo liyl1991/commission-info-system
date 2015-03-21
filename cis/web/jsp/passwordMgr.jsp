@@ -55,7 +55,7 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 旧密码 </label>
 										<div class="col-sm-9">
-											<input type="password" name="oldPwd" id="form-field-2" placeholder="请输入" class="col-xs-10 col-sm-5" />
+											<input type="password" name="oldPwd" maxlength="50" id="form-field-2" placeholder="请输入" class="col-xs-10 col-sm-5" />
 											<span class="help-inline col-xs-12 col-sm-7">
 												<!-- <span class="middle">请输入</span> -->
 											</span>
@@ -68,7 +68,7 @@
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 新密码 </label>
 
 										<div class="col-sm-9">
-											<input type="password" name="newPwd" id="form-field-2" placeholder="请输入" class="col-xs-10 col-sm-5" />
+											<input type="password" name="newPwd" maxlength="50" id="form-field-2" placeholder="请输入" class="col-xs-10 col-sm-5" />
 											<span class="help-inline col-xs-12 col-sm-7">
 												<!-- <span class="middle">Inline help text</span> -->
 											</span>
@@ -79,7 +79,7 @@
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 确认密码 </label>
 
 										<div class="col-sm-9">
-											<input type="password" name="newPwd2" id="form-field-2" placeholder="请输入" class="col-xs-10 col-sm-5" />
+											<input type="password" name="newPwd2" maxlength="50" id="form-field-2" placeholder="请输入" class="col-xs-10 col-sm-5" />
 											<span class="help-inline col-xs-12 col-sm-7">
 												<!-- <span class="middle">Inline help text</span> -->
 											</span>
@@ -112,6 +112,10 @@
 				obj.oldPwd =$("input[name='oldPwd']").val();
 				obj.newPwd =$("input[name='newPwd']").val();
 				obj.newPwd2 =$("input[name='newPwd2']").val();
+				if(!(obj.oldPwd&&obj.newPwd&&obj.newPwd2)){
+					showInfo("输入的信息不完整",false);
+					return;
+				}
 				if(obj.newPwd!=obj.newPwd2){
 					showInfo("两次输入的密码不一致",false);
 					return;	

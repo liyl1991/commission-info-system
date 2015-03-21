@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -56,18 +57,30 @@ public class UserController extends MultiActionController{
 	@RequestMapping("/doUpdatePwd")
 	public @ResponseBody Map<String,Object> doUpdatePwd(UserPwdUpdateObj pwdUpdateObj,HttpServletRequest request){
 		Map<String,Object> resMap = new HashMap<String, Object>();
-		if(pwdUpdateObj.getNewPwd().equals(pwdUpdateObj.getNewPwd2())){
+		if(StringUtils.isEmpty(pwdUpdateObj.getOldPwd())
+				||StringUtils.isEmpty(pwdUpdateObj.getNewPwd())
+				||StringUtils.isEmpty(pwdUpdateObj.getNewPwd2())){
+			resMap.put("result", false);
+			resMap.put("msg", "输入的信息不完整");
+		}
+		else if(pwdUpdateObj.getNewPwd().equals(pwdUpdateObj.getNewPwd2())){
 			User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 			String loginedPwd = this.userService.getUserById(loginedUser.getUserId()).getPassword();
 			if(!MD5Encoder.encode(pwdUpdateObj.getOldPwd()).equals(loginedPwd)){
 				resMap.put("result", false);
 				resMap.put("msg", "原密码输入有误");
 				return resMap;
+			}else if(pwdUpdateObj.getNewPwd().length()>50){
+				resMap.put("result", false);
+				resMap.put("msg", "密码长度过大，请勿超过50个字符");
+				return resMap;
 			}
 			UserUpdateObj userUpdateObj = new UserUpdateObj();
 			userUpdateObj.setUserId(loginedUser.getUserId());
 			userUpdateObj.getNewUpdAttObj().setPassword(MD5Encoder.encode(pwdUpdateObj.getNewPwd()));
 			this.userService.updateDynamic(userUpdateObj);
+			request.getSession().setAttribute(Constants.LOGINED_USER_BEAN_NAME,
+					this.userService.getUserById(userUpdateObj.getUserId()));
 			resMap.put("result", true);
 			resMap.put("msg", "密码修改成功，请牢记您的新密码");
 		}
