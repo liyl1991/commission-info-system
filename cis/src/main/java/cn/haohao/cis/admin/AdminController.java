@@ -89,7 +89,7 @@ public class AdminController extends MultiActionController{
 			resMap.put("preIncome", preIncome.get(0));
 		
 		//总记录
-		resMap.put("incomeSum", this.userIncomeService.getIncomeSum(loginedUser.getUserId()));
+		resMap.put("incomeSum", this.userIncomeService.getIncomeSum(queryObj.getUserId()));
 		//员工信息
 		resMap.put("userInfo", this.userService.getUserById(queryObj.getUserId()));
 		return resMap;

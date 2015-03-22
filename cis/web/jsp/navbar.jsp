@@ -17,15 +17,50 @@
 
 		<div class="navbar-header pull-right" role="navigation">
 			<ul class="nav ace-nav">
-				<li class="grey">
+				<li class="green">
 					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 						<i class="icon-qrcode"></i>
+						安卓
 					</a>
 
 					<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
 						<li class="dropdown-header">
 							<i class="icon-ok"></i>
-							客户端下载
+							安卓下载
+						</li>
+
+						<li>
+							<img src="<%=path %>/assets/images/ewm.png" width="220" height="220"/>
+						</li>
+					</ul>
+				</li>
+				<li class="grey">
+					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+						<i class="icon-qrcode"></i>
+						IOS
+					</a>
+
+					<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+						<li class="dropdown-header">
+							<i class="icon-ok"></i>
+							IOS下载
+						</li>
+
+						<li>
+							<img src="<%=path %>/assets/images/ewm.png" width="220" height="220"/>
+						</li>
+					</ul>
+				</li>
+				<li class="blue">
+					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+						<i class="icon-qrcode"></i>
+						桌面
+					</a>
+
+					<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+						<li class="dropdown-header">
+							<i class="icon-ok"></i>
+							桌面下载
 						</li>
 
 						<li>
