@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>控制台</title>
+		<title>密码修改</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
 		
 	</head>
@@ -31,7 +31,7 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="icon-home home-icon"></i>
-								<a href="http://www.haohao.cn">首页</a>
+								<a href="#">首页</a>
 							</li>
 							<li class="active">密码管理</li>
 						</ul><!-- .breadcrumb -->

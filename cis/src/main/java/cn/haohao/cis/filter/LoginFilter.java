@@ -32,6 +32,8 @@ public class LoginFilter implements Filter {
 		String url = request.getRequestURI();
 
 		boolean doFilter = check(notFilter, url);
+		String contextPath = request.getContextPath()+"/";
+		if(contextPath.equals(url)) doFilter = false;
 		if (doFilter) {
 			Object obj = request.getSession().getAttribute("loginedUser");
 			if (null == obj) {
