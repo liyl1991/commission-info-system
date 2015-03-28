@@ -11,6 +11,14 @@ import cn.haohao.cis.user.model.User;
  *	VO
  */
 public class UserQueryObj extends User implements IPageable{
+	/**
+	 * 等级小于
+	 */
+	private String levelLt;
+	/**
+	 * 不等于
+	 */
+	private String levelNotEq;
 	
 	private static final long serialVersionUID = 1L;
 	/**
@@ -28,7 +36,7 @@ public class UserQueryObj extends User implements IPageable{
 	public Integer getStartRowNum() {
 		if (currentPage < 1)
 			currentPage = 1;
-		return (currentPage - 1) * pageSize + 1;
+		return (currentPage - 1) * pageSize;
 	}
 	public Integer getEndRowNum() {
 		if (currentPage < 1)
@@ -80,4 +88,17 @@ public class UserQueryObj extends User implements IPageable{
 	public void setSort(List<Order> orders){
 		this.sort = new Sort(orders);
 	}
+	public String getLevelLt() {
+		return levelLt;
+	}
+	public void setLevelLt(String levelLt) {
+		this.levelLt = levelLt;
+	}
+	public String getLevelNotEq() {
+		return levelNotEq;
+	}
+	public void setLevelNotEq(String levelNotEq) {
+		this.levelNotEq = levelNotEq;
+	}
+	
 }

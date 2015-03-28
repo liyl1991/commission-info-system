@@ -17,7 +17,7 @@
 
 		<div class="navbar-header pull-right" role="navigation">
 			<ul class="nav ace-nav">
-				<li class="green">
+				<%-- <li class="green">
 					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 						<i class="icon-qrcode"></i>
 						安卓
@@ -33,7 +33,7 @@
 							<img src="<%=path %>/assets/images/ewm.png" width="220" height="220"/>
 						</li>
 					</ul>
-				</li>
+				</li> --%>
 				<%-- <li class="grey">
 					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 						<i class="icon-qrcode"></i>

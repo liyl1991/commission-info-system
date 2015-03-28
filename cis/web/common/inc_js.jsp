@@ -40,7 +40,9 @@
 
 <script src="<%=path %>/assets/js/ace-elements.min.js"></script>
 <script src="<%=path %>/assets/js/ace.min.js"></script>
+<%-- <script src="<%=path %>/assets/js/bootbox.min.js"></script> --%>
 <script type="text/javascript">
+	//bootbox.setLocale("zh_CN");
 	$(function(){
 		$.ajax({
 			url:path+'/user/getDownlineCount',

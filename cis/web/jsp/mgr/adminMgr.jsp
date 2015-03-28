@@ -5,7 +5,7 @@
 	<head>
 		<title>员工管理</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
-		
+		<link rel="stylesheet" href="<%=path %>/assets/css/jquery.gritter.css" />
 	</head>
 
 	<body>
@@ -38,16 +38,20 @@
 						<div class="page-content">
 							<div class="row">
 								<div class="col-xs-12">
-									<h3 class="header smaller lighter blue">员工管理</h3>
-	
+									<div class="table-header">
+										<a href="<%=path %>/admin/goInputUser" class="btn btn-xs btn-info">
+											<i class="icon-edit"></i>
+											<span class="no-text-shadow">新增</span>
+										</a>
+									</div>
 									<div class="table-responsive">
 										<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 											<thead>
 												<tr>
 													<th>姓名</th>
-													<th>性别</th>
-													<th class="hidden-480">等级</th>
-													<th>收入月份</th>
+													<th class="hidden-480">性别</th>
+													<th>等级</th>
+													<th class="hidden-480">收入月份</th>
 													<th>上次收入</th>
 													<th>上次业绩</th>
 													<th class="hidden-480">职业</th>
@@ -105,84 +109,8 @@
 
 		<jsp:include page="/common/inc_js.jsp"></jsp:include>
 		<script src="<%=path %>/assets/js/jqPaginator.js" type="text/javascript"></script>
-		<script type="text/javascript">
-		$(function(){
-			initPagination();
-		});
-		function doQuery(currentPage){
-			var dataObj = { 
-					"currentPage":currentPage?currentPage:1,
-					"pageSize":8}; 
-			$.ajax({
-				url:path+'/admin/getUserList',
-				type:"post",
-				dataType:"json",
-				data:dataObj,
-				success:function(r){
-					$(".container table tbody tr").remove();
-					if(r.downlineUsers.content.length!=0){
-						$('.pagination').show();
-						for(var i=0;i<r.downlineUsers.content.length;i++){
-							$('<tr>'+
-							  '  <td>'+
-								'	<a href="#">'+r.downlineUsers.content[i].name+'</a>'+
-								'</td>'+
-								'<td>'+(r.downlineUsers.content[i].sex=='1'?'男':(r.downlineUsers.content[i].sex=='2'?'女':'保密'))+'</td>'+
-								'<td class="hidden-480">'+r.downlineUsers.content[i].level+'级</td>'+
-								'<td>'+formatDate(r.downlineUsers.content[i].incomeDate)+'</td>'+
-								'<td>'+(r.downlineUsers.content[i].income?r.downlineUsers.content[i].income:'暂无数据')+'</td>'+
-								'<td>'+(r.downlineUsers.content[i].performance?r.downlineUsers.content[i].performance:'暂无数据')+'</td>'+
-								'<td class="hidden-480">'+
-								'	<span>'+r.downlineUsers.content[i].career+'</span>'+
-								'</td>'+
-								'<td>'+
-								'	<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">'+
-								'		<a class="btn btn-minier btn-primary" href="'+path+'/admin/goIncomeInfo/'+r.downlineUsers.content[i].userId+'" title="查看收入与业绩">业绩</a>'+
-							/* 	'		<a class="green" href="#" title="编辑">'+
-								'			<i class="icon-pencil bigger-130"></i>'+
-								'		</a>'+
-								'		<a class="red" href="#" title="删除">'+
-								'			<i class="icon-trash bigger-130"></i>'+
-								'		</a>'+
-								'		<a class="red" href="#" title="降级">'+
-								'			<i class="icon-arrow-down bigger-130"></i>'+
-								'		</a>'+ */
-								'	</div>'+
-								'</td>'+
-							  '</tr>').appendTo('.container table tbody');
-						}
-					}else{
-						$('.pagination').hide();
-						$('<tr>'+
-								'<td colspan="7">暂无数据</td>'+
-							  '</tr>').appendTo(".container table tbody");
-					}
-						
-					$('.pagination').jqPaginator('option', {
-						totalPages: r.downlineUsers.totalPages
-					});
-				},
-				error:function(){
-					
-				}
-			});
-		}
-		function initPagination(totalPages,current){//初始化分页栏
-			$(".pagination").jqPaginator({
-				totalPages: totalPages?totalPages:1,
-				visiblePages: 5,
-				currentPage: current?current:1,
-				first: '<li class="first"><a href="javascript:void(0);">首页<\/a><\/li>',
-				prev: '<li class="prev"><a href="javascript:void(0);"><i class="arrow arrow2"><\/i>上一页<\/a><\/li>',
-				next: '<li class="next"><a href="javascript:void(0);">下一页<i class="arrow arrow3"><\/i><\/a><\/li>',
-				last: '<li class="last"><a href="javascript:void(0);">末页<\/a><\/li>',
-				page: '<li class="page"><a href="javascript:void(0);">{{page}}<\/a><\/li>',
-				onPageChange: function (n) {
-					doQuery(n);
-				}
-			});
-		}
-		</script>
+		<script src="<%=path %>/assets/js/jquery.gritter.min.js"></script>
+		<script src="<%=path %>/jsp/mgr/adminMgr.js" type="text/javascript"></script>
 		
 </body>
 </html>

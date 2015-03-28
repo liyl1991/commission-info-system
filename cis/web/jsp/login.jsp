@@ -17,7 +17,7 @@
 								<h1>
 									<i class="icon-leaf green"></i>
 									<span class="red">好好财经网</span>
-									<span class="white">经纪人系统</span>
+									<span class="blue">经纪人系统</span>
 								</h1>
 								<!-- <h4 class="blue">&copy; Company Name</h4> -->
 							</div>

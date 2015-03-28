@@ -25,15 +25,6 @@ public class UserService implements IUserService {
 	}
 
 	public User createUser(User user) {
-//		if(user.getUserId()!=null){
-//			UserQueryObj tmp = new UserQueryObj();
-//			tmp.setUserId(user.getUserId());
-//			Long retNum = userDao.countByArgs(tmp);
-//			if(retNum>0) throw new BusinessException("prime key value is already exist!");
-//		}else{
-//			Long seq = userDao.getSequence();
-//			user.setUserId(seq);
-//		}
 		userDao.create(user);
 		return user;
 	}

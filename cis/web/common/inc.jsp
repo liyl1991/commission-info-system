@@ -7,7 +7,8 @@
 <!-- basic styles -->
 <link href="<%=path %>/assets/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="<%=path %>/assets/css/font-awesome.min.css" />
-
+<link rel="stylesheet" href="<%=path %>/assets/css/bootstrap-datepicker.min.css" />
+<link rel="stylesheet" href="<%=path %>/assets/css/chosen.css" />
 <!--[if IE 7]>
   <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
 <![endif]-->
