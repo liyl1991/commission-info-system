@@ -60,25 +60,29 @@ public class VuserIncome implements Serializable{
 	 */
 	private java.lang.Integer status;
 	/*
+	 * 角色：1、用户，2、管理员
+	 */
+	private java.lang.Integer userRole;
+	/*
 	 * 上线员工
 	 */
 	private java.lang.Integer uplineUser;
 	/*
-	 * 角色
+	 * 扩展备用1
 	 */
-	private Integer userRole;
+	private java.lang.String extend1;
 	/*
-	 * 月份
+	 * 扩展备用2
 	 */
-	private java.util.Date incomeDate;
+	private java.lang.String extend2;
 	/*
 	 * 收入
 	 */
-	private java.lang.Float income;
+	private java.lang.Float preMonthIncome;
 	/*
 	 * 业绩
 	 */
-	private java.lang.Float performance;
+	private java.lang.Float preMonthPerformance;
 	//属性 end
 	
 	//方法 begin
@@ -191,6 +195,18 @@ public class VuserIncome implements Serializable{
 		this.status = status;
 	}
 	/*
+	 * 获取 角色：1、用户，2、管理员
+	 */
+	public java.lang.Integer getUserRole(){
+		return this.userRole;
+	}
+	/*
+	 * 设置 角色：1、用户，2、管理员
+	 */
+	public void setUserRole(java.lang.Integer userRole){
+		this.userRole = userRole;
+	}
+	/*
 	 * 获取 上线员工
 	 */
 	public java.lang.Integer getUplineUser(){
@@ -203,50 +219,55 @@ public class VuserIncome implements Serializable{
 		this.uplineUser = uplineUser;
 	}
 	/*
-	 * 获取 月份
+	 * 获取 扩展备用1
 	 */
-	public java.util.Date getIncomeDate(){
-		return this.incomeDate;
+	public java.lang.String getExtend1(){
+		return this.extend1;
 	}
 	/*
-	 * 设置 月份
+	 * 设置 扩展备用1
 	 */
-	public void setIncomeDate(java.util.Date incomeDate){
-		this.incomeDate = incomeDate;
+	public void setExtend1(java.lang.String extend1){
+		this.extend1 = extend1;
+	}
+	/*
+	 * 获取 扩展备用2
+	 */
+	public java.lang.String getExtend2(){
+		return this.extend2;
+	}
+	/*
+	 * 设置 扩展备用2
+	 */
+	public void setExtend2(java.lang.String extend2){
+		this.extend2 = extend2;
 	}
 	/*
 	 * 获取 收入
 	 */
-	public java.lang.Float getIncome(){
-		return this.income;
+	public java.lang.Float getPreMonthIncome(){
+		return this.preMonthIncome;
 	}
 	/*
 	 * 设置 收入
 	 */
-	public void setIncome(java.lang.Float income){
-		this.income = income;
+	public void setPreMonthIncome(java.lang.Float preMonthIncome){
+		this.preMonthIncome = preMonthIncome;
 	}
 	/*
 	 * 获取 业绩
 	 */
-	public java.lang.Float getPerformance(){
-		return this.performance;
+	public java.lang.Float getPreMonthPerformance(){
+		return this.preMonthPerformance;
 	}
 	/*
 	 * 设置 业绩
 	 */
-	public void setPerformance(java.lang.Float performance){
-		this.performance = performance;
+	public void setPreMonthPerformance(java.lang.Float preMonthPerformance){
+		this.preMonthPerformance = preMonthPerformance;
 	}
-	
 	//方法 end
 
-	public Integer getUserRole() {
-		return userRole;
-	}
-	public void setUserRole(Integer userRole) {
-		this.userRole = userRole;
-	}
 	public Long getId(){
 		if (userId==null) return null;
 		return Long.valueOf(this.userId);

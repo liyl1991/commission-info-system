@@ -9,6 +9,6 @@ public class Constants {
 	
 	public final static String LOGINED_USER_BEAN_NAME = "loginedUser";
 	
-	public final static String DEFAULT_PASSWORD = "abc123";
+	public final static String DEFAULT_PASSWORD = PropertiesUtils.getProperties().getProperty("default_password");
 
 }

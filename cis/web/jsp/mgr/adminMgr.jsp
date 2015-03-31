@@ -50,10 +50,9 @@
 												<tr>
 													<th>姓名</th>
 													<th class="hidden-480">性别</th>
-													<th>等级</th>
-													<th class="hidden-480">收入月份</th>
-													<th>上次收入</th>
-													<th>上次业绩</th>
+													<th class="hidden-480">等级</th>
+													<th>上月收入</th>
+													<th>上月业绩</th>
 													<th class="hidden-480">职业</th>
 													<th></th>
 												</tr>

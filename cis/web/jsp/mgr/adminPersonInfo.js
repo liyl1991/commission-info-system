@@ -62,6 +62,7 @@ UserDetail.prototype.init = function(){
 			_own.doQueryUserIncome(n);
 		}
 	});
+	//提交收入信息按钮事件
 	$('.submitIncomeBtn').click(function(){
 		if(isNaN($('input[name="income"]').val())||$.trim($('input[name="income"]').val()).length==0){
 			$.gritter.add({
@@ -72,7 +73,7 @@ UserDetail.prototype.init = function(){
 			});
 			return;
 		}
-		if(isNaN($('input[name="performance"]').val())){
+		if(_own.userInfo.level!='X'&&(isNaN($('input[name="performance"]').val())||$.trim($('input[name="performance"]').val()).length==0)){
 			$.gritter.add({
 				title: '添加收入信息出错',
 				text: '请正确输入业绩信息，必须为数值。',
@@ -164,7 +165,7 @@ UserDetail.prototype.doQueryUserdownlines = function(pageNo){
 		}
 	});
 };
-
+//查询员工收入
 UserDetail.prototype.doQueryUserIncome = function(pageNo){
 	var _own = this;
 	var dataObj = { 
@@ -185,9 +186,10 @@ UserDetail.prototype.doQueryUserIncome = function(pageNo){
 					var statusClass = r.incomeList.content[i].isEnough==1?'success':'danger';
 					$('<tr class="'+statusClass+'">'+
 						'<td>'+formatDate(r.incomeList.content[i].incomeDate)+'</td>'+
-						'<td>'+r.incomeList.content[i].income+'</td>'+
-						'<td>'+r.incomeList.content[i].performance+'</td>'+
+						'<td>'+(r.incomeList.content[i].income?("￥"+r.incomeList.content[i].income):'暂无数据')+'</td>'+
+						'<td>'+(r.incomeList.content[i].performance?("￥"+r.incomeList.content[i].performance):'暂无数据')+'</td>'+
 						'<td><i class="icon-'+isEnough+'"></i></td>'+
+						//'<td><a class="btn btn-minier btn-danger" href="javascript:doDelete('+r.incomeList.content[i].+')" title="删除该员工">删除</a></td>'+
 					  '</tr>').appendTo(".income-table tbody");
 				}
 			}
@@ -199,14 +201,14 @@ UserDetail.prototype.doQueryUserIncome = function(pageNo){
 			}
 			//$(".pre-income,.pre-performance").remove infobox-green
 			if(r.preIncome){
-				$(".pre-income .money").text("￥"+r.preIncome.income);
-				$(".pre-performance .money").text("￥"+r.preIncome.performance);
+				$(".pre-income .money").text(r.preIncome.preMonthIncome?("￥"+r.preIncome.preMonthIncome):'暂无数据');
+				$(".pre-performance .money").text(r.preIncome.preMonthPerformance?("￥"+r.preIncome.preMonthPerformance):'暂无数据');
 				if(r.preIncome.isEnough==1) $(".pre-performance").addClass("infobox-green");
 				else $(".pre-performance").addClass("infobox-red");
 			}
 			if(r.incomeSum){
-				$(".sum-income .money").text("￥"+r.incomeSum.income);
-				$(".sum-performance .money").text("￥"+r.incomeSum.performance);
+				$(".sum-income .money").text(r.incomeSum.income?("￥"+r.incomeSum.income):'暂无数据');
+				$(".sum-performance .money").text(r.incomeSum.performance?("￥"+r.incomeSum.performance):'暂无数据');
 			}
 			_own.userInfo = r.userInfo;
 			$('#dropdown14 .pagination').jqPaginator('option', {

@@ -13,6 +13,8 @@ import cn.haohao.cis.income.model.UserIncome;
 public class UserIncomeQueryObj extends UserIncome implements IPageable{
 	
 	private static final long serialVersionUID = 1L;
+	private Integer yearEq;
+	private Integer monthEq;
 	/**
 	 * 页面大小
 	 */
@@ -80,4 +82,17 @@ public class UserIncomeQueryObj extends UserIncome implements IPageable{
 	public void setSort(List<Order> orders){
 		this.sort = new Sort(orders);
 	}
+	public Integer getYearEq() {
+		return yearEq;
+	}
+	public void setYearEq(Integer yearEq) {
+		this.yearEq = yearEq;
+	}
+	public Integer getMonthEq() {
+		return monthEq;
+	}
+	public void setMonthEq(Integer monthEq) {
+		this.monthEq = monthEq;
+	}
+	
 }

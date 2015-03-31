@@ -100,13 +100,13 @@
 						for(var i=0;i<r.downlineUsers.content.length;i++){
 							$('<tr>'+
 							  '  <td>'+
-								'	<a href="#">'+r.downlineUsers.content[i].name+'</a>'+
+								'	<a href="'+path+'/userIncome/goDownlineIncome/'+r.downlineUsers.content[i].userId+'">'+r.downlineUsers.content[i].name+'</a>'+
 								'</td>'+
 								'<td>'+(r.downlineUsers.content[i].sex=='1'?'男':(r.downlineUsers.content[i].sex=='2'?'女':'保密'))+'</td>'+
 								'<td class="hidden-480">'+r.downlineUsers.content[i].level+'级</td>'+
 								'<td class="hidden-480">'+formatDate(r.downlineUsers.content[i].incomeDate)+'</td>'+
-								'<td>'+(r.downlineUsers.content[i].income?r.downlineUsers.content[i].income:'暂无数据')+'</td>'+
-								'<td>'+(r.downlineUsers.content[i].performance?r.downlineUsers.content[i].performance:'暂无数据')+'</td>'+
+								'<td>'+(r.downlineUsers.content[i].preMonthIncome?r.downlineUsers.content[i].preMonthIncome:'暂无数据')+'</td>'+
+								'<td>'+(r.downlineUsers.content[i].preMonthPerformance?r.downlineUsers.content[i].preMonthPerformance:'暂无数据')+'</td>'+
 								'<td class="hidden-480">'+
 								'	<span class="label label-sm label-warning">'+r.downlineUsers.content[i].career+'</span>'+
 								'</td>'+

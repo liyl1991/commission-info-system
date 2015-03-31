@@ -21,9 +21,8 @@ function doQuery(currentPage){
 					'</td>'+
 					'<td>'+(r.downlineUsers.content[i].sex=='1'?'男':(r.downlineUsers.content[i].sex=='2'?'女':'保密'))+'</td>'+
 					'<td class="hidden-480">'+r.downlineUsers.content[i].level+'级</td>'+
-					'<td>'+formatDate(r.downlineUsers.content[i].incomeDate)+'</td>'+
-					'<td>'+(r.downlineUsers.content[i].income?r.downlineUsers.content[i].income:'暂无数据')+'</td>'+
-					'<td>'+(r.downlineUsers.content[i].performance?r.downlineUsers.content[i].performance:'暂无数据')+'</td>'+
+					'<td>'+(r.downlineUsers.content[i].preMonthIncome?r.downlineUsers.content[i].preMonthIncome:'暂无数据')+'</td>'+
+					'<td>'+(r.downlineUsers.content[i].preMonthPerformance?r.downlineUsers.content[i].preMonthPerformance:'暂无数据')+'</td>'+
 					'<td class="hidden-480">'+
 					'	<span>'+r.downlineUsers.content[i].career+'</span>'+
 					'</td>'+

@@ -10,7 +10,6 @@ import cn.haohao.cis.user.service.IVuserIncomeService;
 import cn.haohao.cis.user.model.VuserIncome;
 import cn.haohao.cis.user.vo.VuserIncomeQueryObj;
 import cn.haohao.cis.user.vo.VuserIncomeUpdateObj;
-import cn.haohao.vas.core.exception.BusinessException;
 //j-import-e
 /**
  *	SERVICE IMPL
@@ -34,7 +33,7 @@ public class VuserIncomeService implements IVuserIncomeService {
 		vuserIncomeDao.delete(vuserIncomeQueryObj);
 	}
 
-	public VuserIncome getVuserIncomeById(Long vuserIncomeId) {
+	public VuserIncome getVuserIncomeById(Integer vuserIncomeId) {
 		return vuserIncomeDao.getById(vuserIncomeId);
 	}
 

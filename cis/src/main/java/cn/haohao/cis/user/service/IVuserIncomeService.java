@@ -44,7 +44,7 @@ public interface IVuserIncomeService {
 	 * @param vuserIncomeId
 	 * @return
 	 */
-	public VuserIncome getVuserIncomeById(Long vuserIncomeId);
+	public VuserIncome getVuserIncomeById(Integer vuserIncomeId);
 	/**
 	 * u-insert-b@note6.0@
 	 * u-insert-e@note6.0@

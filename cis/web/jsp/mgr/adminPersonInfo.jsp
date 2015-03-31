@@ -43,10 +43,11 @@
 							<li class="active">
 								<a data-toggle="tab" href="#home4">员工信息</a>
 							</li>
-
+							<c:if test="${user.level ne 'X' }">
 							<li>
 								<a data-toggle="tab" href="#profile4">员工下线</a>
 							</li>
+							</c:if>
 
 							<li>
 								<a data-toggle="tab" href="#dropdown14">员工收入</a>
@@ -153,7 +154,7 @@
 										</div>
 									</div>
 							</div>
-
+							<c:if test="${user.level ne 'X' }">
 							<div id="profile4" class="tab-pane">
 								<table class="table table-striped table-bordered table-hover downline-table">
 									<thead>
@@ -176,7 +177,7 @@
 									</ul>
 								</div>
 							</div>
-
+							</c:if>
 							<div id="dropdown14" class="tab-pane">
 							<div class="row clearfix income-content">
 							<div class="col-md-2 column">
@@ -215,18 +216,11 @@
 								<table class="table table-hover table-bordered income-table">
 									<thead>
 										<tr>
-											<th>
-												月份
-											</th>
-											<th>
-												收入
-											</th>
-											<th>
-												业绩
-											</th>
-											<th>
-												是否达标
-											</th>
+											<th>月份</th>
+											<th>收入</th>
+											<th>业绩</th>
+											<th>是否达标</th>
+											<!-- <th>操作</th> -->
 										</tr>
 									</thead>
 									<tbody>
@@ -253,7 +247,7 @@
 		</div>
 		<!-- modal start -->
 		<div id="modal-form" class="modal" tabindex="-1">
-			<div class="modal-dialog">
+			<div class="modal-dialog margin-top-55">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -271,13 +265,15 @@
 										<input type="text" name="income" id="form-field-income" class="col-xs-10 col-sm-8" />
 									</div>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right" for="form-field-perform">业绩 </label>
-		
-									<div class="col-sm-9">
-										<input type="text" name="performance" id="form-field-perform" class="col-xs-10 col-sm-8" />
+								<c:if test="${user.level ne 'X' }">
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-perform">业绩 </label>
+			
+										<div class="col-sm-9">
+											<input type="text" name="performance" id="form-field-perform" class="col-xs-10 col-sm-8" />
+										</div>
 									</div>
-								</div>
+								</c:if>
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="form-field-incomedate"> 收入月份 </label>
 

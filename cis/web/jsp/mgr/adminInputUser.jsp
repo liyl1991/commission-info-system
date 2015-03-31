@@ -1,7 +1,11 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
-<% String path = request.getContextPath();%>
+<%@ page import="cn.haohao.cis.utils.Constants"  %>
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
+<% 
+	String path = request.getContextPath();
+	String defaultPwd = Constants.DEFAULT_PASSWORD;
+%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -43,7 +47,7 @@
 							新员工录入
 							<small>
 								<i class="icon-double-angle-right"></i>
-								您可以在这里录入新员工信息。所有新员工密码默认为'abc123'。
+								您可以在这里录入新员工信息。所有新员工密码默认为'<%=defaultPwd %>'。
 							</small>
 						</h1>
 					</div>

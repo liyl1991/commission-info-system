@@ -140,8 +140,8 @@
 					}
 					//$(".pre-income,.pre-performance").remove infobox-green
 					if(r.preIncome){
-						$(".pre-income .money").text("￥"+r.preIncome.income);
-						$(".pre-performance .money").text("￥"+r.preIncome.performance);
+						$(".pre-income .money").text(r.preIncome.preMonthIncome?("￥"+r.preIncome.preMonthIncome):'暂无数据');
+						$(".pre-performance .money").text(r.preIncome.preMonthPerformance?("￥"+r.preIncome.preMonthPerformance):'暂无数据');
 						if(r.preIncome.isEnough==1) $(".pre-performance").addClass("infobox-green");
 						else $(".pre-performance").addClass("infobox-red");
 					}

@@ -31,6 +31,8 @@
 		   <if test="income != null">and t.INCOME = #{income}</if>
 		   <if test="performance != null">and t.PERFORMANCE = #{performance}</if>
 		   <if test="isEnough != null">and t.IS_ENOUGH = #{isEnough}</if>
+		   <if test="yearEq != null">and year(t.INCOME_DATE)  = #{yearEq}</if>
+		   <if test="monthEq != null">and month(t.INCOME_DATE)  = #{monthEq}</if>
 	   </trim>
 	 </where>
 	</sql>

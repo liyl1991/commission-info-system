@@ -1,9 +1,5 @@
 package cn.haohao.cis.admin;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.haohao.cis.income.model.UserIncome;
 import cn.haohao.cis.income.service.IUserIncomeService;
 import cn.haohao.cis.income.vo.UserIncomeQueryObj;
-import cn.haohao.cis.income.vo.UserIncomeUpdateObj;
 import cn.haohao.cis.user.model.User;
 import cn.haohao.cis.user.model.VuserIncome;
 import cn.haohao.cis.user.service.IUserService;
@@ -95,10 +90,10 @@ public class AdminController extends MultiActionController{
 		//可选上级列表
 		UserQueryObj userQueryObj = new UserQueryObj();
 		userQueryObj.setStatus(1);
-		userQueryObj.setLevelLt(targetUser.getLevel());
-		if(!"B".equalsIgnoreCase(targetUser.getLevel())){//只有B级的上线可以是管理员
-			userQueryObj.setLevelNotEq("A");
-		}
+		//userQueryObj.setLevelLt(targetUser.getLevel());
+		//if(!"B".equalsIgnoreCase(targetUser.getLevel())){//只有B级的上线可以是管理员
+		//}
+		userQueryObj.setLevelNotEq("X");
 		List<User> uplineCandidate = this.userService.queryUser(userQueryObj);
 		request.setAttribute("uplineCandidate", uplineCandidate);
 		return "mgr/adminPersonInfo";
@@ -135,10 +130,7 @@ public class AdminController extends MultiActionController{
 		Page<UserIncome> incomeList = this.userIncomeService.pageQueryUserIncome(queryObj);
 		resMap.put("incomeList", incomeList);
 		//上月记录
-		queryObj.setIncomeDate(this.getPrecedingDate());
-		List<UserIncome> preIncome = this.userIncomeService.queryUserIncome(queryObj);
-		if(preIncome.size()!=0)
-			resMap.put("preIncome", preIncome.get(0));
+		resMap.put("preIncome", this.vuserIncomeService.getVuserIncomeById(queryObj.getUserId()));
 		
 		//总记录
 		resMap.put("incomeSum", this.userIncomeService.getIncomeSum(queryObj.getUserId()));
@@ -247,6 +239,7 @@ public class AdminController extends MultiActionController{
 			return resMap;
 		}
 		try{
+			DataValidater.userIncomeInputValidate(userIncome, userService, userIncomeService);
 			this.userIncomeService.createUserIncome(userIncome);
 			resMap.put("result", true);
 		}catch(BusinessException be){
@@ -257,25 +250,5 @@ public class AdminController extends MultiActionController{
 			resMap.put("msg", "新增失败");
 		}
 		return resMap;
-	}
-	/**
-	 * 获取上个月日期
-	 * @return
-	 */
-	private Date getPrecedingDate(){
-		
-		Calendar c = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		int month = c.get(Calendar.MONTH),year = c.get(Calendar.YEAR);
-		try {
-			if(month!=0){
-				return sdf.parse(year+"-"+month+"-01");
-			}else{
-				return sdf.parse((year-1)+"-12-01");
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 }
