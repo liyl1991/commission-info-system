@@ -1,7 +1,9 @@
 package cn.haohao.cis.validate;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -76,15 +78,36 @@ public class DataValidater {
 		if(targetUser==null)
 			throw new BusinessException("员工信息无效");
 		//录入的月份是否存在
-		Calendar ca = Calendar.getInstance();
-		ca.setTime(newObj.getIncomeDate());
+		Calendar objDate = Calendar.getInstance();
+		objDate.setTime(newObj.getIncomeDate());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM");
 		UserIncomeQueryObj userIncomeQueryObj = new UserIncomeQueryObj();
-		userIncomeQueryObj.setYearEq(ca.get(Calendar.YEAR));
-		userIncomeQueryObj.setMonthEq(ca.get(Calendar.MONTH)+1);
+		userIncomeQueryObj.setYearEq(objDate.get(Calendar.YEAR));
+		userIncomeQueryObj.setMonthEq(objDate.get(Calendar.MONTH)+1);
 		userIncomeQueryObj.setUserId(newObj.getUserId());
 		if(userIncomeService.queryUserIncome(userIncomeQueryObj).size()>0)
 			throw new BusinessException("该员工在"+sdf.format(newObj.getIncomeDate())+"月份已经有收入信息，请确认");
-		
+		//验证当前录入信息的月份不能大于当前月
+		Calendar now = Calendar.getInstance();
+		now.setTime(new Date());
+		if(objDate.get(Calendar.YEAR)>now.get(Calendar.YEAR))
+			throw new BusinessException("您只能录入当前月份及之前的收入信息，请检查收入月份");
+		else if(objDate.get(Calendar.YEAR)==now.get(Calendar.YEAR)
+				&&objDate.get(Calendar.MONTH)>now.get(Calendar.MONTH))
+			throw new BusinessException("您只能录入当前月份及之前的收入信息，请检查收入月份");
+	}
+	public static void main(String[] args) {
+		Calendar ca = Calendar.getInstance();
+		Calendar ca1 = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		ca.setTime(new Date());
+		try {
+			ca1.setTime(sdf.parse("2016/01/11"));
+			System.out.println("ca"+ca.get(Calendar.YEAR)+"-"+ca.get(Calendar.MONTH));
+			System.out.println("ca1"+ca1.get(Calendar.YEAR)+"-"+ca1.get(Calendar.MONTH));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
