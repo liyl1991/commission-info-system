@@ -109,11 +109,13 @@
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-upline"> 员工上级 </label>
 							<div class="col-sm-9">
 								<%-- <input type="text" name="uplineName" value="${uplineUser.name }(${uplineUser.level }级)" id="form-field-1" class="col-xs-10 col-sm-5" /> --%>
-								<select name="uplineUser" class="col-sm-4 chosen-select" id="form-field-upline" data-placeholder="">
+								<div class="row col-sm-5">
+								<select name="uplineUser" class="col-sm-12 chosen-select" id="form-field-upline" data-placeholder="">
 									<c:forEach items="${uplineCandidate }" var="candidate">
 										<option value="${candidate.userId }" <c:if test="${user.uplineUser == candidate.userId}">selected="selected"</c:if>>${candidate.name }(${candidate.level }级)</option>
 									</c:forEach>
 								</select>
+								</div>
 							</div>
 						</div>
 						<div class="form-group">
