@@ -25,7 +25,18 @@ public class DataValidater {
 		//身份证验证
 		if(StringUtils.isNotEmpty(newObj.getIdCard())){
 			IDCard.IDCardValidate(newObj.getIdCard());
+			//查询身份证是否被使用
+			UserQueryObj userQueryObj = new UserQueryObj();
+			userQueryObj.setIdCard(newObj.getIdCard());
+			List<User> userList = userService.queryUser(userQueryObj);
+			if(userList.size()>1)
+				throw new BusinessException("读取数据出错");
+			else if(userList.size()==1){
+				if(userList.get(0).getUserId()!=newObj.getUserId())
+					throw new BusinessException("您输入的身份证号码已被使用，请确认！");
+			}
 		}
+		
 		//等级验证
 		if(oldObj.getLevel().compareToIgnoreCase(newObj.getLevel())>0){
 			//自身等级必须低于上级
@@ -43,6 +54,26 @@ public class DataValidater {
 				if(downline.getLevel().compareTo(newObj.getLevel())>=0){
 					throw new BusinessException("要将员工降级到"+newObj.getLevel()+",必须该员工所有下线都低于这个等级。");
 				}
+			}
+		}
+	}
+	/**
+	 * 验证审核未通过用户更新信息
+	 */
+	public static void userUpdateAuditValidate(User newObj,IUserService userService){
+		//User oldObj = userService.getUserById(newObj.getUserId());
+		//身份证验证
+		if(StringUtils.isNotEmpty(newObj.getIdCard())){
+			IDCard.IDCardValidate(newObj.getIdCard());
+			//查询身份证是否被使用
+			UserQueryObj userQueryObj = new UserQueryObj();
+			userQueryObj.setIdCard(newObj.getIdCard());
+			List<User> userList = userService.queryUser(userQueryObj);
+			if(userList.size()>1)
+				throw new BusinessException("读取数据出错");
+			else if(userList.size()==1){
+				if(userList.get(0).getUserId().intValue()!=newObj.getUserId().intValue())
+					throw new BusinessException("您输入的身份证号码已被使用，请确认！");
 			}
 		}
 	}
@@ -96,6 +127,31 @@ public class DataValidater {
 				&&objDate.get(Calendar.MONTH)>now.get(Calendar.MONTH))
 			throw new BusinessException("您只能录入当前月份及之前的收入信息，请检查收入月份");
 	}
+	
+	public static void userRegisterValidate(User registerUser ,String pwd,String affirmPwd,IUserService userService){
+		if(registerUser.getIdCard()==null||registerUser.getIdCard().trim().length()==0){
+			throw new BusinessException("请输入您的身份证号码!");
+		}else
+			IDCard.IDCardValidate(registerUser.getIdCard());
+		
+		UserQueryObj userQueryObj = new UserQueryObj();
+		userQueryObj.setIdCard(registerUser.getIdCard());
+		List<User> userList = userService.queryUser(userQueryObj);
+		if(userList.size()!=0){
+			throw new BusinessException("您输入的身份证号码已被注册，请确认！");
+		}
+		
+		if(pwd==null||pwd.trim().length()==0){
+			throw new BusinessException("请输入密码！");
+		}
+		if(affirmPwd==null||affirmPwd.trim().length()==0){
+			throw new BusinessException("请输入确认密码！");
+		}
+		if(!pwd.equals(affirmPwd)){
+			throw new BusinessException("两次输入密码不一致！");
+		}
+	}
+	
 	public static void main(String[] args) {
 		Calendar ca = Calendar.getInstance();
 		Calendar ca1 = Calendar.getInstance();

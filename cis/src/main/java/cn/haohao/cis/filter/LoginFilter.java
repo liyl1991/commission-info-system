@@ -25,7 +25,7 @@ public class LoginFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		// 不拦截的url
-		String[] notFilter = new String[] { "/jsp/login.jsp","/login/doLogin" };
+		String[] notFilter = new String[] { "/jsp/login.jsp","/login/doLogin","/login/doRegister" };
 
 		// 请求的url
 		String url = request.getRequestURI();

@@ -5,6 +5,7 @@
 	<head>
 		<title>经纪人系统</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
+		<link rel="stylesheet" href="<%=path %>/assets/css/jquery.gritter.css" />
 	</head>
 
 	<body class="login-layout">
@@ -135,71 +136,95 @@
 											<div class="space-6"></div>
 											<p> 请输入您的信息: </p>
 
-											<form>
-												<fieldset>
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" placeholder="姓名" />
-															<i class="icon-user"></i>
-														</span>
-													</label>
-
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="密码" />
-															<i class="icon-lock"></i>
-														</span>
-													</label>
-
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="确认密码" />
-															<i class="icon-retweet"></i>
-														</span>
-													</label>
-													
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input class="form-control date-picker" id="id-date-picker-1" placeholder="出生年月" type="text" data-date-format="yyyy-mm-dd" />
-															<i class="icon-calendar bigger-110"></i>
-														</span>
-													</label>
-													
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" placeholder="住址" />
-															<i class="icon-home"></i>
-														</span>
-													</label>
-													
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" placeholder="职业" />
-															<i class="icon-coffee"></i>
-														</span>
-													</label>
-													<!-- <label class="block">
-														<input type="checkbox" class="ace" />
-														<span class="lbl">
-															I accept the
-															<a href="#">User Agreement</a>
-														</span>
-													</label> -->
-
-													<div class="space-24"></div>
-
+											<form class="form-horizontal" role="form" id="registerForm">
+ 													<div class="form-group">
+														<label class="col-sm-3 control-label no-padding-right" for="form-field-idcard">身份证号 </label>
+				
+														<div class="col-sm-9">
+															<input type="text" name="idCard"  maxlength="20" id="form-field-idcard" class="col-sm-12" />
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-3 control-label no-padding-right" for="form-field-name"> 姓名 </label>
+				
+														<div class="col-sm-9">
+															<input type="text" name="name" id="form-field-name" class="col-sm-12" />
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-3 control-label no-padding-right" for="form-field-pwd"> 密码 </label>
+				
+														<div class="col-sm-9">
+															<input type="password" name="pwd" id="form-field-pwd" class="col-sm-12" />
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-3 control-label no-padding-right" for="form-field-affirmPwd"> 确认密码</label>
+				
+														<div class="col-sm-9">
+															<input type="password" name="affirmPwd" id="form-field-affirmPwd" class="col-sm-12" />
+														</div>
+													</div>		
+													<div class="form-group">
+														<label class="col-sm-3 control-label no-padding-right" for="form-field-sex"> 性别 </label>
+				
+														<div class="col-sm-9">
+														  <div class="col-sm-3" style="padding-left: 0px;">
+															<label>
+																<input type="radio" class="ace" name="sex" value="1" checked="checked"/>
+																<span class="lbl"> 男</span>
+															</label>
+														  </div>
+														  <div class="col-sm-4">
+															<label>
+																<input type="radio" class="ace" name="sex" value="2"/>
+																<span class="lbl"> 女</span>
+															</label>
+														  </div>
+														  <div class="col-sm-5">
+															<label>
+																<input type="radio" class="ace" name="sex" value="3"/>
+																<span class="lbl"> 保密</span>
+															</label>
+														  </div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-3 control-label no-padding-right" for="form-field-birthday"> 出生年月</label>
+				
+														<div class="col-sm-9">
+															<input type="text" data-date-format="yyyy年mm月dd日" id="form-field-birthday"  placeholder="年/月/日" class="col-sm-12 birthdate-picker" />
+															<input type="hidden" name="birthday" />													
+														</div>
+													</div>	
+													<div class="form-group">
+														<label class="col-sm-3 control-label no-padding-right" for="form-field-career"> 职业</label>
+				
+														<div class="col-sm-9">
+															<input type="text" name="career" id="form-field-career" class="col-sm-12" />
+														</div>
+													</div>	
+													<div class="form-group">
+														<label class="col-sm-3 control-label no-padding-right" for="form-field-address"> 住址</label>
+				
+														<div class="col-sm-9">
+															<input type="text" name="address" id="form-field-address" class="col-sm-12" />
+															
+														</div>
+													</div>	
+													<div class="space-4"></div>
 													<div class="clearfix">
 														<button type="reset" class="width-30 pull-left btn btn-sm">
 															<i class="icon-refresh"></i>
 															重置
 														</button>
 
-														<button type="button" class="width-65 pull-right btn btn-sm btn-success">
+														<button type="button" class="width-65 pull-right btn btn-sm btn-success registerBtn">
 															注册
 															<i class="icon-arrow-right icon-on-right"></i>
 														</button>
 													</div>
-												</fieldset>
+												<!-- </fieldset> -->
 											</form>
 										</div>
 
@@ -238,16 +263,11 @@
 
 		<!-- inline scripts related to this page -->
 		<script src="<%=path %>/assets/js/date-time/bootstrap-datepicker.js"></script>
+		<script src="<%=path %>/assets/js/jquery.form.js" type="text/javascript"></script>
+		<script src="<%=path %>/assets/js/jquery.gritter.min.js"></script>
 		<script type="text/javascript">
 			var errorMsg = '${errorMsg}';
-			function show_box(id) {
-				 jQuery('.widget-box.visible').removeClass('visible');
-				 jQuery('#'+id).addClass('visible');
-			}
 			$(function(){
-				/* $('.date-picker').datepicker({autoclose:true}).next().on(ace.click_event, function(){
-					$(this).prev().focus();
-				}); */
 				//登陆事件绑定
 				$(".loginBtn").click(function(){
 					var idCard = $("#loginForm input[name='idCard']").val();
@@ -257,6 +277,50 @@
 					else
 						showError("请输入您的登陆信息");
 				});
+				//注册事件绑定
+				$(".registerBtn").click(function(){
+					var validateResult = registerValidate();
+					if(validateResult){
+						$.gritter.add({
+							title: '注册失败',
+							text: validateResult,
+							time:'5000',
+							class_name: 'gritter-error gritter-light'
+						});				
+						return;
+					}
+					$("#registerForm").ajaxSubmit({
+						url:path+"/login/doRegister",
+			    		type:'post',
+				    	"dataType":"json",
+				    	success: function (r) {
+				    		if(r.result){
+				    			$.gritter.add({
+									title: '注册成功',
+									text: '请等待审核',
+									time:'5000',
+									class_name: 'gritter-success gritter-light'
+								});
+				    		}else{
+				    			$.gritter.add({
+									title: '注册失败',
+									text: r.msg,
+									time:'5000',
+									class_name: 'gritter-error gritter-light'
+								});
+				    		}
+				    	},
+						error:function(){
+							$.gritter.add({
+								title: '操作失败',
+								text: '',
+								time:'5000',
+								class_name: 'gritter-error gritter-light'
+							});
+						}
+					});
+				});
+				
 				//关闭警告框事件
 				$(".login-box").on('click','.alert .close',function(){
 					$(this).parent(".alert").remove();
@@ -264,7 +328,16 @@
 				if(errorMsg){
 					showError(errorMsg);
 				}
+				
+				$('.birthdate-picker').datepicker({autoclose:true}).on('changeDate', function(ev){
+					var dt = new Date(ev.date.valueOf());
+					$('input[name="birthday"]').val(dt);
+				});
 			});
+			function show_box(id) {
+				 jQuery('.widget-box.visible').removeClass('visible');
+				 jQuery('#'+id).addClass('visible');
+			}
 			function showError(msg){
 				var alertCnt = $(".login-box .alert").length;
 				if(alertCnt!=0) $(".login-box .alert").remove();
@@ -275,6 +348,23 @@
 					'	</button>'+
 					'	<i class="icon-ok red"></i>'+msg+
 					'</div>');
+			}
+			function registerValidate(){
+				//if($.trim($('.signup-box input[name="idCard"]').val()).length==0)
+				if(!$('.signup-box input[name="idCard"]').val())
+					return '请输入您的身份证号码!';
+				if(!$('.signup-box input[name="name"]').val())
+					return '请输入您姓名!';
+				if(!$('.signup-box input[name="pwd"]').val())
+					return '请输入密码!';
+				if(!$('.signup-box input[name="affirmPwd"]').val())
+					return '请输入确认密码!';
+				if($('.signup-box input[name="affirmPwd"]').val()!=$('.signup-box input[name="pwd"]').val())
+					return '两次输入密码不一致';
+				if((!$('.signup-box input[name="birthday"]').val())||
+						(!$('#form-field-birthday').val()))
+					return '请选择您的出生日期!';
+				return null;
 			}
 		</script>
 

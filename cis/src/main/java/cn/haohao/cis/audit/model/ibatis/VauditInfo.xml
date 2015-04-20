@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="VauditInfo">
+	
+	<resultMap id="VauditInfoResult" type="cn.haohao.cis.audit.model.VauditInfo">
+		<result property="userId" column="USER_ID" />
+		<result property="auditAdmin" column="AUDIT_ADMIN" />
+		<result property="auditStatus" column="AUDIT_STATUS" />
+		<result property="registerDate" column="REGISTER_DATE" />
+		<result property="auditDate" column="AUDIT_DATE" />
+		<result property="name" column="NAME" />
+		<result property="idCard" column="ID_CARD" />
+		<result property="sex" column="SEX" />
+		<result property="birthday" column="BIRTHDAY" />
+		<result property="address" column="ADDRESS" />
+		<result property="career" column="CAREER" />
+		<result property="extend1" column="EXTEND1" />
+		<result property="extend2" column="EXTEND2" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+	
+	<select id="VauditInfo.getById" resultMap="VauditInfoResult">
+		<![CDATA[
+			select t.*
+			from V_AUDIT_INFO t
+			where user_id = #{userId}
+		]]>
+	</select>
+
+		
+	<sql id="VauditInfo.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="userId != null">and t.USER_ID = #{userId}</if>
+		   <if test="auditAdmin != null">and t.AUDIT_ADMIN = #{auditAdmin}</if>
+		   <if test="auditStatus != null">and t.AUDIT_STATUS = #{auditStatus}</if>
+		   <if test="registerDate != null">and t.REGISTER_DATE = #{registerDate}</if>
+		   <if test="auditDate != null">and t.AUDIT_DATE = #{auditDate}</if>
+		   <if test="name != null">and t.NAME = #{name}</if>
+		   <if test="idCard != null">and t.ID_CARD = #{idCard}</if>
+		   <if test="sex != null">and t.SEX = #{sex}</if>
+		   <if test="birthday != null">and t.BIRTHDAY = #{birthday}</if>
+		   <if test="address != null">and t.ADDRESS = #{address}</if>
+		   <if test="career != null">and t.CAREER = #{career}</if>
+		   <if test="extend1 != null">and t.EXTEND1 = #{extend1}</if>
+		   <if test="extend2 != null">and t.EXTEND2 = #{extend2}</if>
+		   <if test="status != null">and t.STATUS = #{status}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="VauditInfo.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_V_AUDIT_INFO.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="VauditInfo.create">
+		<![CDATA[
+			insert into V_AUDIT_INFO (  USER_ID ,  AUDIT_ADMIN ,  AUDIT_STATUS ,  REGISTER_DATE ,  AUDIT_DATE ,  NAME ,  ID_CARD ,  SEX ,  BIRTHDAY ,  ADDRESS ,  CAREER ,  EXTEND1 ,  EXTEND2 ,  STATUS   ) 
+			values (  #{userId} ,  #{auditAdmin} ,  #{auditStatus} ,  #{registerDate} ,  #{auditDate} ,  #{name} ,  #{idCard} ,  #{sex} ,  #{birthday} ,  #{address} ,  #{career} ,  #{extend1} ,  #{extend2} ,  #{status}   )
+		]]>
+	</insert>
+	
+	<update id="VauditInfo.update">
+		<![CDATA[
+			update V_AUDIT_INFO set 
+			 USER_ID=#{userId} , AUDIT_ADMIN=#{auditAdmin} , AUDIT_STATUS=#{auditStatus} , REGISTER_DATE=#{registerDate} , AUDIT_DATE=#{auditDate} , NAME=#{name} , ID_CARD=#{idCard} , SEX=#{sex} , BIRTHDAY=#{birthday} , ADDRESS=#{address} , CAREER=#{career} , EXTEND1=#{extend1} , EXTEND2=#{extend2} , STATUS=#{status} 
+			where user_id = #{userId}
+		]]>
+	</update>
+	
+	<update id="VauditInfo.updateDynamic">
+		update V_AUDIT_INFO t 
+		<set>
+			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
+			<if test="newUpdAttObj.auditAdmin != null">t.AUDIT_ADMIN = #{newUpdAttObj.auditAdmin},</if>	
+			<if test="newUpdAttObj.auditStatus != null">t.AUDIT_STATUS = #{newUpdAttObj.auditStatus},</if>	
+			<if test="newUpdAttObj.registerDate != null">t.REGISTER_DATE = #{newUpdAttObj.registerDate},</if>	
+			<if test="newUpdAttObj.auditDate != null">t.AUDIT_DATE = #{newUpdAttObj.auditDate},</if>	
+			<if test="newUpdAttObj.name != null">t.NAME = #{newUpdAttObj.name},</if>	
+			<if test="newUpdAttObj.idCard != null">t.ID_CARD = #{newUpdAttObj.idCard},</if>	
+			<if test="newUpdAttObj.sex != null">t.SEX = #{newUpdAttObj.sex},</if>	
+			<if test="newUpdAttObj.birthday != null">t.BIRTHDAY = #{newUpdAttObj.birthday},</if>	
+			<if test="newUpdAttObj.address != null">t.ADDRESS = #{newUpdAttObj.address},</if>	
+			<if test="newUpdAttObj.career != null">t.CAREER = #{newUpdAttObj.career},</if>	
+			<if test="newUpdAttObj.extend1 != null">t.EXTEND1 = #{newUpdAttObj.extend1},</if>	
+			<if test="newUpdAttObj.extend2 != null">t.EXTEND2 = #{newUpdAttObj.extend2},</if>	
+			<if test="newUpdAttObj.status != null">t.STATUS = #{newUpdAttObj.status},</if>	
+		</set>
+		<include refid="VauditInfo.whereClause" />
+	</update>
+	
+	<delete id="VauditInfo.delete">
+		<![CDATA[
+		delete from V_AUDIT_INFO t
+		]]>
+		<include refid="VauditInfo.whereClause" />
+	</delete>
+	
+	<select id="VauditInfo.queryByArgs" resultMap="VauditInfoResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from V_AUDIT_INFO t 
+		]]>
+		<include refid="VauditInfo.whereClause" />
+	</select>
+	
+	<select id="VauditInfo.pageCountByArgs" resultMap="VauditInfoResult">
+		<![CDATA[
+			select t.*
+			from V_AUDIT_INFO t 
+		]]>
+		<include refid="VauditInfo.whereClause" />
+		<![CDATA[
+			order by audit_status desc
+			limit #{startRowNum},#{pageSize}
+		]]>
+	</select>
+	
+	<select id="VauditInfo.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from V_AUDIT_INFO t 
+		<include refid="VauditInfo.whereClause" />
+	</select>
+	
+	<select id="VauditInfo.countByArgs" resultType="java.lang.Long">
+		select count(1) from V_AUDIT_INFO t 
+		<include refid="VauditInfo.whereClause" />
+	</select>
+</mapper>

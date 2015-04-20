@@ -45,10 +45,11 @@ public class AdminController extends MultiActionController{
 	 */
 	@RequestMapping("/goAdminMgr")
 	public String goAdminMgr(HttpServletRequest request){
-		
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
-		if(loginedUser.isAdmin())
+		if(loginedUser.isAdmin()){
+			request.setAttribute("adminMgrActive", Constants.ACTIVE_CLASS);
 			return "mgr/adminMgr";
+		}
 		else
 			return "index";
 	}
@@ -81,6 +82,8 @@ public class AdminController extends MultiActionController{
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(!loginedUser.isAdmin())
 			return "index";
+		//选中菜单设定
+		request.setAttribute("adminMgrActive", Constants.ACTIVE_CLASS);
 		//要查看的用户
 		User targetUser = this.userService.getUserById(id);
 		request.setAttribute("user", targetUser);
@@ -198,6 +201,8 @@ public class AdminController extends MultiActionController{
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(!loginedUser.isAdmin())
 			return "index";
+		//选中菜单设定
+		request.setAttribute("adminMgrActive", Constants.ACTIVE_CLASS);
 		UserQueryObj queryObj = new UserQueryObj();
 		queryObj.setStatus(1);
 		queryObj.setLevelNotEq("X");//x级不可能为上级

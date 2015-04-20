@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <% String path = request.getContextPath();%>
-
+<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <!--[if !IE]> -->
 
 <script type="text/javascript">
@@ -41,6 +41,7 @@
 <script src="<%=path %>/assets/js/ace-elements.min.js"></script>
 <script src="<%=path %>/assets/js/ace.min.js"></script>
 <%-- <script src="<%=path %>/assets/js/bootbox.min.js"></script> --%>
+<c:if test="${loginedUser.userRole==1 }">
 <script type="text/javascript">
 	//bootbox.setLocale("zh_CN");
 	$(function(){
@@ -57,3 +58,22 @@
 		});
 	});
 </script>
+</c:if>
+<c:if test="${loginedUser.userRole==2 }">
+<script type="text/javascript">
+	//bootbox.setLocale("zh_CN");
+	$(function(){
+		$.ajax({
+			url:path+'/auditInfo/getUnAtuditCount',
+			type:"post",
+			dataType:"json",
+			success:function(r){
+				$('.unaudit-count').text(r.unAtuditCount);
+			},
+			error:function(){
+				
+			}
+		});
+	});
+</script>
+</c:if>

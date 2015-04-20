@@ -73,4 +73,8 @@ public interface IUserService {
 	 * @return
 	 */
 	public Long countByArgs(UserQueryObj queryObj);
+	
+	public User createUserForRegister(User user);
+	
+	public void updateAndPassAudit(UserUpdateObj updateObj,User adminInfo);
 }

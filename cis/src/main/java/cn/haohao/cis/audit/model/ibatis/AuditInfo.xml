@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="AuditInfo">
+	
+	<resultMap id="AuditInfoResult" type="cn.haohao.cis.audit.model.AuditInfo">
+		<result property="userId" column="USER_ID" />
+		<result property="auditAdmin" column="AUDIT_ADMIN" />
+		<result property="auditStatus" column="AUDIT_STATUS" />
+		<result property="registerDate" column="REGISTER_DATE" />
+		<result property="auditDate" column="AUDIT_DATE" />
+	</resultMap>
+	
+	<select id="AuditInfo.getById" resultMap="AuditInfoResult">
+		<![CDATA[
+			select t.*
+			from T_AUDIT_INFO t
+			where user_id = #{userId}
+		]]>
+	</select>
+
+		
+	<sql id="AuditInfo.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="userId != null">and t.USER_ID = #{userId}</if>
+		   <if test="auditAdmin != null">and t.AUDIT_ADMIN = #{auditAdmin}</if>
+		   <if test="auditStatus != null">and t.AUDIT_STATUS = #{auditStatus}</if>
+		   <if test="registerDate != null">and t.REGISTER_DATE = #{registerDate}</if>
+		   <if test="auditDate != null">and t.AUDIT_DATE = #{auditDate}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="AuditInfo.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_T_AUDIT_INFO.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="AuditInfo.create">
+		<![CDATA[
+			insert into T_AUDIT_INFO (  USER_ID ,  AUDIT_ADMIN ,  AUDIT_STATUS ,  REGISTER_DATE ,  AUDIT_DATE   ) 
+			values (  #{userId} ,  #{auditAdmin} ,  #{auditStatus} ,  #{registerDate} ,  #{auditDate}   )
+		]]>
+	</insert>
+	
+	<update id="AuditInfo.update">
+		<![CDATA[
+			update T_AUDIT_INFO set 
+			 USER_ID=#{userId} , AUDIT_ADMIN=#{auditAdmin} , AUDIT_STATUS=#{auditStatus} , REGISTER_DATE=#{registerDate} , AUDIT_DATE=#{auditDate} 
+			where user_id = #{userId}
+		]]>
+	</update>
+	
+	<update id="AuditInfo.updateDynamic">
+		update T_AUDIT_INFO t 
+		<set>
+			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
+			<if test="newUpdAttObj.auditAdmin != null">t.AUDIT_ADMIN = #{newUpdAttObj.auditAdmin},</if>	
+			<if test="newUpdAttObj.auditStatus != null">t.AUDIT_STATUS = #{newUpdAttObj.auditStatus},</if>	
+			<if test="newUpdAttObj.registerDate != null">t.REGISTER_DATE = #{newUpdAttObj.registerDate},</if>	
+			<if test="newUpdAttObj.auditDate != null">t.AUDIT_DATE = #{newUpdAttObj.auditDate},</if>	
+		</set>
+		<include refid="AuditInfo.whereClause" />
+	</update>
+	
+	<delete id="AuditInfo.delete">
+		<![CDATA[
+		delete from T_AUDIT_INFO t
+		]]>
+		<include refid="AuditInfo.whereClause" />
+	</delete>
+	
+	<select id="AuditInfo.queryByArgs" resultMap="AuditInfoResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from T_AUDIT_INFO t 
+		]]>
+		<include refid="AuditInfo.whereClause" />
+	</select>
+	
+	<select id="AuditInfo.pageCountByArgs" resultMap="AuditInfoResult">
+		<![CDATA[
+			select t.*
+		]]>
+			from T_AUDIT_INFO t 
+		<include refid="AuditInfo.whereClause" />
+		<![CDATA[
+			limit #{startRowNum},#{pageSize}
+		]]>
+	</select>
+	
+	<select id="AuditInfo.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from T_AUDIT_INFO t 
+		<include refid="AuditInfo.whereClause" />
+	</select>
+	
+	<select id="AuditInfo.countByArgs" resultType="java.lang.Long">
+		select count(1) from T_AUDIT_INFO t 
+		<include refid="AuditInfo.whereClause" />
+	</select>
+</mapper>

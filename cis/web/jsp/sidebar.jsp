@@ -24,20 +24,20 @@
 		</li>
 	  </c:if>
 	  <c:if test="${loginedUser.userRole==2 }">
-		<li class="active">
+		<li class="${adminMgrActive}">
 			<a href="<%=path%>/admin/goAdminMgr">
 				<i class="icon-flag"></i>
 				<span class="menu-text"> 员工管理 </span>
 			</a>
 		</li>
 
-		<!-- <li class="">
-			<a href="">
+		<li class="${auditUserActive}">
+			<a href="<%=path%>/auditInfo/goAuditUser">
 				<i class="icon-group"></i>
 				<span class="menu-text"> 用户审核</span>
-				<span class="badge badge-primary downline-count"></span>
+				<span class="badge badge-primary unaudit-count"></span>
 			</a>
-		</li> -->
+		</li>
 	  </c:if>
 	</ul><!-- /.nav-list -->
 
