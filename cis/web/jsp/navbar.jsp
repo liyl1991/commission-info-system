@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <% String path = request.getContextPath();%>
+<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <div class="navbar navbar-default" id="navbar">
 	<!-- <script type="text/javascript">
 		try{ace.settings.check('navbar' , 'fixed')}catch(e){}
@@ -17,57 +18,28 @@
 
 		<div class="navbar-header pull-right" role="navigation">
 			<ul class="nav ace-nav">
-				<%-- <li class="green">
+				<c:if test="${loginedUser.userRole==1 }">
+				<li class="green notice-nav">
 					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-						<i class="icon-qrcode"></i>
-						安卓
+						<i class="icon-bell-alt icon-animated-bell"></i>
+						<span class="badge badge-success unread-count"></span>
 					</a>
 
 					<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
 						<li class="dropdown-header">
-							<i class="icon-ok"></i>
-							安卓下载
+							<i class="icon-warning-sign"></i>
+							<span class="unread-count"></span><span>条未读公告</span>
 						</li>
 
 						<li>
-							<img src="<%=path %>/assets/images/ewm.png" width="220" height="220"/>
-						</li>
-					</ul>
-				</li> --%>
-				<%-- <li class="grey">
-					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-						<i class="icon-qrcode"></i>
-						IOS
-					</a>
-
-					<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-						<li class="dropdown-header">
-							<i class="icon-ok"></i>
-							IOS下载
-						</li>
-
-						<li>
-							<img src="<%=path %>/assets/images/ewm.png" width="220" height="220"/>
+							<a href="<%=path%>/notice/goNoticeList">
+								查看所有公告
+								<i class="icon-arrow-right"></i>
+							</a>
 						</li>
 					</ul>
 				</li>
-				<li class="blue">
-					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-						<i class="icon-qrcode"></i>
-						桌面
-					</a>
-
-					<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-						<li class="dropdown-header">
-							<i class="icon-ok"></i>
-							桌面下载
-						</li>
-
-						<li>
-							<img src="<%=path %>/assets/images/ewm.png" width="220" height="220"/>
-						</li>
-					</ul>
-				</li> --%>
+				</c:if>
 				<li class="light-blue">
 					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 						<span class="user-info">

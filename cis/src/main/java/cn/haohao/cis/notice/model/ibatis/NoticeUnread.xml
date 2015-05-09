@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="NoticeUnread">
+	
+	<resultMap id="NoticeUnreadResult" type="cn.haohao.cis.notice.model.NoticeUnread">
+		<result property="userId" column="USER_ID" />
+		<result property="noticeId" column="NOTICE_ID" />
+	</resultMap>
+	
+	<select id="NoticeUnread.getById" resultMap="NoticeUnreadResult">
+		<![CDATA[
+			select t.*
+			from T_NOTICE_UNREAD t
+			where user_id = #{userId}
+		]]>
+	</select>
+
+		
+	<sql id="NoticeUnread.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="userId != null">and t.USER_ID = #{userId}</if>
+		   <if test="noticeId != null">and t.NOTICE_ID = #{noticeId}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="NoticeUnread.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_T_NOTICE_UNREAD.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="NoticeUnread.create">
+		<![CDATA[
+			insert into T_NOTICE_UNREAD (  USER_ID ,  NOTICE_ID   ) 
+			values (  #{userId} ,  #{noticeId}   )
+		]]>
+	</insert>
+	
+	<insert id="NoticeUnread.createUnreadByNoticeId">
+		<![CDATA[
+			insert into t_notice_unread
+			select user_id,#{noticeId}
+			from t_user
+			where status=1 and user_role=1 and level != 'X'
+		]]>
+	</insert>
+	
+	<update id="NoticeUnread.update">
+		<![CDATA[
+			update T_NOTICE_UNREAD set 
+			 USER_ID=#{userId} , NOTICE_ID=#{noticeId} 
+			where user_id = #{userId}
+		]]>
+	</update>
+	
+	<update id="NoticeUnread.updateDynamic">
+		update T_NOTICE_UNREAD t 
+		<set>
+			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
+			<if test="newUpdAttObj.noticeId != null">t.NOTICE_ID = #{newUpdAttObj.noticeId},</if>	
+		</set>
+		<include refid="NoticeUnread.whereClause" />
+	</update>
+	
+	<delete id="NoticeUnread.delete">
+		<![CDATA[
+		delete from T_NOTICE_UNREAD
+		]]>
+		<where>
+	    <trim prefixOverrides="and">
+		   <if test="userId != null">and USER_ID = #{userId}</if>
+		   <if test="noticeId != null">and NOTICE_ID = #{noticeId}</if>
+	    </trim>
+	 </where>
+	</delete>
+	
+	<select id="NoticeUnread.queryByArgs" resultMap="NoticeUnreadResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from T_NOTICE_UNREAD t 
+		]]>
+		<include refid="NoticeUnread.whereClause" />
+	</select>
+	
+	<select id="NoticeUnread.pageCountByArgs" resultMap="NoticeUnreadResult">
+		<![CDATA[
+			SELECT * FROM (SELECT ROWS_.*, ROWNUM ROWNUM_ FROM (
+			select t.*
+		]]>
+			from T_NOTICE_UNREAD t 
+		<include refid="NoticeUnread.whereClause" />
+		<![CDATA[
+			) ROWS_ WHERE ROWNUM <= #{endRowNum} ) WHERE ROWNUM_ >= #{startRowNum}
+		]]>
+	</select>
+	
+	<select id="NoticeUnread.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from T_NOTICE_UNREAD t 
+		<include refid="NoticeUnread.whereClause" />
+	</select>
+	
+	<select id="NoticeUnread.countByArgs" resultType="java.lang.Long">
+		select count(1) from T_NOTICE_UNREAD t 
+		<include refid="NoticeUnread.whereClause" />
+	</select>
+</mapper>

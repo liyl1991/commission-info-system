@@ -26,14 +26,16 @@ public class DataValidater {
 		if(StringUtils.isNotEmpty(newObj.getIdCard())){
 			IDCard.IDCardValidate(newObj.getIdCard());
 			//查询身份证是否被使用
-			UserQueryObj userQueryObj = new UserQueryObj();
-			userQueryObj.setIdCard(newObj.getIdCard());
-			List<User> userList = userService.queryUser(userQueryObj);
-			if(userList.size()>1)
-				throw new BusinessException("读取数据出错");
-			else if(userList.size()==1){
-				if(userList.get(0).getUserId()!=newObj.getUserId())
-					throw new BusinessException("您输入的身份证号码已被使用，请确认！");
+			if(!oldObj.getIdCard().equals(newObj.getIdCard())){
+				UserQueryObj userQueryObj = new UserQueryObj();
+				userQueryObj.setIdCard(newObj.getIdCard());
+				List<User> userList = userService.queryUser(userQueryObj);
+				if(userList.size()>1)
+					throw new BusinessException("读取数据出错");
+				else if(userList.size()==1){
+					if(userList.get(0).getUserId()!=newObj.getUserId())
+						throw new BusinessException("您输入的身份证号码已被使用，请确认！");
+				}
 			}
 		}
 		
@@ -61,19 +63,21 @@ public class DataValidater {
 	 * 验证审核未通过用户更新信息
 	 */
 	public static void userUpdateAuditValidate(User newObj,IUserService userService){
-		//User oldObj = userService.getUserById(newObj.getUserId());
+		User oldObj = userService.getUserById(newObj.getUserId());
 		//身份证验证
 		if(StringUtils.isNotEmpty(newObj.getIdCard())){
 			IDCard.IDCardValidate(newObj.getIdCard());
 			//查询身份证是否被使用
-			UserQueryObj userQueryObj = new UserQueryObj();
-			userQueryObj.setIdCard(newObj.getIdCard());
-			List<User> userList = userService.queryUser(userQueryObj);
-			if(userList.size()>1)
-				throw new BusinessException("读取数据出错");
-			else if(userList.size()==1){
-				if(userList.get(0).getUserId().intValue()!=newObj.getUserId().intValue())
-					throw new BusinessException("您输入的身份证号码已被使用，请确认！");
+			if(!oldObj.getIdCard().equals(newObj.getIdCard())){
+				UserQueryObj userQueryObj = new UserQueryObj();
+				userQueryObj.setIdCard(newObj.getIdCard());
+				List<User> userList = userService.queryUser(userQueryObj);
+				if(userList.size()>1)
+					throw new BusinessException("读取数据出错");
+				else if(userList.size()==1){
+					if(userList.get(0).getUserId()!=newObj.getUserId())
+						throw new BusinessException("您输入的身份证号码已被使用，请确认！");
+				}
 			}
 		}
 	}

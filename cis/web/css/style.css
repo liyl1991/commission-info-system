@@ -4,3 +4,32 @@
 .signup-box .form-horizontal .form-group{
 	margin-bottom: 8px;	
 }
+.wysiwyg-toolbar{
+	height: 35px;
+}
+
+.form-elements label,.form-elements div{
+	float: left;
+}
+.form-elements label{
+	height: 31px;
+	line-height: 31px;
+}
+.form-elements div{
+	width: 35%;
+}
+.form-elements div input {
+	width: 100%;
+}
+.message-item .date-time{
+	color:#878787;
+}
+.message-item .btns-groups{
+	float: right;
+}
+.message-item,.message-item:first-child{
+	border-width: 1px;
+}
+.message-item{
+	margin-top: -1px;
+}

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Notice">
+	
+	<resultMap id="NoticeResult" type="cn.haohao.cis.notice.model.Notice">
+		<result property="noticeId" column="NOTICE_ID" />
+		<result property="title" column="TITLE" />
+		<result property="content" column="CONTENT" />
+		<result property="createDate" column="CREATE_DATE" />
+		<result property="createUser" column="CREATE_USER" />
+		<result property="topFlag" column="TOP_FLAG" />
+		<result property="topDate" column="TOP_DATE" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+	
+	<resultMap id="NoticeIsReadResult" type="cn.haohao.cis.notice.model.Notice">
+		<result property="noticeId" column="NOTICE_ID" />
+		<result property="title" column="TITLE" />
+		<result property="content" column="CONTENT" />
+		<result property="createDate" column="CREATE_DATE" />
+		<result property="createUser" column="CREATE_USER" />
+		<result property="topFlag" column="TOP_FLAG" />
+		<result property="topDate" column="TOP_DATE" />
+		<result property="status" column="STATUS" />
+		<result property="readFlag" column="READ_FLAG"/>
+	</resultMap>
+	
+	<select id="Notice.getById" resultMap="NoticeResult">
+		<![CDATA[
+			select t.*
+			from T_NOTICE t
+			where notice_id = #{noticeId}
+		]]>
+	</select>
+
+		
+	<sql id="Notice.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="noticeId != null">and t.NOTICE_ID = #{noticeId}</if>
+		   <if test="title != null">and t.TITLE = #{title}</if>
+		   <if test="content != null">and t.CONTENT = #{content}</if>
+		   <if test="createDate != null">and t.CREATE_DATE = #{createDate}</if>
+		   <if test="createUser != null">and t.CREATE_USER = #{createUser}</if>
+		   <if test="topFlag != null">and t.TOP_FLAG = #{topFlag}</if>
+		   <if test="topDate != null">and t.TOP_DATE = #{topDate}</if>
+		   <if test="status != null">and t.STATUS = #{status}</if>
+		   <if test="titleMatch != null">and t.TITLE like '%${titleMatch}%'</if>
+		   <if test="readFlag != null">and t.READ_FLAG like #{readFlag}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="Notice.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_T_NOTICE.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="Notice.create">
+		<![CDATA[
+			insert into T_NOTICE (  NOTICE_ID ,  TITLE ,  CONTENT ,  CREATE_DATE ,  CREATE_USER ,  TOP_FLAG ,  TOP_DATE ,  STATUS   ) 
+			values (  #{noticeId} ,  #{title} ,  #{content} ,  #{createDate} ,  #{createUser} ,  #{topFlag} ,  #{topDate} ,  #{status}   )
+		]]>
+	</insert>
+	
+	<update id="Notice.update">
+		<![CDATA[
+			update T_NOTICE set 
+			 NOTICE_ID=#{noticeId} , TITLE=#{title} , CONTENT=#{content} , CREATE_DATE=#{createDate} , CREATE_USER=#{createUser} , TOP_FLAG=#{topFlag} , TOP_DATE=#{topDate} , STATUS=#{status} 
+			where notice_id = #{noticeId}
+		]]>
+	</update>
+	
+	<update id="Notice.updateDynamic">
+		update T_NOTICE t 
+		<set>
+			t.TOP_DATE = #{newUpdAttObj.topDate},
+			<if test="newUpdAttObj.noticeId != null">t.NOTICE_ID = #{newUpdAttObj.noticeId},</if>	
+			<if test="newUpdAttObj.title != null">t.TITLE = #{newUpdAttObj.title},</if>	
+			<if test="newUpdAttObj.content != null">t.CONTENT = #{newUpdAttObj.content},</if>	
+			<if test="newUpdAttObj.createDate != null">t.CREATE_DATE = #{newUpdAttObj.createDate},</if>	
+			<if test="newUpdAttObj.createUser != null">t.CREATE_USER = #{newUpdAttObj.createUser},</if>	
+			<if test="newUpdAttObj.topFlag != null">t.TOP_FLAG = #{newUpdAttObj.topFlag},</if>	
+			<if test="newUpdAttObj.status != null">t.STATUS = #{newUpdAttObj.status},</if>	
+			<if test="setTopDateNull != null">t.TOP_DATE = null,</if>
+		</set>
+		<include refid="Notice.whereClause" />
+	</update>
+	
+	<delete id="Notice.delete">
+		<![CDATA[
+		delete from T_NOTICE t
+		]]>
+		<include refid="Notice.whereClause" />
+	</delete>
+	
+	<select id="Notice.queryByArgs" resultMap="NoticeResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from T_NOTICE t 
+		]]>
+		<include refid="Notice.whereClause" />
+	</select>
+	
+	<select id="Notice.getTopNotice" resultMap="NoticeResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from T_NOTICE t 
+			order by t.top_flag,top_date desc,create_date desc
+			limit 0,1
+		]]>
+		<include refid="Notice.whereClause" />
+	</select>
+	
+	<select id="Notice.pageCountByArgs" resultMap="NoticeResult">
+		<![CDATA[
+			select t.*
+		]]>
+			from T_NOTICE t 
+		<include refid="Notice.whereClause" />
+		<![CDATA[
+			order by t.top_flag,top_date desc,create_date desc
+			limit #{startRowNum},#{pageSize}
+		]]>
+	</select>
+	
+	<select id="Notice.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from T_NOTICE t 
+		<include refid="Notice.whereClause" />
+	</select>
+	
+	<select id="Notice.pageCountIsReadByArgs" resultMap="NoticeIsReadResult">
+		<![CDATA[
+			select t.*
+			from (  select n.*,
+					       case when nu.user_id is null              
+					            then 1            
+					            ELSE 2 end read_flag
+					from t_notice n
+					left join t_notice_unread nu
+					on n.notice_id = nu.notice_id and nu.user_id = #{visitorId}) t 
+		]]>
+		<include refid="Notice.whereClause" />
+		<![CDATA[
+			order by t.top_flag,top_date desc,create_date desc
+			limit #{startRowNum},#{pageSize}
+		]]>
+	</select>
+	
+	<select id="Notice.pageCountIsReadByArgs.count" resultType="java.lang.Long">
+		select count(1) from (  select n.*,
+					       case when nu.user_id is null              
+					            then 1            
+					            ELSE 2 end read_flag
+					from t_notice n
+					left join t_notice_unread nu
+					on n.notice_id = nu.notice_id and nu.user_id = #{visitorId}) t  
+		<include refid="Notice.whereClause" />
+	</select>
+	
+	<select id="Notice.countByArgs" resultType="java.lang.Long">
+		select count(1) from T_NOTICE t 
+		<include refid="Notice.whereClause" />
+	</select>
+</mapper>

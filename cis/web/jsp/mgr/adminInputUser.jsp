@@ -53,7 +53,7 @@
 					</div>
 					<form id="inputUserForm" class="form-horizontal" role="form" method="post">
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-idcard">身份证号 </label>
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-idcard">身份证</label>
 
 							<div class="col-sm-9">
 								<input type="text" name="idCard" id="form-field-idcard" class="col-xs-10 col-sm-5" />

@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -36,6 +38,7 @@ public class AuditInfoController extends MultiActionController{
 	private IVauditInfoService vauditInfoService;
 	@Autowired
 	private IUserService userService;
+	private Log log = LogFactory.getLog("adminLog");
 	
 	@RequestMapping("/goAuditUser")
 	public String goAuditUser(HttpServletRequest request){
@@ -84,6 +87,7 @@ public class AuditInfoController extends MultiActionController{
 		try {
 			this.auditInfoService.passAudit(userId, loginedUser);
 			resMap.put("result", true);
+			this.log.info(loginedUser.getName()+"-审核并通过用户->"+this.userService.getUserById(userId).getName());
 		} catch (Exception e) {
 			e.printStackTrace();
 			resMap.put("result", false);
@@ -108,6 +112,7 @@ public class AuditInfoController extends MultiActionController{
 			updateObj.getNewUpdAttObj().setAuditDate(new Date());
 			this.auditInfoService.updateDynamic(updateObj);
 			resMap.put("result", true);
+			this.log.info(loginedUser.getName()+"-审核并驳回用户申请->"+this.userService.getUserById(userId).getName());
 		} catch (Exception e) {
 			e.printStackTrace();
 			resMap.put("result", false);
@@ -151,6 +156,7 @@ public class AuditInfoController extends MultiActionController{
 			updateObj.setNewUpdAttObj(newObj);
 			this.userService.updateDynamic(updateObj);
 			resMap.put("result", true);
+			this.log.info(loginedUser.getName()+"-修改了用户注册申请信息->"+this.userService.getUserById(newObj.getUserId()).getName());
 		}catch(BusinessException be){
 			resMap.put("result", false);
 			resMap.put("msg", be.getMessage());
@@ -175,7 +181,7 @@ public class AuditInfoController extends MultiActionController{
 			updateObj.setUserId(newObj.getUserId());
 			updateObj.setNewUpdAttObj(newObj);
 			this.userService.updateAndPassAudit(updateObj,loginedUser);
-			
+			this.log.info(loginedUser.getName()+"-修改用户并通过申请->"+this.userService.getUserById(newObj.getUserId()).getName());
 			resMap.put("result", true);
 		}catch(BusinessException be){
 			resMap.put("result", false);

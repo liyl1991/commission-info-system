@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.haohao.cis.audit.model.AuditInfo;
 import cn.haohao.cis.audit.service.IAuditInfoService;
-import cn.haohao.cis.audit.vo.AuditInfoQueryObj;
 import cn.haohao.cis.user.model.User;
 import cn.haohao.cis.user.service.IUserService;
 import cn.haohao.cis.user.vo.UserQueryObj;
@@ -32,7 +33,7 @@ public class LoginController extends MultiActionController{
 	private IUserService userService;
 	@Autowired
 	private IAuditInfoService auditInfoService;
-	
+	private Log log = LogFactory.getLog("adminLog");
 	@RequestMapping("/doLogin")
 	public String doLogin(UserQueryObj loginInfo ,HttpServletRequest request){
 		if(StringUtils.isNotEmpty(loginInfo.getPassword())){
@@ -55,10 +56,12 @@ public class LoginController extends MultiActionController{
 					return "login";
 				}
 				request.getSession().setAttribute(Constants.LOGINED_USER_BEAN_NAME, current);
-				if(current.isAdmin())
+				if(current.isAdmin()){
+					this.log.info(current.getName()+"-登陆系统！");
 					return "redirect:/admin/goAdminMgr";
+				}
 				else
-					return "redirect:/login/goIndex";
+					return "redirect:/notice/goIndexNotice";
 			}
 		}
 		request.setAttribute("errorMsg", "用户名或者密码错误，请重新输入。");
@@ -96,10 +99,10 @@ public class LoginController extends MultiActionController{
 		return "login";
 	}
 	
-	@RequestMapping("/goIndex")
+	/*@RequestMapping("/goIndex")
 	public String goIndex(HttpServletRequest request){
 		request.setAttribute("indexActive", Constants.ACTIVE_CLASS);
 		return "index";
-	}
+	}*/
 	
 }

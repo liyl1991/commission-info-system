@@ -9,7 +9,7 @@
 	<ul class="nav nav-list">
 	  <c:if test="${loginedUser.userRole==1 }">
 		<li class="${indexActive }">
-			<a href="<%=path%>/login/goIndex">
+			<a href="<%=path%>/userIncome/goIncomeInfo">
 				<i class="icon-flag"></i>
 				<span class="menu-text"> 收入与业绩 </span>
 			</a>
@@ -36,6 +36,13 @@
 				<i class="icon-group"></i>
 				<span class="menu-text"> 用户审核</span>
 				<span class="badge badge-primary unaudit-count"></span>
+			</a>
+		</li>
+		
+		<li class="${noticeMgrActive}">
+			<a href="<%=path%>/noticeMgr/goNoticeMgr">
+				<i class="icon-volume-up"></i>
+				<span class="menu-text"> 公告管理</span>
 			</a>
 		</li>
 	  </c:if>

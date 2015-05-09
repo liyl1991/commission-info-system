@@ -56,6 +56,47 @@
 				
 			}
 		});
+		$.ajax({
+			url:path+'/notice/getNoticeListWithStatus',
+			type:"get",
+			dataType:"json",
+			success:function(r){
+				$('.notice-nav .unread-count').text(r.result.length);
+				for(var i=0;i<r.result.length;i++){
+					var htm = 
+						'<li>'+
+						'	<a href="'+path+'/notice/goNoticeView/'+r.result[i].id+'">'+
+						'		<span class="msg-body">'+
+						'			<span class="msg-title">'+
+						'				<span class="blue">'+r.result[i].title+'</span>'+
+						'			</span>'+
+						'			<span class="msg-time">'+
+						'				<i class="icon-time"></i>'+
+						'				<span>'+formatDate2(r.result[i].createDate)+'</span>'+
+						'			</span>'+
+						'		</span>'+
+						'	</a>'+
+						'</li>';
+					$('.notice-nav .dropdown-navbar .dropdown-header').after(htm);
+				}
+				function formatDate2(str){
+					if(str){
+						var dt = new Date(str);
+					  	var yy = dt.getFullYear();
+					  	var mm= dt.getMonth()+1<10?'0'+(dt.getMonth()+1):(dt.getMonth()+1);
+					  	var dd = dt.getDate()<10?'0'+dt.getDate():dt.getDate();
+					  	var hh = dt.getHours()<10?'0'+dt.getHours():dt.getHours();
+					  	var mi = dt.getMinutes()<10?'0'+dt.getMinutes():dt.getMinutes();
+					  	return yy+"年"+mm+"月"+dd+"日";
+					}else{
+						return '';
+					}
+				}
+			},
+			error:function(){
+				
+			}
+		});
 	});
 </script>
 </c:if>

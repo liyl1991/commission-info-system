@@ -1,11 +1,14 @@
 package cn.haohao.cis.admin;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -39,6 +42,7 @@ public class AdminController extends MultiActionController{
 	private IUserIncomeService userIncomeService;
 	@Autowired
 	private IUserService userService;
+	private Log log = LogFactory.getLog("adminLog");
 	/**
 	 * 至员工管理页 
 	 * @param request
@@ -167,6 +171,7 @@ public class AdminController extends MultiActionController{
 		updateObj.getNewUpdAttObj().setStatus(2);
 		this.userService.updateDynamic(updateObj);
 		resMap.put("result", true);
+		this.log.info(loginedUser.getName()+"-删除用户->"+this.userService.getUserById(userId).getName());
 		return resMap;
 	}
 	
@@ -186,6 +191,7 @@ public class AdminController extends MultiActionController{
 			updateObj.setNewUpdAttObj(newObj);
 			this.userService.updateDynamic(updateObj);
 			resMap.put("result", true);
+			this.log.info(loginedUser.getName()+"-修改用户->"+this.userService.getUserById(newObj.getUserId()).getName());
 		}catch(BusinessException be){
 			resMap.put("result", false);
 			resMap.put("msg", be.getMessage());
@@ -223,8 +229,9 @@ public class AdminController extends MultiActionController{
 			user.setStatus(1);
 			user.setUserRole(1);
 			user.setPassword(MD5Encoder.encode(Constants.DEFAULT_PASSWORD));
-			this.userService.createUser(user);
+			user = this.userService.createUser(user);
 			resMap.put("result", true);
+			this.log.info(loginedUser.getName()+"-新增用户->"+user.getName()+"["+user.getIdCard()+"]");
 		}catch(BusinessException be){
 			resMap.put("result", false);
 			resMap.put("msg", be.getMessage());
@@ -247,6 +254,20 @@ public class AdminController extends MultiActionController{
 			DataValidater.userIncomeInputValidate(userIncome, userService, userIncomeService);
 			this.userIncomeService.createUserIncome(userIncome);
 			resMap.put("result", true);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
+			StringBuilder sb = new StringBuilder();
+			sb.append(loginedUser.getName())
+			  .append("-新增用户收入信息->")
+			  .append(this.userService.getUserById(userIncome.getUserId()).getName())
+			  .append("\n")
+			  .append(sdf.format(userIncome.getIncomeDate()))
+			  .append("\n")
+			  .append("收入：")
+			  .append(userIncome.getIncome());
+			if(userIncome.getPerformance()!=null){
+				sb.append("业绩").append(userIncome.getPerformance());
+			}
+			this.log.info(sb.toString());
 		}catch(BusinessException be){
 			resMap.put("result", false);
 			resMap.put("msg", be.getMessage());

@@ -82,4 +82,10 @@ public class UserIncomeController extends MultiActionController{
 		request.setAttribute("downlineIncomeInfo", downlineIncomeInfo);
 		return "downlineIncome";
 	}
+	
+	@RequestMapping("/goIncomeInfo")
+	public String goIndex(HttpServletRequest request){
+		request.setAttribute("indexActive", Constants.ACTIVE_CLASS);
+		return "incomeInfo";
+	}
 }
