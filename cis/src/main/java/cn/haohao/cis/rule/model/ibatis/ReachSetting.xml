@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ReachSetting">
+	
+	<resultMap id="ReachSettingResult" type="cn.haohao.cis.rule.model.ReachSetting">
+		<result property="reachId" column="REACH_ID" />
+		<result property="type" column="TYPE" />
+		<result property="reachPerformance" column="REACH_PERFORMANCE" />
+		<result property="settingLevel" column="SETTING_LEVEL" />
+		<result property="usingDate" column="USING_DATE" />
+		<result property="endDate" column="END_DATE" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+	
+	<select id="ReachSetting.getById" resultMap="ReachSettingResult">
+		<![CDATA[
+			select t.*
+			from T_REACH_SETTING t
+			where reach_id = #{reachId}
+		]]>
+	</select>
+
+		
+	<sql id="ReachSetting.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="reachId != null">and t.REACH_ID = #{reachId}</if>
+		   <if test="type != null">and t.TYPE = #{type}</if>
+		   <if test="reachPerformance != null">and t.REACH_PERFORMANCE = #{reachPerformance}</if>
+		   <if test="settingLevel != null">and t.SETTING_LEVEL = #{settingLevel}</if>
+		   <if test="usingDate != null">and t.USING_DATE = #{usingDate}</if>
+		   <if test="endDate != null">and t.END_DATE = #{endDate}</if>
+		   <if test="status != null">and t.STATUS = #{status}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="ReachSetting.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_T_REACH_SETTING.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="ReachSetting.create">
+		<![CDATA[
+			insert into T_REACH_SETTING (  REACH_ID ,  TYPE ,  REACH_PERFORMANCE ,  SETTING_LEVEL ,  USING_DATE ,  END_DATE ,  STATUS   ) 
+			values (  #{reachId} ,  #{type} ,  #{reachPerformance} ,  #{settingLevel} ,  #{usingDate} ,  #{endDate} ,  #{status}   )
+		]]>
+	</insert>
+	
+	<update id="ReachSetting.update">
+		<![CDATA[
+			update T_REACH_SETTING set 
+			 REACH_ID=#{reachId} , TYPE=#{type} , REACH_PERFORMANCE=#{reachPerformance} , SETTING_LEVEL=#{settingLevel} , USING_DATE=#{usingDate} , END_DATE=#{endDate} , STATUS=#{status} 
+			where reach_id = #{reachId}
+		]]>
+	</update>
+	
+	<update id="ReachSetting.updateDynamic">
+		update T_REACH_SETTING t 
+		<set>
+			<if test="newUpdAttObj.reachId != null">t.REACH_ID = #{newUpdAttObj.reachId},</if>	
+			<if test="newUpdAttObj.type != null">t.TYPE = #{newUpdAttObj.type},</if>	
+			<if test="newUpdAttObj.reachPerformance != null">t.REACH_PERFORMANCE = #{newUpdAttObj.reachPerformance},</if>	
+			<if test="newUpdAttObj.settingLevel != null">t.SETTING_LEVEL = #{newUpdAttObj.settingLevel},</if>	
+			<if test="newUpdAttObj.usingDate != null">t.USING_DATE = #{newUpdAttObj.usingDate},</if>	
+			<if test="newUpdAttObj.endDate != null">t.END_DATE = #{newUpdAttObj.endDate},</if>	
+			<if test="newUpdAttObj.status != null">t.STATUS = #{newUpdAttObj.status},</if>	
+		</set>
+		<include refid="ReachSetting.whereClause" />
+	</update>
+	
+	<delete id="ReachSetting.delete">
+		<![CDATA[
+		delete from T_REACH_SETTING t
+		]]>
+		<include refid="ReachSetting.whereClause" />
+	</delete>
+	
+	<select id="ReachSetting.queryByArgs" resultMap="ReachSettingResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from T_REACH_SETTING t 
+		]]>
+		<include refid="ReachSetting.whereClause" />
+	</select>
+	
+	<select id="ReachSetting.pageCountByArgs" resultMap="ReachSettingResult">
+		<![CDATA[
+			select t.*
+		]]>
+			from T_REACH_SETTING t 
+		<include refid="ReachSetting.whereClause" />
+		<![CDATA[
+			limit #{startRowNum},#{pageSize}
+		]]>
+	</select>
+	
+	<select id="ReachSetting.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from T_REACH_SETTING t 
+		<include refid="ReachSetting.whereClause" />
+	</select>
+	
+	<select id="ReachSetting.countByArgs" resultType="java.lang.Long">
+		select count(1) from T_REACH_SETTING t 
+		<include refid="ReachSetting.whereClause" />
+	</select>
+</mapper>

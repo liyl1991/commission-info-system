@@ -4,6 +4,8 @@ package cn.haohao.cis.user.model;
 import java.io.Serializable;
 //j-import-e
 
+import cn.haohao.cis.rule.model.IncomeSetting;
+
 /**
  * User
  * @author generator
@@ -79,6 +81,8 @@ public class User implements Serializable{
 	 * 扩展备用2
 	 */
 	private java.lang.String extend2;
+	
+	private IncomeSetting incomeSetting;
 	//属性 end
 	
 	//方法 begin
@@ -257,11 +261,20 @@ public class User implements Serializable{
 		return Long.valueOf(this.userId);
 	}
 	
+	public IncomeSetting getIncomeSetting() {
+		return incomeSetting;
+	}
+	public void setIncomeSetting(IncomeSetting incomeSetting) {
+		this.incomeSetting = incomeSetting;
+	}
 	/**
 	 * 是否是管理员
 	 */
 	public Boolean isAdmin(){
 		if(this.userRole==2) return true;
 		else return false;
+	}
+	public Boolean isLevelB(){
+		return "B".equalsIgnoreCase(this.level);
 	}
 }

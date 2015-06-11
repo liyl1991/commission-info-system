@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SpecialSetting">
+	
+	<resultMap id="SpecialSettingResult" type="cn.haohao.cis.rule.model.SpecialSetting">
+		<result property="userId" column="USER_ID" />
+		<result property="settingId" column="SETTING_ID" />
+		<result property="type" column="TYPE" />
+	</resultMap>
+	
+	<select id="SpecialSetting.getById" resultMap="SpecialSettingResult">
+		<![CDATA[
+			select t.*
+			from T_SPECIAL_SETTING t
+			where user_id = #{userId}
+		]]>
+	</select>
+
+		
+	<sql id="SpecialSetting.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="userId != null">and t.USER_ID = #{userId}</if>
+		   <if test="settingId != null">and t.SETTING_ID = #{settingId}</if>
+		   <if test="type != null">and t.TYPE = #{type}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="SpecialSetting.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_T_SPECIAL_SETTING.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="SpecialSetting.create">
+		<![CDATA[
+			insert into T_SPECIAL_SETTING (  USER_ID ,  SETTING_ID ,  TYPE   ) 
+			values (  #{userId} ,  #{settingId} ,  #{type}   )
+		]]>
+	</insert>
+	
+	<update id="SpecialSetting.update">
+		<![CDATA[
+			update T_SPECIAL_SETTING set 
+			 USER_ID=#{userId} , SETTING_ID=#{settingId} , TYPE=#{type} 
+			where user_id = #{userId}
+		]]>
+	</update>
+	
+	<update id="SpecialSetting.updateDynamic">
+		update T_SPECIAL_SETTING t 
+		<set>
+			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
+			<if test="newUpdAttObj.settingId != null">t.SETTING_ID = #{newUpdAttObj.settingId},</if>	
+			<if test="newUpdAttObj.type != null">t.TYPE = #{newUpdAttObj.type},</if>	
+		</set>
+		<include refid="SpecialSetting.whereClause" />
+	</update>
+	
+	<delete id="SpecialSetting.delete">
+		<![CDATA[
+		delete from T_SPECIAL_SETTING
+		]]>
+		<where>
+		  <trim prefixOverrides="and">
+			   <if test="userId != null">and USER_ID = #{userId}</if>
+			   <if test="settingId != null">and SETTING_ID = #{settingId}</if>
+			   <if test="type != null">and TYPE = #{type}</if>
+		   </trim>
+		 </where>
+	</delete>
+	
+	<select id="SpecialSetting.queryByArgs" resultMap="SpecialSettingResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from T_SPECIAL_SETTING t 
+		]]>
+		<include refid="SpecialSetting.whereClause" />
+	</select>
+	
+	<select id="SpecialSetting.pageCountByArgs" resultMap="SpecialSettingResult">
+		<![CDATA[
+			SELECT * FROM (SELECT ROWS_.*, ROWNUM ROWNUM_ FROM (
+			select t.*
+		]]>
+			from T_SPECIAL_SETTING t 
+		<include refid="SpecialSetting.whereClause" />
+		<![CDATA[
+			) ROWS_ WHERE ROWNUM <= #{endRowNum} ) WHERE ROWNUM_ >= #{startRowNum}
+		]]>
+	</select>
+	
+	<select id="SpecialSetting.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from T_SPECIAL_SETTING t 
+		<include refid="SpecialSetting.whereClause" />
+	</select>
+	
+	<select id="SpecialSetting.countByArgs" resultType="java.lang.Long">
+		select count(1) from T_SPECIAL_SETTING t 
+		<include refid="SpecialSetting.whereClause" />
+	</select>
+</mapper>

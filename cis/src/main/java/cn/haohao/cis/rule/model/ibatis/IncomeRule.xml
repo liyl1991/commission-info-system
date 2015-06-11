@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="IncomeRule">
+	
+	<resultMap id="IncomeRuleResult" type="cn.haohao.cis.rule.model.IncomeRule">
+		<result property="ruleId" column="RULE_ID" />
+		<result property="detailContent" column="DETAIL_CONTENT" />
+	</resultMap>
+	
+	<select id="IncomeRule.getById" resultMap="IncomeRuleResult">
+		<![CDATA[
+			select t.*
+			from T_INCOME_RULE t
+			where rule_id = #{ruleId}
+		]]>
+	</select>
+
+		
+	<sql id="IncomeRule.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="ruleId != null">and t.RULE_ID = #{ruleId}</if>
+		   <if test="detailContent != null">and t.DETAIL_CONTENT = #{detailContent}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="IncomeRule.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_T_INCOME_RULE.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="IncomeRule.create">
+		<![CDATA[
+			insert into T_INCOME_RULE (  RULE_ID ,  DETAIL_CONTENT   ) 
+			values (  #{ruleId} ,  #{detailContent}   )
+		]]>
+	</insert>
+	
+	<update id="IncomeRule.update">
+		<![CDATA[
+			update T_INCOME_RULE set 
+			 RULE_ID=#{ruleId} , DETAIL_CONTENT=#{detailContent} 
+			where rule_id = #{ruleId}
+		]]>
+	</update>
+	
+	<update id="IncomeRule.updateDynamic">
+		update T_INCOME_RULE t 
+		<set>
+			<if test="newUpdAttObj.ruleId != null">t.RULE_ID = #{newUpdAttObj.ruleId},</if>	
+			<if test="newUpdAttObj.detailContent != null">t.DETAIL_CONTENT = #{newUpdAttObj.detailContent},</if>	
+		</set>
+		<include refid="IncomeRule.whereClause" />
+	</update>
+	
+	<delete id="IncomeRule.delete">
+		<![CDATA[
+		delete from T_INCOME_RULE t
+		]]>
+		<include refid="IncomeRule.whereClause" />
+	</delete>
+	
+	<select id="IncomeRule.queryByArgs" resultMap="IncomeRuleResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from T_INCOME_RULE t 
+		]]>
+		<include refid="IncomeRule.whereClause" />
+	</select>
+	
+	<select id="IncomeRule.pageCountByArgs" resultMap="IncomeRuleResult">
+		<![CDATA[
+			SELECT * FROM (SELECT ROWS_.*, ROWNUM ROWNUM_ FROM (
+			select t.*
+		]]>
+			from T_INCOME_RULE t 
+		<include refid="IncomeRule.whereClause" />
+		<![CDATA[
+			) ROWS_ WHERE ROWNUM <= #{endRowNum} ) WHERE ROWNUM_ >= #{startRowNum}
+		]]>
+	</select>
+	
+	<select id="IncomeRule.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from T_INCOME_RULE t 
+		<include refid="IncomeRule.whereClause" />
+	</select>
+	
+	<select id="IncomeRule.countByArgs" resultType="java.lang.Long">
+		select count(1) from T_INCOME_RULE t 
+		<include refid="IncomeRule.whereClause" />
+	</select>
+</mapper>

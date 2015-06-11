@@ -3,22 +3,20 @@
 <mapper namespace="UserIncome">
 	
 	<resultMap id="UserIncomeResult" type="cn.haohao.cis.income.model.UserIncome">
+		<result property="incomeId" column="INCOME_ID" />
 		<result property="userId" column="USER_ID" />
 		<result property="incomeDate" column="INCOME_DATE" />
 		<result property="income" column="INCOME" />
 		<result property="performance" column="PERFORMANCE" />
-		<result property="isEnough" column="IS_ENOUGH" />
+		<result property="settingId" column="SETTING_ID" />
+		<result property="fromIncomeId" column="FROM_INCOME_ID" />
 	</resultMap>
-	<resultMap id="UserIncomeSumResult" type="cn.haohao.cis.income.model.UserIncome">
-		<result property="userId" column="USER_ID" />
-		<result property="income" column="INCOME" />
-		<result property="performance" column="PERFORMANCE" />
-	</resultMap>
+	
 	<select id="UserIncome.getById" resultMap="UserIncomeResult">
 		<![CDATA[
 			select t.*
 			from T_USER_INCOME t
-			where user_id = #{userId}
+			where income_id = #{incomeId}
 		]]>
 	</select>
 
@@ -26,13 +24,13 @@
 	<sql id="UserIncome.whereClause">
 	 <where>
 	  <trim prefixOverrides="and">
+		   <if test="incomeId != null">and t.INCOME_ID = #{incomeId}</if>
 		   <if test="userId != null">and t.USER_ID = #{userId}</if>
 		   <if test="incomeDate != null">and t.INCOME_DATE = #{incomeDate}</if>
 		   <if test="income != null">and t.INCOME = #{income}</if>
 		   <if test="performance != null">and t.PERFORMANCE = #{performance}</if>
-		   <if test="isEnough != null">and t.IS_ENOUGH = #{isEnough}</if>
-		   <if test="yearEq != null">and year(t.INCOME_DATE)  = #{yearEq}</if>
-		   <if test="monthEq != null">and month(t.INCOME_DATE)  = #{monthEq}</if>
+		   <if test="settingId != null">and t.SETTING_ID = #{settingId}</if>
+		   <if test="fromIncomeId != null">and t.FROM_INCOME_ID = #{fromIncomeId}</if>
 	   </trim>
 	 </where>
 	</sql>
@@ -45,27 +43,29 @@
 	
 	<insert id="UserIncome.create">
 		<![CDATA[
-			insert into T_USER_INCOME (  USER_ID ,  INCOME_DATE ,  INCOME ,  PERFORMANCE ,  IS_ENOUGH   ) 
-			values (  #{userId} ,  #{incomeDate} ,  #{income} ,  #{performance} ,  #{isEnough}   )
+			insert into T_USER_INCOME (  INCOME_ID ,  USER_ID ,  INCOME_DATE ,  INCOME ,  PERFORMANCE ,  SETTING_ID ,  FROM_INCOME_ID   ) 
+			values (  #{incomeId} ,  #{userId} ,  #{incomeDate} ,  #{income} ,  #{performance} ,  #{settingId} ,  #{fromIncomeId}   )
 		]]>
 	</insert>
 	
 	<update id="UserIncome.update">
 		<![CDATA[
 			update T_USER_INCOME set 
-			 USER_ID=#{userId} , INCOME_DATE=#{incomeDate} , INCOME=#{income} , PERFORMANCE=#{performance} , IS_ENOUGH=#{isEnough} 
-			where user_id = #{userId}
+			 INCOME_ID=#{incomeId} , USER_ID=#{userId} , INCOME_DATE=#{incomeDate} , INCOME=#{income} , PERFORMANCE=#{performance} , SETTING_ID=#{settingId} , FROM_INCOME_ID=#{fromIncomeId} 
+			where income_id = #{incomeId}
 		]]>
 	</update>
 	
 	<update id="UserIncome.updateDynamic">
 		update T_USER_INCOME t 
 		<set>
+			<if test="newUpdAttObj.incomeId != null">t.INCOME_ID = #{newUpdAttObj.incomeId},</if>	
 			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
 			<if test="newUpdAttObj.incomeDate != null">t.INCOME_DATE = #{newUpdAttObj.incomeDate},</if>	
 			<if test="newUpdAttObj.income != null">t.INCOME = #{newUpdAttObj.income},</if>	
 			<if test="newUpdAttObj.performance != null">t.PERFORMANCE = #{newUpdAttObj.performance},</if>	
-			<if test="newUpdAttObj.isEnough != null">t.IS_ENOUGH = #{newUpdAttObj.isEnough},</if>	
+			<if test="newUpdAttObj.settingId != null">t.SETTING_ID = #{newUpdAttObj.settingId},</if>	
+			<if test="newUpdAttObj.fromIncomeId != null">t.FROM_INCOME_ID = #{newUpdAttObj.fromIncomeId},</if>	
 		</set>
 		<include refid="UserIncome.whereClause" />
 	</update>
@@ -93,7 +93,6 @@
 		]]>
 			from T_USER_INCOME t 
 		<include refid="UserIncome.whereClause" />
-			order by income_date desc
 		<![CDATA[
 			limit #{startRowNum},#{pageSize}
 		]]>
@@ -107,14 +106,5 @@
 	<select id="UserIncome.countByArgs" resultType="java.lang.Long">
 		select count(1) from T_USER_INCOME t 
 		<include refid="UserIncome.whereClause" />
-	</select>
-	
-	<select id="UserIncome.getIncomeSum" resultMap="UserIncomeSumResult">
-		<![CDATA[
-		select t.USER_ID,SUM(t.INCOME) INCOME,SUM(t.PERFORMANCE) PERFORMANCE
-		from T_USER_INCOME t 
-		group by t.USER_ID
-		having t.USER_ID = #{userId}
-		]]>
 	</select>
 </mapper>

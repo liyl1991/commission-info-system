@@ -11,6 +11,10 @@ import org.apache.commons.lang.StringUtils;
 import cn.haohao.cis.income.model.UserIncome;
 import cn.haohao.cis.income.service.IUserIncomeService;
 import cn.haohao.cis.income.vo.UserIncomeQueryObj;
+import cn.haohao.cis.rule.model.IncomeRule;
+import cn.haohao.cis.rule.model.IncomeSetting;
+import cn.haohao.cis.rule.service.IIncomeSettingService;
+import cn.haohao.cis.rule.vo.IncomeSettingQueryObj;
 import cn.haohao.cis.user.model.User;
 import cn.haohao.cis.user.service.IUserService;
 import cn.haohao.cis.user.vo.UserQueryObj;
@@ -156,18 +160,23 @@ public class DataValidater {
 		}
 	}
 	
-	public static void main(String[] args) {
-		Calendar ca = Calendar.getInstance();
-		Calendar ca1 = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		ca.setTime(new Date());
-		try {
-			ca1.setTime(sdf.parse("2016/01/11"));
-			System.out.println("ca"+ca.get(Calendar.YEAR)+"-"+ca.get(Calendar.MONTH));
-			System.out.println("ca1"+ca1.get(Calendar.YEAR)+"-"+ca1.get(Calendar.MONTH));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static void incomeSettingUpdateValidate(List<IncomeSetting> newSettings, IIncomeSettingService incomeSettingService) {
+		if(newSettings == null || newSettings.size() == 0)
+			throw new BusinessException("系统出错！");
+		Float newTotal = 0F;
+		for (IncomeSetting incomeSetting : newSettings) {
+			if(incomeSetting.getProportion().floatValue() > 1F){
+				throw new BusinessException("比例填写不能大于1！");
+			}
+			newTotal += incomeSetting.getProportion();
+		}
+		IncomeSettingQueryObj incomeSettingQueryObj = new IncomeSettingQueryObj();
+		incomeSettingQueryObj.setRuleId(0);
+		incomeSettingQueryObj.setStatus(1);
+		IncomeSetting baseIncomeSetting = incomeSettingService.getIncomeSetting(incomeSettingQueryObj);
+		if((newTotal.floatValue() >= baseIncomeSetting.getProportion().floatValue() && !"B".equals(newSettings.get(0).getSettingLevel()))
+				||(newTotal.floatValue() > baseIncomeSetting.getProportion().floatValue() && "B".equals(newSettings.get(0).getSettingLevel()))){
+			throw new BusinessException("总提成比例不能为大于基础提成比例，且【B级】所剩提成比例不能为0！");
 		}
 	}
 }

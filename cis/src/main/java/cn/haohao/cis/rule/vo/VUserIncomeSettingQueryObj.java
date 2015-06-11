@@ -1,31 +1,23 @@
-package cn.haohao.cis.user.vo;
+package cn.haohao.cis.rule.vo;
 //j-import-b
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import cn.haohao.vas.core.vo.IPageable;
-import cn.haohao.cis.user.model.User;
+import cn.haohao.cis.rule.model.VUserIncomeSetting;
 //j-import-e
 /**
  *	VO
  */
-public class UserQueryObj extends User implements IPageable{
-	/**
-	 * 等级小于
-	 */
-	private String levelLt;
-	/**
-	 * 不等于
-	 */
-	private String levelNotEq;
+public class VUserIncomeSettingQueryObj extends VUserIncomeSetting implements IPageable{
 	
-	private String levelNotIn;
-	
-	private String nameMatch;
-	
-	private Integer grandUserId;
 	private static final long serialVersionUID = 1L;
+	
+	private String detailContentLike;
+	private Integer userIdEqOrNull;
+	private String downlineUserLevel;
+	private List<Integer> uplineUserIds;
 	/**
 	 * 页面大小
 	 */
@@ -60,16 +52,16 @@ public class UserQueryObj extends User implements IPageable{
 	public Sort getSort() {
 		return this.sort;
 	}
-	public UserQueryObj next() {
+	public VUserIncomeSettingQueryObj next() {
 		this.currentPage += 1;
 		return this;
 	}
-	public UserQueryObj previousOrFirst() {
+	public VUserIncomeSettingQueryObj previousOrFirst() {
 		if(currentPage != 1)
 			this.currentPage -= 1;
 		return this;
 	}
-	public UserQueryObj first() {
+	public VUserIncomeSettingQueryObj first() {
 		this.currentPage = 1;
 		return this;
 	}
@@ -93,36 +85,29 @@ public class UserQueryObj extends User implements IPageable{
 	public void setSort(List<Order> orders){
 		this.sort = new Sort(orders);
 	}
-	public String getLevelLt() {
-		return levelLt;
+	public String getDetailContentLike() {
+		return detailContentLike;
 	}
-	public void setLevelLt(String levelLt) {
-		this.levelLt = levelLt;
+	public void setDetailContentLike(String detailContentLike) {
+		this.detailContentLike = detailContentLike;
 	}
-	public String getLevelNotEq() {
-		return levelNotEq;
+	public Integer getUserIdEqOrNull() {
+		return userIdEqOrNull;
 	}
-	public void setLevelNotEq(String levelNotEq) {
-		this.levelNotEq = levelNotEq;
+	public void setUserIdEqOrNull(Integer userIdEqOrNull) {
+		this.userIdEqOrNull = userIdEqOrNull;
 	}
-	public String getNameMatch() {
-		if(this.nameMatch == null)
-			return null;
-		return "%"+nameMatch+"%";
+	public String getDownlineUserLevel() {
+		return downlineUserLevel;
 	}
-	public void setNameMatch(String nameMatch) {
-		this.nameMatch = nameMatch;
+	public void setDownlineUserLevel(String downlineUserLevel) {
+		this.downlineUserLevel = downlineUserLevel;
 	}
-	public Integer getGrandUserId() {
-		return grandUserId;
+	public List<Integer> getUplineUserIds() {
+		return uplineUserIds;
 	}
-	public void setGrandUserId(Integer grandUserId) {
-		this.grandUserId = grandUserId;
+	public void setUplineUserIds(List<Integer> uplineUserIds) {
+		this.uplineUserIds = uplineUserIds;
 	}
-	public String getLevelNotIn() {
-		return levelNotIn;
-	}
-	public void setLevelNotIn(String levelNotIn) {
-		this.levelNotIn = levelNotIn;
-	}
+	
 }

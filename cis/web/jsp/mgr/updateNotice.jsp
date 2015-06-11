@@ -100,13 +100,13 @@
 					'success':function(r){
 						if(r.result)
 							$.gritter.add({
-								title: '发布修改成功',
+								title: '公告修改成功',
 								text: '',
 								class_name: 'gritter-success gritter-light'
 							});
 						else{
 							$.gritter.add({
-								title: '发布修改失败',
+								title: '公告修改失败',
 								text: r.msg,
 								class_name: 'gritter-error gritter-light'
 							});

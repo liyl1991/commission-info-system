@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="IncomeSetting">
+	
+	<resultMap id="IncomeSettingResult" type="cn.haohao.cis.rule.model.IncomeSetting">
+		<result property="settingId" column="SETTING_ID" />
+		<result property="type" column="TYPE" />
+		<result property="proportion" column="PROPORTION" />
+		<result property="ruleId" column="RULE_ID" />
+		<result property="settingLevel" column="SETTING_LEVEL" />
+		<result property="usingDate" column="USING_DATE" />
+		<result property="endDate" column="END_DATE" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+	
+	<select id="IncomeSetting.getById" resultMap="IncomeSettingResult">
+		<![CDATA[
+			select t.*
+			from T_INCOME_SETTING t
+			where setting_id = #{settingId}
+		]]>
+	</select>
+
+		
+	<sql id="IncomeSetting.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="settingId != null">and t.SETTING_ID = #{settingId}</if>
+		   <if test="type != null">and t.TYPE = #{type}</if>
+		   <if test="proportion != null">and t.PROPORTION = #{proportion}</if>
+		   <if test="ruleId != null">and t.RULE_ID = #{ruleId}</if>
+		   <if test="settingLevel != null">and t.SETTING_LEVEL = #{settingLevel}</if>
+		   <if test="usingDate != null">and t.USING_DATE = #{usingDate}</if>
+		   <if test="endDate != null">and t.END_DATE = #{endDate}</if>
+		   <if test="status != null">and t.STATUS = #{status}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="IncomeSetting.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_T_INCOME_SETTING.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="IncomeSetting.create">
+		<![CDATA[
+			insert into T_INCOME_SETTING (  SETTING_ID ,  TYPE ,  PROPORTION ,  RULE_ID ,  SETTING_LEVEL ,  USING_DATE ,  END_DATE ,  STATUS   ) 
+			values (  #{settingId} ,  #{type} ,  #{proportion} ,  #{ruleId} ,  #{settingLevel} ,  #{usingDate} ,  #{endDate} ,  #{status}   )
+		]]>
+	</insert>
+	
+	<update id="IncomeSetting.update">
+		<![CDATA[
+			update T_INCOME_SETTING set 
+			 SETTING_ID=#{settingId} , TYPE=#{type} , PROPORTION=#{proportion} , RULE_ID=#{ruleId} , SETTING_LEVEL=#{settingLevel} , USING_DATE=#{usingDate} , END_DATE=#{endDate} , STATUS=#{status} 
+			where setting_id = #{settingId}
+		]]>
+	</update>
+	
+	<update id="IncomeSetting.updateDynamic">
+		update T_INCOME_SETTING t 
+		<set>
+			<if test="newUpdAttObj.settingId != null">t.SETTING_ID = #{newUpdAttObj.settingId},</if>	
+			<if test="newUpdAttObj.type != null">t.TYPE = #{newUpdAttObj.type},</if>	
+			<if test="newUpdAttObj.proportion != null">t.PROPORTION = #{newUpdAttObj.proportion},</if>	
+			<if test="newUpdAttObj.ruleId != null">t.RULE_ID = #{newUpdAttObj.ruleId},</if>	
+			<if test="newUpdAttObj.settingLevel != null">t.SETTING_LEVEL = #{newUpdAttObj.settingLevel},</if>	
+			<if test="newUpdAttObj.usingDate != null">t.USING_DATE = #{newUpdAttObj.usingDate},</if>	
+			<if test="newUpdAttObj.endDate != null">t.END_DATE = #{newUpdAttObj.endDate},</if>	
+			<if test="newUpdAttObj.status != null">t.STATUS = #{newUpdAttObj.status},</if>	
+		</set>
+		<include refid="IncomeSetting.whereClause" />
+	</update>
+	
+	<delete id="IncomeSetting.delete">
+		<![CDATA[
+		delete from T_INCOME_SETTING
+		]]>
+		<where>
+	  <trim prefixOverrides="and">
+		   <if test="settingId != null">and SETTING_ID = #{settingId}</if>
+		   <if test="type != null">and TYPE = #{type}</if>
+		   <if test="proportion != null">and PROPORTION = #{proportion}</if>
+		   <if test="ruleId != null">and RULE_ID = #{ruleId}</if>
+		   <if test="settingLevel != null">and SETTING_LEVEL = #{settingLevel}</if>
+		   <if test="usingDate != null">and USING_DATE = #{usingDate}</if>
+		   <if test="endDate != null">and END_DATE = #{endDate}</if>
+		   <if test="status != null">and STATUS = #{status}</if>
+	   </trim>
+	 </where>
+	</delete>
+	
+	<select id="IncomeSetting.queryByArgs" resultMap="IncomeSettingResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from T_INCOME_SETTING t 
+		]]>
+		<include refid="IncomeSetting.whereClause" />
+	</select>
+	
+	<select id="IncomeSetting.pageCountByArgs" resultMap="IncomeSettingResult">
+		<![CDATA[
+			select t.*
+		]]>
+			from T_INCOME_SETTING t 
+		<include refid="IncomeSetting.whereClause" />
+		<![CDATA[
+			limit #{startRowNum},#{pageSize}
+		]]>
+	</select>
+	
+	<select id="IncomeSetting.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from T_INCOME_SETTING t 
+		<include refid="IncomeSetting.whereClause" />
+	</select>
+	
+	<select id="IncomeSetting.countByArgs" resultType="java.lang.Long">
+		select count(1) from T_INCOME_SETTING t 
+		<include refid="IncomeSetting.whereClause" />
+	</select>
+</mapper>

@@ -41,8 +41,22 @@
 		
 		<li class="${noticeMgrActive}">
 			<a href="<%=path%>/noticeMgr/goNoticeMgr">
-				<i class="icon-volume-up"></i>
+				<i class="icon-bullhorn"></i>
 				<span class="menu-text"> 公告管理</span>
+			</a>
+		</li>
+		
+		<li class="${incomeMgrActive}">
+			<a href="<%=path%>/userIncomeMgr/goIncomeMgr">
+				<i class="icon-inbox"></i>
+				<span class="menu-text"> 员工收入</span>
+			</a>
+		</li>
+		
+		<li class="${ruleMgrActive}">
+			<a href="<%=path%>/incomeRuleMgr/goIncomeRuleMgr">
+				<i class="icon-briefcase"></i>
+				<span class="menu-text"> 提成规则</span>
 			</a>
 		</li>
 	  </c:if>

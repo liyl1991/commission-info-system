@@ -33,3 +33,55 @@
 .message-item{
 	margin-top: -1px;
 }
+.nav-tabs{
+	height: 42px;
+}
+#ruleTab .form-group{
+	height: 31px;
+}
+.side-user-list{
+	border-right:1px solid #F5F5F5;
+	height: 100%;
+}
+.user-select-list{
+	overflow-y: scroll;
+}
+.user-select-list ul{
+	list-style-position: outside;
+	list-style-type: none;
+	margin: 0;
+}
+.user-select-list ul li{
+	padding-left:8px;
+	height: 32px;
+	line-height: 28px;
+	font-size: 14px;
+	cursor: pointer;
+	border-bottom: 1px solid #F5F5F5;
+	border-collapse: collapse;
+}
+.user-select-list ul li span{
+	padding-left: 5px;
+	color: #B5B5B5;
+}
+.user-select-list ul li:hover{
+	background-color: #6FB3E0;
+	color: #fff;
+}
+.user-select-list ul li.active{
+	background-color: #6FB3E0;
+	color: #fff;
+}
+.user-list-content{
+	height: 100%;
+}
+
+
+
+
+
+
+
+
+
+

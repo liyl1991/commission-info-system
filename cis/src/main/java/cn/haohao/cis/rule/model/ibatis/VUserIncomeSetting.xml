@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="VUserIncomeSetting">
+	
+	<resultMap id="VUserIncomeSettingResult" type="cn.haohao.cis.rule.model.VUserIncomeSetting">
+		<result property="ruleId" column="RULE_ID" />
+		<result property="detailContent" column="DETAIL_CONTENT" />
+		<result property="commonSettingId" column="COMMON_SETTING_ID" />
+		<result property="commonSetting" column="COMMON_SETTING" />
+		<result property="settingLevel" column="SETTING_LEVEL" />
+		<result property="specialSettingId" column="SPECIAL_SETTING_ID" />
+		<result property="specialSetting" column="SPECIAL_SETTING" />
+		<result property="userId" column="USER_ID" />
+	</resultMap>
+	
+	<select id="VUserIncomeSetting.getById" resultMap="VUserIncomeSettingResult">
+		<![CDATA[
+			select t.*
+			from V_USER_INCOME_SETTING t
+			where rule_id = #{ruleId}
+		]]>
+	</select>
+
+		
+	<sql id="VUserIncomeSetting.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="ruleId != null">and t.RULE_ID = #{ruleId}</if>
+		   <if test="detailContent != null">and t.DETAIL_CONTENT = #{detailContent}</if>
+		   <if test="commonSettingId != null">and t.COMMON_SETTING_ID = #{commonSettingId}</if>
+		   <if test="commonSetting != null">and t.COMMON_SETTING = #{commonSetting}</if>
+		   <if test="settingLevel != null">and t.SETTING_LEVEL = #{settingLevel}</if>
+		   <if test="specialSettingId != null">and t.SPECIAL_SETTING_ID = #{specialSettingId}</if>
+		   <if test="specialSetting != null">and t.SPECIAL_SETTING = #{specialSetting}</if>
+		   <if test="userId != null">and t.USER_ID = #{userId}</if>
+		   <if test="detailContentLike != null">and t.DETAIL_CONTENT like #{detailContentLike}</if>
+		   <if test="userIdEqOrNull != null">and (t.USER_ID = #{userIdEqOrNull} or t.USER_ID is null)</if>
+		   <if test="uplineUserIds != null and downlineUserLevel != null">
+				and user_id in (
+					select user_id 
+					from t_user 
+					where upline_user in 
+					<foreach collection="uplineUserIds" index="index" item="uplineUserId" open="(" separator="," close=")">
+			            #{uplineUserId}
+			        </foreach>
+					 and setting_level = #{downlineUserLevel}
+					)
+		   </if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="VUserIncomeSetting.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_V_USER_INCOME_SETTING.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="VUserIncomeSetting.create">
+		<![CDATA[
+			insert into V_USER_INCOME_SETTING (  RULE_ID ,  DETAIL_CONTENT ,  COMMON_SETTING_ID ,  COMMON_SETTING ,  SETTING_LEVEL ,  SPECIAL_SETTING_ID ,  SPECIAL_SETTING ,  USER_ID   ) 
+			values (  #{ruleId} ,  #{detailContent} ,  #{commonSettingId} ,  #{commonSetting} ,  #{settingLevel} ,  #{specialSettingId} ,  #{specialSetting} ,  #{userId}   )
+		]]>
+	</insert>
+	
+	<update id="VUserIncomeSetting.update">
+		<![CDATA[
+			update V_USER_INCOME_SETTING set 
+			 RULE_ID=#{ruleId} , DETAIL_CONTENT=#{detailContent} , COMMON_SETTING_ID=#{commonSettingId} , COMMON_SETTING=#{commonSetting} , SETTING_LEVEL=#{settingLevel} , SPECIAL_SETTING_ID=#{specialSettingId} , SPECIAL_SETTING=#{specialSetting} , USER_ID=#{userId} 
+			where rule_id = #{ruleId}
+		]]>
+	</update>
+	
+	<update id="VUserIncomeSetting.updateDynamic">
+		update V_USER_INCOME_SETTING t 
+		<set>
+			<if test="newUpdAttObj.ruleId != null">t.RULE_ID = #{newUpdAttObj.ruleId},</if>	
+			<if test="newUpdAttObj.detailContent != null">t.DETAIL_CONTENT = #{newUpdAttObj.detailContent},</if>	
+			<if test="newUpdAttObj.commonSettingId != null">t.COMMON_SETTING_ID = #{newUpdAttObj.commonSettingId},</if>	
+			<if test="newUpdAttObj.commonSetting != null">t.COMMON_SETTING = #{newUpdAttObj.commonSetting},</if>	
+			<if test="newUpdAttObj.settingLevel != null">t.SETTING_LEVEL = #{newUpdAttObj.settingLevel},</if>	
+			<if test="newUpdAttObj.specialSettingId != null">t.SPECIAL_SETTING_ID = #{newUpdAttObj.specialSettingId},</if>	
+			<if test="newUpdAttObj.specialSetting != null">t.SPECIAL_SETTING = #{newUpdAttObj.specialSetting},</if>	
+			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
+		</set>
+		<include refid="VUserIncomeSetting.whereClause" />
+	</update>
+	
+	<delete id="VUserIncomeSetting.delete">
+		<![CDATA[
+		delete from V_USER_INCOME_SETTING t
+		]]>
+		<include refid="VUserIncomeSetting.whereClause" />
+	</delete>
+	
+	<select id="VUserIncomeSetting.queryByArgs" resultMap="VUserIncomeSettingResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from V_USER_INCOME_SETTING t 
+		]]>
+		<include refid="VUserIncomeSetting.whereClause" />
+		order by t.detail_content desc
+	</select>
+	
+	<select id="VUserIncomeSetting.queryUserSpecial" resultMap="VUserIncomeSettingResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from (	SELECT tba.*,tbb.special_setting_id,tbb.special_setting,tbb.user_id from (
+					select a.rule_id,a.detail_content,a.common_setting_id,a.common_setting,a.setting_level 
+					from v_user_income_setting a
+					where a.detail_content like #{detailContentLike} and a.setting_level = #{settingLevel}
+					group by a.rule_id,a.detail_content,a.common_setting,a.common_setting,a.setting_level ) tba
+					left join (
+					select b.rule_id,b.special_setting_id,b.special_setting,b.user_id from v_user_income_setting b
+					where b.detail_content like #{detailContentLike} and b.setting_level = #{settingLevel} and b.user_id = #{userId}) tbb
+					on tba.rule_id = tbb.rule_id
+					) t 
+		]]>
+		<where>
+			<if test="ruleId != null">and t.RULE_ID = #{ruleId}</if>
+		</where>
+		order by t.detail_content desc
+	</select>
+	
+	<select id="VUserIncomeSetting.getDownlineSpecialMax" resultType="java.lang.Float">
+		<![CDATA[
+			select max(t.SPECIAL_SETTING)
+			from V_USER_INCOME_SETTING t 
+			]]>
+			<include refid="VUserIncomeSetting.whereClause" />
+			<![CDATA[
+							 and setting_level = #{downlineUserLevel}
+			order by t.detail_content desc
+		]]>
+	</select>
+	
+	<select id="VUserIncomeSetting.pageCountByArgs" resultMap="VUserIncomeSettingResult">
+		<![CDATA[
+			select t.*
+		]]>
+			from V_USER_INCOME_SETTING t 
+		<include refid="VUserIncomeSetting.whereClause" />
+		<![CDATA[
+			order by t.detail_content desc
+			limit #{startRowNum},#{pageSize}
+		]]>
+	</select>
+	
+	<select id="VUserIncomeSetting.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from V_USER_INCOME_SETTING t 
+		<include refid="VUserIncomeSetting.whereClause" />
+	</select>
+	
+	<select id="VUserIncomeSetting.countByArgs" resultType="java.lang.Long">
+		select count(1) from V_USER_INCOME_SETTING t 
+		<include refid="VUserIncomeSetting.whereClause" />
+	</select>
+</mapper>

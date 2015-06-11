@@ -47,6 +47,15 @@
 		   <if test="extend2 != null">and t.EXTEND2 = #{extend2}</if>
 		   <if test="levelLt != null">and t.level &lt; #{levelLt}</if>
 		   <if test="levelNotEq != null">and t.level != #{levelNotEq}</if>
+		   <if test="levelNotIn != null">and t.level not in (${levelNotIn})</if>
+		   <if test="nameMatch != null">and (t.name like #{nameMatch} or t.ID_CARD like #{nameMatch})</if>
+		   <if test="grandUserId != null">
+		   	and t.UPLINE_USER in (
+		   			select user_id
+		   			from T_USER _user2
+		   			where _user2.UPLINE_USER = #{grandUserId}	
+		   		) 
+		   	</if>
 	   </trim>
 	 </where>
 	</sql>
@@ -110,6 +119,12 @@
 			from T_USER t 
 		]]>
 		<include refid="User.whereClause" />
+		<if test="sort != null">
+			order by
+			<foreach collection="sort" item="order" separator=",">
+				t.${order.property} ${order.direction}
+			</foreach>
+		</if>
 	</select>
 	
 	<select id="User.pageCountByArgs" resultMap="UserResult">

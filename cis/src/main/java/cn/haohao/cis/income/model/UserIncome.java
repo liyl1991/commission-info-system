@@ -24,6 +24,10 @@ public class UserIncome implements Serializable{
 	
 	//属性 begin
 	/*
+	 * 收入信息id
+	 */
+	private java.lang.Integer incomeId;
+	/*
 	 * 用户id
 	 */
 	private java.lang.Integer userId;
@@ -40,12 +44,28 @@ public class UserIncome implements Serializable{
 	 */
 	private java.lang.Float performance;
 	/*
-	 * 是否达标:1、达标，2、未达标
+	 * 使用提成规则的id
 	 */
-	private java.lang.Integer isEnough;
+	private java.lang.Integer settingId;
+	/*
+	 * 提成来源id
+	 */
+	private java.lang.Integer fromIncomeId;
 	//属性 end
 	
 	//方法 begin
+	/*
+	 * 获取 收入信息id
+	 */
+	public java.lang.Integer getIncomeId(){
+		return this.incomeId;
+	}
+	/*
+	 * 设置 收入信息id
+	 */
+	public void setIncomeId(java.lang.Integer incomeId){
+		this.incomeId = incomeId;
+	}
 	/*
 	 * 获取 用户id
 	 */
@@ -95,21 +115,33 @@ public class UserIncome implements Serializable{
 		this.performance = performance;
 	}
 	/*
-	 * 获取 是否达标:1、达标，2、未达标
+	 * 获取 使用提成规则的id
 	 */
-	public java.lang.Integer getIsEnough(){
-		return this.isEnough;
+	public java.lang.Integer getSettingId(){
+		return this.settingId;
 	}
 	/*
-	 * 设置 是否达标:1、达标，2、未达标
+	 * 设置 使用提成规则的id
 	 */
-	public void setIsEnough(java.lang.Integer isEnough){
-		this.isEnough = isEnough;
+	public void setSettingId(java.lang.Integer settingId){
+		this.settingId = settingId;
+	}
+	/*
+	 * 获取 提成来源id
+	 */
+	public java.lang.Integer getFromIncomeId(){
+		return this.fromIncomeId;
+	}
+	/*
+	 * 设置 提成来源id
+	 */
+	public void setFromIncomeId(java.lang.Integer fromIncomeId){
+		this.fromIncomeId = fromIncomeId;
 	}
 	//方法 end
 
 	public Long getId(){
-		if (userId==null) return null;
-		return Long.valueOf(this.userId);
+		if (incomeId==null) return null;
+		return Long.valueOf(this.incomeId);
 	}
 }
