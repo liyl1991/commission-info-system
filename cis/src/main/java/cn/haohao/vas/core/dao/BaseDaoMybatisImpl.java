@@ -30,10 +30,8 @@ public class BaseDaoMybatisImpl<T> implements BaseDao<T> {
 	public BaseDaoMybatisImpl(Class<T> type) {
 		this.type = type;
 	}
-	public Long getSequence() {
-		
-		return (Long) this.sqlSessionTemplate.selectOne(this.getStatementName() + ".getSequence");
-		//queryForObject(this.getStatementName() + ".getSequence");
+	public Integer getSequence() {
+		return (Integer) this.sqlSessionTemplate.selectOne(this.getStatementName() + ".getSequence");
 	}
 
 	public void create(T newObj) {

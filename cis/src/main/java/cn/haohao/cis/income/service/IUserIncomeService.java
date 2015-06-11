@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import cn.haohao.cis.income.model.UserIncome;
+import cn.haohao.cis.income.vo.UserIncomeInputObj;
 import cn.haohao.cis.income.vo.UserIncomeQueryObj;
 import cn.haohao.cis.income.vo.UserIncomeUpdateObj;
+import cn.haohao.cis.user.model.User;
 //j-import-e
 /**
  *	SERVICE
@@ -19,6 +21,8 @@ public interface IUserIncomeService {
 	 * @return
 	 */
 	public UserIncome createUserIncome(UserIncome userIncome);
+	
+	public void createUserIncome(List<User> userUplineList, UserIncomeInputObj inputObj);
 	/**
 	 * u-insert-b@note2.0@
 	 * u-insert-e@note2.0@

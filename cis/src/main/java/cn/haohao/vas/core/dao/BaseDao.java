@@ -19,7 +19,7 @@ public interface BaseDao<T> {
 	 * 
 	 * @return 序列值
 	 */
-	Long getSequence();
+	Integer getSequence();
 
 	/**
 	 * 添加对象

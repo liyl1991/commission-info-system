@@ -7,13 +7,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.haohao.cis.income.service.IUserIncomeService;
+import cn.haohao.cis.income.vo.UserIncomeInputObj;
 import cn.haohao.cis.rule.model.IncomeRule;
 import cn.haohao.cis.rule.model.IncomeSetting;
 import cn.haohao.cis.rule.model.VUserIncomeSetting;
@@ -25,11 +27,9 @@ import cn.haohao.cis.rule.vo.IncomeRuleQueryObj;
 import cn.haohao.cis.rule.vo.IncomeSettingQueryObj;
 import cn.haohao.cis.rule.vo.VUserIncomeSettingQueryObj;
 import cn.haohao.cis.user.model.User;
-import cn.haohao.cis.user.model.VuserIncome;
 import cn.haohao.cis.user.service.IUserService;
 import cn.haohao.cis.user.service.IVuserIncomeService;
 import cn.haohao.cis.user.vo.UserQueryObj;
-import cn.haohao.cis.user.vo.VuserIncomeQueryObj;
 import cn.haohao.cis.utils.Constants;
 
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
@@ -52,6 +52,8 @@ public class UserIncomeMgrController extends MultiActionController{
 	private ISpecialSettingService specialSettingService;
 	@Autowired
 	private IIncomeSettingService incomeSettingService;
+	
+	private Log log = LogFactory.getLog("adminLog");
 	
 	@RequestMapping("/goIncomeMgr")
 	public String goIndex(HttpServletRequest request){
@@ -107,6 +109,32 @@ public class UserIncomeMgrController extends MultiActionController{
 		incomeSettingQueryObj.setRuleId(0);
 		incomeSettingQueryObj.setStatus(1);
 		resMap.put("baseRuleSetting", this.incomeSettingService.getIncomeSetting(incomeSettingQueryObj));
+		return resMap;
+	}
+	
+	@RequestMapping("/doInputUserIncome")
+	public @ResponseBody Map<String,Object> doInputUserIncome(HttpServletRequest request, UserIncomeInputObj inputObj){
+		Map<String,Object> resMap = new HashMap<String, Object>();
+		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
+		if(!loginedUser.isAdmin())
+			return resMap;
+		User user = this.userService.getUserById(inputObj.getUserId());
+		if( !"X".equalsIgnoreCase(user.getLevel())){
+			resMap.put("msg", "只能选择X级别的员工");
+			return resMap;
+		}
+		List<User> userUplineList = new ArrayList<User>();
+		try{
+			userUplineList = this.getUserUplineWithSetting(user, userUplineList);
+			this.setUsersIncomeSetting(this.incomeRuleService.getIncomeRuleById(inputObj.getRuleId()), userUplineList);
+			this.userIncomeService.createUserIncome(userUplineList, inputObj);
+			resMap.put("result", true);
+			log.info(loginedUser.getName()+"-添加了创收信息->"+user.getName()+"("+user.getIdCard()+"):"+inputObj.getIncome());
+		} catch (Exception e){
+			e.printStackTrace();
+			resMap.put("result", false);
+			resMap.put("msg", "系统出错");
+		}
 		return resMap;
 	}
 	
