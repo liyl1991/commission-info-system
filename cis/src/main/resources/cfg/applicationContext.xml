@@ -19,7 +19,7 @@
 	<!--
 		公用的基本配置文件，请不要随便在这里添加东西，如有需要，当面通知我。-->
     <!-- <context:component-scan base-package="com.newland"/>   -->
-    <context:component-scan base-package="com.newland">  
+    <context:component-scan base-package="cn.haohao">  
           <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />   
      </context:component-scan>   
  	
