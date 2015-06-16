@@ -81,14 +81,7 @@
 											</th>
 										</tr>
 									</thead>
-									<tbody>
-										<!-- <tr class="success">
-											<td>2014年10月</td>
-											<td>1299.8</td>
-											<td>129</td>
-											<td><i class="icon-remove"></i></td>
-										</tr> -->
-									</tbody>
+									<tbody></tbody>
 								</table>
 								<div>
 									<ul class="pagination">
@@ -124,15 +117,20 @@
 						for(var i=0;i<r.incomeList.content.length;i++){
 							var isEnough = r.incomeList.content[i].isEnough==1?'ok':'remove';
 							var statusClass = r.incomeList.content[i].isEnough==1?'success':'danger';
-							$('<tr class="'+statusClass+'">'+
-								'<td>'+formatDate(r.incomeList.content[i].incomeDate)+'</td>'+
-								'<td>'+r.incomeList.content[i].income+'</td>'+
-								'<td>'+r.incomeList.content[i].performance+'</td>'+
-								'<td><i class="icon-'+isEnough+'"></i></td>'+
-							  '</tr>').appendTo(".container table tbody");
+							if(r.incomeList.content[i].incomeDate){
+								$('<tr class="'+statusClass+'">'+
+									'<td>'+formatDate(r.incomeList.content[i].incomeDate)+'</td>'+
+									'<td>'+r.incomeList.content[i].income+'</td>'+
+									'<td>'+r.incomeList.content[i].performance+'</td>'+
+									'<td><i class="icon-'+isEnough+'"></i></td>'+
+								  '</tr>').appendTo(".container table tbody");
+							}
 						}
+						$('.pagination').jqPaginator('option', {
+							totalPages: r.incomeList.totalPages
+						});
 					}
-					else{
+					if($(".container table tbody tr").length == 0){
 						$('.pagination').hide();
 						$('<tr>'+
 								'<td colspan="4">暂无数据</td>'+
@@ -140,18 +138,13 @@
 					}
 					//$(".pre-income,.pre-performance").remove infobox-green
 					if(r.preIncome){
-						$(".pre-income .money").text(r.preIncome.preMonthIncome?("￥"+r.preIncome.preMonthIncome):'暂无数据');
-						$(".pre-performance .money").text(r.preIncome.preMonthPerformance?("￥"+r.preIncome.preMonthPerformance):'暂无数据');
+						$(".pre-income .money").text(r.preIncome.income?("￥"+r.preIncome.income):'暂无数据');
+						$(".pre-performance .money").text(r.preIncome.performance?("￥"+r.preIncome.performance):'暂无数据');
 						if(r.preIncome.isEnough==1) $(".pre-performance").addClass("infobox-green");
 						else $(".pre-performance").addClass("infobox-red");
 					}
-					if(r.incomeSum){
-						$(".sum-income .money").text("￥"+r.incomeSum.income);
-						$(".sum-performance .money").text("￥"+r.incomeSum.performance);
-					}
-					$('.pagination').jqPaginator('option', {
-						totalPages: r.incomeList.totalPages
-					});
+					$(".sum-income .money").text(r.incomeSum.income?("￥"+r.incomeSum.income):'暂无数据');
+					$(".sum-performance .money").text(r.incomeSum.performance?("￥"+r.incomeSum.performance):'暂无数据');
 				},
 				error:function(){}
 			});

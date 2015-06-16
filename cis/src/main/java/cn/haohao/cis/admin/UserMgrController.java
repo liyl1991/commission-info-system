@@ -1,6 +1,6 @@
 package cn.haohao.cis.admin;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,21 +11,21 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.haohao.cis.income.model.UserIncome;
-import cn.haohao.cis.income.service.IUserIncomeService;
-import cn.haohao.cis.income.vo.UserIncomeQueryObj;
+import cn.haohao.cis.income.model.VuserIncome;
+import cn.haohao.cis.income.service.IVuserIncomeService;
+import cn.haohao.cis.income.vo.VuserIncomeQueryObj;
 import cn.haohao.cis.user.model.User;
-import cn.haohao.cis.user.model.VuserIncome;
 import cn.haohao.cis.user.service.IUserService;
-import cn.haohao.cis.user.service.IVuserIncomeService;
 import cn.haohao.cis.user.vo.UserQueryObj;
 import cn.haohao.cis.user.vo.UserUpdateObj;
-import cn.haohao.cis.user.vo.VuserIncomeQueryObj;
+import cn.haohao.cis.utils.BaseUtils;
 import cn.haohao.cis.utils.Constants;
 import cn.haohao.cis.validate.DataValidater;
 import cn.haohao.vas.core.exception.BusinessException;
@@ -33,26 +33,24 @@ import cn.haohao.vas.core.utils.MD5Encoder;
 
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 @Controller
-@RequestMapping("/admin")
-public class AdminController extends MultiActionController{
+@RequestMapping("/userMgr")
+public class UserMgrController extends MultiActionController{
 	
 	@Autowired
-	private IVuserIncomeService vuserIncomeService;
-	@Autowired
-	private IUserIncomeService userIncomeService;
-	@Autowired
 	private IUserService userService;
+	@Autowired
+	private IVuserIncomeService vuserIncomeService;
 	private Log log = LogFactory.getLog("adminLog");
 	/**
 	 * 至员工管理页 
 	 * @param request
 	 */
-	@RequestMapping("/goAdminMgr")
-	public String goAdminMgr(HttpServletRequest request){
+	@RequestMapping("/goUserMgr")
+	public String goUserMgr(HttpServletRequest request){
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(loginedUser.isAdmin()){
 			request.setAttribute("adminMgrActive", Constants.ACTIVE_CLASS);
-			return "mgr/adminMgr";
+			return "mgr/user/userMgr";
 		}
 		else
 			return "index";
@@ -63,17 +61,16 @@ public class AdminController extends MultiActionController{
 	 * @param request
 	 */
 	@RequestMapping("/getUserList")
-	public @ResponseBody Map<String,Object> getIncomeInfo(VuserIncomeQueryObj queryObj,HttpServletRequest request){
-		
-		Map<String,Object> resMap = new HashMap<String, Object>();
+	public @ResponseBody Page<User> getIncomeInfo(UserQueryObj queryObj,HttpServletRequest request){
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(!loginedUser.isAdmin())
-			return resMap;
+			return null;
 		queryObj.setStatus(1);
 		queryObj.setUserRole(1);
-		Page<VuserIncome> downlineUsers = this.vuserIncomeService.pageQueryVuserIncome(queryObj);
-		resMap.put("downlineUsers", downlineUsers);
-		return resMap;
+		List<Sort.Order> orders = new ArrayList<Sort.Order>();
+		orders.add(new Order("level"));
+		queryObj.setSort(orders);
+		return this.userService.pageQueryUser(queryObj);
 	}
 	
 	/**
@@ -103,7 +100,7 @@ public class AdminController extends MultiActionController{
 		userQueryObj.setLevelNotEq("X");
 		List<User> uplineCandidate = this.userService.queryUser(userQueryObj);
 		request.setAttribute("uplineCandidate", uplineCandidate);
-		return "mgr/adminPersonInfo";
+		return "mgr/user/adminPersonInfo";
 	}
 	
 	/**
@@ -112,13 +109,11 @@ public class AdminController extends MultiActionController{
 	 * @param request
 	 */
 	@RequestMapping("/getUserDownlines")
-	public @ResponseBody Map<String,Object> getUserDownlines(UserQueryObj queryObj,HttpServletRequest request){
-		Map<String,Object> resMap = new HashMap<String,Object>();
+	public @ResponseBody Page<User> getUserDownlines(UserQueryObj queryObj,HttpServletRequest request){
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(!loginedUser.isAdmin())
-			return resMap;
-		resMap.put("downlines", this.userService.pageQueryUser(queryObj));
-		return resMap;
+			return null;
+		return this.userService.pageQueryUser(queryObj);
 	}
 	
 	/**
@@ -127,20 +122,25 @@ public class AdminController extends MultiActionController{
 	 * @param request
 	 */
 	@RequestMapping("/getIncomeInfo")
-	public @ResponseBody Map<String,Object> getIncomeInfo(UserIncomeQueryObj queryObj,HttpServletRequest request){
+	public @ResponseBody Map<String,Object> getIncomeInfo(VuserIncomeQueryObj queryObj,HttpServletRequest request){
 		
 		Map<String,Object> resMap = new HashMap<String,Object>();
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(!loginedUser.isAdmin())
 			return resMap;
+		Integer userId = queryObj.getUserId();
 		//历史收入记录
-		Page<UserIncome> incomeList = this.userIncomeService.pageQueryUserIncome(queryObj);
-		resMap.put("incomeList", incomeList);
+		resMap.put("incomeList", this.vuserIncomeService.pageQueryVuserIncome(queryObj));
 		//上月记录
-		resMap.put("preIncome", this.vuserIncomeService.getVuserIncomeById(queryObj.getUserId()));
+		queryObj = new VuserIncomeQueryObj();
+		queryObj.setUserId(userId);
+		queryObj.setIncomeDate(BaseUtils.getFirstDayOnPreMonth());
+		List<VuserIncome> list = this.vuserIncomeService.queryVuserIncome(queryObj);
+		if(list != null && list.size() == 1)
+			resMap.put("preIncome", list.get(0));
 		
 		//总记录
-		resMap.put("incomeSum", this.userIncomeService.getIncomeSum(queryObj.getUserId()));
+		resMap.put("incomeSum", this.vuserIncomeService.getIncomeSum(userId));
 		//员工信息
 		resMap.put("userInfo", this.userService.getUserById(queryObj.getUserId()));
 		return resMap;
@@ -213,7 +213,7 @@ public class AdminController extends MultiActionController{
 		queryObj.setStatus(1);
 		queryObj.setLevelNotEq("X");//x级不可能为上级
 		request.setAttribute("uplineCandidate", this.userService.queryUser(queryObj));
-		return "mgr/adminInputUser";
+		return "mgr/user/adminInputUser";
 	}
 	
 	@RequestMapping("/doInputUser")
@@ -242,39 +242,4 @@ public class AdminController extends MultiActionController{
 		return resMap;
 	}
 	
-	@RequestMapping("/doInputUserIncome")
-	public @ResponseBody Map<String,Object> doInputUserIncome(UserIncome userIncome,HttpServletRequest request){
-		Map<String,Object> resMap = new HashMap<String,Object>();
-		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
-		if(!loginedUser.isAdmin()){
-			resMap.put("result", false);
-			return resMap;
-		}
-		try{
-			DataValidater.userIncomeInputValidate(userIncome, userService, userIncomeService);
-			this.userIncomeService.createUserIncome(userIncome);
-			resMap.put("result", true);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
-			StringBuilder sb = new StringBuilder();
-			sb.append(loginedUser.getName())
-			  .append("-新增用户收入信息->")
-			  .append(this.userService.getUserById(userIncome.getUserId()).getName())
-			  .append("\n")
-			  .append(sdf.format(userIncome.getIncomeDate()))
-			  .append("\n")
-			  .append("收入：")
-			  .append(userIncome.getIncome());
-			if(userIncome.getPerformance()!=null){
-				sb.append("业绩").append(userIncome.getPerformance());
-			}
-			this.log.info(sb.toString());
-		}catch(BusinessException be){
-			resMap.put("result", false);
-			resMap.put("msg", be.getMessage());
-		}catch (Exception e) {
-			resMap.put("result", false);
-			resMap.put("msg", "新增失败");
-		}
-		return resMap;
-	}
 }

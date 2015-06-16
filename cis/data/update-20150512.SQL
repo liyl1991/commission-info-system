@@ -9,13 +9,13 @@ CREATE TABLE t_income_rule
 ;
 --输入8种规则名
 insert into t_income_rule values(100,'BX');
-insert into t_income_rule values(100,'BCX');
-insert into t_income_rule values(100,'BDX');
-insert into t_income_rule values(100,'BEX');
-insert into t_income_rule values(100,'BCDX');
-insert into t_income_rule values(100,'BCEX');
-insert into t_income_rule values(100,'BDEX');
-insert into t_income_rule values(100,'BCDEX');
+insert into t_income_rule values(101,'BCX');
+insert into t_income_rule values(102,'BDX');
+insert into t_income_rule values(103,'BEX');
+insert into t_income_rule values(104,'BCDX');
+insert into t_income_rule values(105,'BCEX');
+insert into t_income_rule values(106,'BDEX');
+insert into t_income_rule values(107,'BCDEX');
 
 CREATE TABLE t_income_setting
 (
@@ -77,19 +77,24 @@ CREATE TABLE t_special_setting
 
 create or replace view v_special_setting
 as
-SELECT se.setting_id,st.proportion,st.rule_id ,se.user_id,st.setting_level
+SELECT se.setting_id,st.proportion,st.rule_id ,se.user_id,st.setting_level,st.using_date,st.end_date
 from t_special_setting se
 left join t_income_setting st
-on se.setting_id = st.setting_id and st.status = 1;
+on se.setting_id = st.setting_id;
 
 create or replace view v_user_income_setting
 as
-select a.*,c.setting_id common_setting_id,c.proportion common_setting,c.setting_level,b.setting_id special_setting_id,b.proportion special_setting,b.user_id
+select a.*,
+       c.setting_id common_setting_id,
+       c.proportion common_setting,
+       c.setting_level,
+       b.setting_id special_setting_id,
+       b.proportion special_setting,b.user_id
 from t_income_rule a 
 left join t_income_setting c
 on a.rule_id = c.rule_id and c.status = 1 and c.type = 1
 left join v_special_setting b 
-on a.rule_id = b.rule_id and c.setting_level = b.setting_level;
+on a.rule_id = b.rule_id and c.setting_level = b.setting_level and b.status = 1;
 
 --重建t_user_income
 --  Drop Tables, Stored Procedures and Views 
@@ -109,3 +114,11 @@ CREATE TABLE t_user_income
 	PRIMARY KEY (income_id)
 )  COMMENT='用户收入信息表'
 ;
+
+create or replace view v_user_income
+as
+select u.*,vi.income_date,vi.income,vi.performance
+from t_user u
+left join v_income_month_count vi
+on u.user_id = vi.user_id
+where u.user_role = 1

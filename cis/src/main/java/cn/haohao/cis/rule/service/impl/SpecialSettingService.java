@@ -10,7 +10,6 @@ import cn.haohao.cis.rule.service.ISpecialSettingService;
 import cn.haohao.cis.rule.model.SpecialSetting;
 import cn.haohao.cis.rule.vo.SpecialSettingQueryObj;
 import cn.haohao.cis.rule.vo.SpecialSettingUpdateObj;
-import cn.haohao.vas.core.exception.BusinessException;
 //j-import-e
 /**
  *	SERVICE IMPL
@@ -19,42 +18,42 @@ import cn.haohao.vas.core.exception.BusinessException;
 public class SpecialSettingService implements ISpecialSettingService {
 	
 	@Autowired
-	private ISpecialSettingDao sepcialSettingDao;
+	private ISpecialSettingDao specialSettingDao;
 	
-	public void batchDeleteSepcialSetting(List<SpecialSetting> sepcialSettingList) {
-		sepcialSettingDao.batchDelete(sepcialSettingList);
+	public void batchDeleteSpecialSetting(List<SpecialSetting> specialSettingList) {
+		specialSettingDao.batchDelete(specialSettingList);
 	}
 
-	public SpecialSetting createSepcialSetting(SpecialSetting sepcialSetting) {
-		sepcialSettingDao.create(sepcialSetting);
-		return sepcialSetting;
+	public SpecialSetting createSpecialSetting(SpecialSetting specialSetting) {
+		specialSettingDao.create(specialSetting);
+		return specialSetting;
 	}
 
-	public void deleteSepcialSetting(SpecialSettingQueryObj sepcialSettingQueryObj) {
-		sepcialSettingDao.delete(sepcialSettingQueryObj);
+	public void deleteSpecialSetting(SpecialSettingQueryObj specialSettingQueryObj) {
+		specialSettingDao.delete(specialSettingQueryObj);
 	}
 
-	public SpecialSetting getSepcialSettingById(Long sepcialSettingId) {
-		return sepcialSettingDao.getById(sepcialSettingId);
+	public SpecialSetting getSpecialSettingById(Integer specialSettingId) {
+		return specialSettingDao.getById(specialSettingId);
 	}
 
-	public SpecialSetting modifySepcialSetting(SpecialSetting sepcialSetting) {
-		sepcialSettingDao.update(sepcialSetting);
-		return sepcialSetting;
+	public SpecialSetting modifySpecialSetting(SpecialSetting specialSetting) {
+		specialSettingDao.update(specialSetting);
+		return specialSetting;
 	}
 
-	public Page<SpecialSetting> pageQuerySepcialSetting(SpecialSettingQueryObj sepcialSettingqueryObj) {
-		return sepcialSettingDao.pageCountByArgs(sepcialSettingqueryObj);
+	public Page<SpecialSetting> pageQuerySpecialSetting(SpecialSettingQueryObj specialSettingqueryObj) {
+		return specialSettingDao.pageCountByArgs(specialSettingqueryObj);
 	}
 	
-	public List<SpecialSetting> querySepcialSetting(SpecialSettingQueryObj sepcialSettingqueryObj) {
-		return sepcialSettingDao.queryByArgs(sepcialSettingqueryObj);
+	public List<SpecialSetting> querySpecialSetting(SpecialSettingQueryObj specialSettingqueryObj) {
+		return specialSettingDao.queryByArgs(specialSettingqueryObj);
 	}
 	
 	public void updateDynamic(SpecialSettingUpdateObj updateObj){
-		sepcialSettingDao.updateDynamic(updateObj);
+		specialSettingDao.updateDynamic(updateObj);
 	}
 	public Long countByArgs(SpecialSettingQueryObj queryObj){
-		return sepcialSettingDao.countByArgs(queryObj);
+		return specialSettingDao.countByArgs(queryObj);
 	}
 }

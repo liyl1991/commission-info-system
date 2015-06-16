@@ -18,9 +18,4 @@ public class UserIncomeDaoImpl extends BaseDaoMybatisImpl<UserIncome> implements
 	public UserIncomeDaoImpl(Class<UserIncome> type) {
 		super(type);
 	}
-	@Override
-	public UserIncome getIncomeSum(Integer userId) {
-		return this.sqlSessionTemplate.selectOne(this.getStatementName() + ".getIncomeSum",userId);
-	}
-	
 }

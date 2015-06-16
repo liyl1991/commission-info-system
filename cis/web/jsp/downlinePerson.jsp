@@ -50,13 +50,10 @@
 												<thead>
 													<tr>
 														<th>姓名</th>
-														<th>性别</th>
+														<th>身份证</th>
+														<th class="hidden-480">性别</th>
 														<th class="hidden-480">等级</th>
-														<th>上次月份</th>
-														<th>上次收入</th>
-														<th>上次业绩</th>
 														<th class="hidden-480">职业</th>
-														<!-- <th></th> -->
 													</tr>
 												</thead>
 
@@ -95,25 +92,18 @@
 				data:dataObj,
 				success:function(r){
 					$(".container table tbody tr").remove();
-					if(r.downlineUsers.content.length!=0){
+					if(r.content.length!=0){
 						$('.pagination').show();
-						for(var i=0;i<r.downlineUsers.content.length;i++){
+						for(var i=0;i<r.content.length;i++){
 							$('<tr>'+
 							  '  <td>'+
-								'	<a href="'+path+'/userIncome/goDownlineIncome/'+r.downlineUsers.content[i].userId+'">'+r.downlineUsers.content[i].name+'</a>'+
+								'	<a href="'+path+'/userIncome/goDownlineIncome/'+r.content[i].userId+'" title="点击查看详细">'+r.content[i].name+'</a>'+
 								'</td>'+
-								'<td>'+(r.downlineUsers.content[i].sex=='1'?'男':(r.downlineUsers.content[i].sex=='2'?'女':'保密'))+'</td>'+
-								'<td class="hidden-480">'+r.downlineUsers.content[i].level+'级</td>'+
-								'<td class="hidden-480">'+formatDate(r.downlineUsers.content[i].incomeDate)+'</td>'+
-								'<td>'+(r.downlineUsers.content[i].preMonthIncome?r.downlineUsers.content[i].preMonthIncome:'暂无数据')+'</td>'+
-								'<td>'+(r.downlineUsers.content[i].preMonthPerformance?r.downlineUsers.content[i].preMonthPerformance:'暂无数据')+'</td>'+
-								'<td class="hidden-480">'+
-								'	<span class="label label-sm label-warning">'+r.downlineUsers.content[i].career+'</span>'+
-								'</td>'+
-								/* '<td>'+
-								'	<button class="btn btn-xs btn-primary">详细</button>'+
-								'</td>'+ */
-							  '</tr>').appendTo('#downlineTable tbody');
+								'<td>'+r.content[i].idCard+'</td>'+
+								'<td class="hidden-480">'+(r.content[i].sex=='1'?'男':(r.content[i].sex=='2'?'女':'保密'))+'</td>'+
+								'<td class="hidden-480">'+r.content[i].level+'级</td>'+
+								'<td class="hidden-480">'+r.content[i].career+'</td>'+
+							  '</tr>').appendTo('.container table tbody');
 						}
 					}else{
 						$('.pagination').hide();

@@ -10,7 +10,6 @@ import cn.haohao.cis.rule.service.IIncomeRuleService;
 import cn.haohao.cis.rule.model.IncomeRule;
 import cn.haohao.cis.rule.vo.IncomeRuleQueryObj;
 import cn.haohao.cis.rule.vo.IncomeRuleUpdateObj;
-import cn.haohao.vas.core.exception.BusinessException;
 //j-import-e
 /**
  *	SERVICE IMPL

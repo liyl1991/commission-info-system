@@ -1,10 +1,10 @@
-package cn.haohao.cis.user.service;
+package cn.haohao.cis.income.service;
 //j-import-b
 import java.util.List;
 import org.springframework.data.domain.Page;
-import cn.haohao.cis.user.model.VuserIncome;
-import cn.haohao.cis.user.vo.VuserIncomeQueryObj;
-import cn.haohao.cis.user.vo.VuserIncomeUpdateObj;
+import cn.haohao.cis.income.model.VuserIncome;
+import cn.haohao.cis.income.vo.VuserIncomeQueryObj;
+import cn.haohao.cis.income.vo.VuserIncomeUpdateObj;
 //j-import-e
 /**
  *	SERVICE
@@ -59,6 +59,8 @@ public interface IVuserIncomeService {
 	 * @return
 	 */
 	public List<VuserIncome> queryVuserIncome(VuserIncomeQueryObj vuserIncomequeryObj);
+	
+	public VuserIncome getIncomeSum(Integer userId);
 	/**
 	 * u-insert-b@note8.0@
 	 * u-insert-e@note8.0@

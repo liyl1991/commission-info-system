@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 
 import cn.haohao.cis.rule.dao.IIncomeSettingDao;
@@ -75,10 +76,11 @@ public class IncomeSettingService implements IIncomeSettingService {
 
 	@Override
 	public IncomeSetting createIncomeSetting(IncomeSetting incomeSetting,Integer userId) {
+		Integer settingId = this.incomeSettingDao.getSequence();
+		incomeSetting.setSettingId(settingId);
 		this.incomeSettingDao.create(incomeSetting);
-		incomeSetting =this.incomeSettingDao.queryByArgs(incomeSetting).get(0);
 		SpecialSetting specialSetting = new SpecialSetting();
-		specialSetting.setSettingId(incomeSetting.getSettingId());
+		specialSetting.setSettingId(settingId);
 		specialSetting.setUserId(userId);
 		specialSetting.setType(1);
 		this.specialSettingDao.create(specialSetting);

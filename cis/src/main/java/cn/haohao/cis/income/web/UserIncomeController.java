@@ -1,6 +1,7 @@
 package cn.haohao.cis.income.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,12 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.haohao.cis.income.model.UserIncome;
+import cn.haohao.cis.income.model.VuserIncome;
 import cn.haohao.cis.income.service.IUserIncomeService;
-import cn.haohao.cis.income.vo.UserIncomeQueryObj;
+import cn.haohao.cis.income.service.IVuserIncomeService;
+import cn.haohao.cis.income.vo.VuserIncomeQueryObj;
 import cn.haohao.cis.user.model.User;
-import cn.haohao.cis.user.model.VuserIncome;
-import cn.haohao.cis.user.service.IVuserIncomeService;
+import cn.haohao.cis.user.service.IUserService;
+import cn.haohao.cis.utils.BaseUtils;
 import cn.haohao.cis.utils.Constants;
 
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
@@ -29,43 +31,51 @@ public class UserIncomeController extends MultiActionController{
 	private IUserIncomeService userIncomeService;
 	@Autowired
 	private IVuserIncomeService vuserIncomeService;
+	@Autowired
+	private IUserService userService;
 	
 	@RequestMapping("/getIncomeInfo")
-	public @ResponseBody Map<String,Object> getIncomeInfo(UserIncomeQueryObj queryObj,HttpServletRequest request){
+	public @ResponseBody Map<String,Object> getIncomeInfo(VuserIncomeQueryObj queryObj,HttpServletRequest request){
 		
 		Map<String,Object> resMap = new HashMap<String,Object>();
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		//历史收入记录
 		queryObj.setUserId(loginedUser.getUserId());
-		Page<UserIncome> incomeList = this.userIncomeService.pageQueryUserIncome(queryObj);
-		resMap.put("incomeList", incomeList);
+		resMap.put("incomeList", this.vuserIncomeService.pageQueryVuserIncome(queryObj));
 		//上月记录
-		resMap.put("preIncome", this.vuserIncomeService.getVuserIncomeById(loginedUser.getUserId()));
-		
+		queryObj = new VuserIncomeQueryObj();
+		queryObj.setUserId(loginedUser.getUserId());
+		queryObj.setIncomeDate(BaseUtils.getFirstDayOnPreMonth());
+		List<VuserIncome> list = this.vuserIncomeService.queryVuserIncome(queryObj);
+		if(list != null && list.size() == 1)
+			resMap.put("preIncome", list.get(0));
 		//总记录
-		resMap.put("incomeSum", this.userIncomeService.getIncomeSum(loginedUser.getUserId()));
-		
+		resMap.put("incomeSum", this.vuserIncomeService.getIncomeSum(loginedUser.getUserId()));
 		return resMap;
 	}
 	
 	@RequestMapping("/getDownlineIncomeInfo")
-	public @ResponseBody Map<String,Object> getDownlineIncomeInfo(UserIncomeQueryObj queryObj,HttpServletRequest request){
+	public @ResponseBody Map<String,Object> getDownlineIncomeInfo(VuserIncomeQueryObj queryObj,HttpServletRequest request){
 		
 		Map<String,Object> resMap = new HashMap<String,Object>();
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
-		VuserIncome preIncome = this.vuserIncomeService.getVuserIncomeById(queryObj.getUserId());
-		if(preIncome==null||
-				preIncome.getUplineUser().intValue() != loginedUser.getUserId().intValue()){//如果该员工不是登陆人下线则无法查看
+		Integer userId = queryObj.getUserId();
+		User targetUser = this.userService.getUserById(userId);
+		if( targetUser == null || targetUser.getUplineUser() != loginedUser.getUserId()){//如果该员工不是登陆人下线则无法查看
 			return resMap;
 		}
 		//历史收入记录
-		Page<UserIncome> incomeList = this.userIncomeService.pageQueryUserIncome(queryObj);
+		Page<VuserIncome> incomeList = this.vuserIncomeService.pageQueryVuserIncome(queryObj);
 		resMap.put("incomeList", incomeList);
 		//上月记录
-		resMap.put("preIncome", preIncome);
-		
+		queryObj = new VuserIncomeQueryObj();
+		queryObj.setUserId(userId);
+		queryObj.setIncomeDate(BaseUtils.getFirstDayOnPreMonth());
+		List<VuserIncome> list = this.vuserIncomeService.queryVuserIncome(queryObj);
+		if(list != null && list.size() == 1)
+			resMap.put("preIncome", list.get(0));
 		//总记录
-		resMap.put("incomeSum", this.userIncomeService.getIncomeSum(queryObj.getUserId()));
+		resMap.put("incomeSum", this.vuserIncomeService.getIncomeSum(userId));
 		
 		return resMap;
 	}

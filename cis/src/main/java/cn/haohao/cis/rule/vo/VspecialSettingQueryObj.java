@@ -1,19 +1,20 @@
-package cn.haohao.cis.user.vo;
+package cn.haohao.cis.rule.vo;
 //j-import-b
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+
 import cn.haohao.vas.core.vo.IPageable;
-import cn.haohao.cis.user.model.VuserIncome;
+import cn.haohao.cis.rule.model.VspecialSetting;
 //j-import-e
 /**
  *	VO
  */
-public class VuserIncomeQueryObj extends VuserIncome implements IPageable{
+public class VspecialSettingQueryObj extends VspecialSetting implements IPageable{
 	
 	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 页面大小
 	 */
@@ -26,6 +27,8 @@ public class VuserIncomeQueryObj extends VuserIncome implements IPageable{
 	 * 排序 
 	 */
 	private Sort sort;
+	private Date effectiveDate;
+	
 	public Integer getStartRowNum() {
 		if (currentPage < 1)
 			currentPage = 1;
@@ -48,16 +51,16 @@ public class VuserIncomeQueryObj extends VuserIncome implements IPageable{
 	public Sort getSort() {
 		return this.sort;
 	}
-	public VuserIncomeQueryObj next() {
+	public VspecialSettingQueryObj next() {
 		this.currentPage += 1;
 		return this;
 	}
-	public VuserIncomeQueryObj previousOrFirst() {
+	public VspecialSettingQueryObj previousOrFirst() {
 		if(currentPage != 1)
 			this.currentPage -= 1;
 		return this;
 	}
-	public VuserIncomeQueryObj first() {
+	public VspecialSettingQueryObj first() {
 		this.currentPage = 1;
 		return this;
 	}
@@ -81,4 +84,11 @@ public class VuserIncomeQueryObj extends VuserIncome implements IPageable{
 	public void setSort(List<Order> orders){
 		this.sort = new Sort(orders);
 	}
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+	
 }

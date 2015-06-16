@@ -1,6 +1,7 @@
 package cn.haohao.cis.admin;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,26 +11,35 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.haohao.cis.income.model.UserIncome;
+import cn.haohao.cis.income.model.VuserIncome;
 import cn.haohao.cis.income.service.IUserIncomeService;
+import cn.haohao.cis.income.service.IVuserIncomeService;
 import cn.haohao.cis.income.vo.UserIncomeInputObj;
+import cn.haohao.cis.income.vo.VuserIncomeQueryObj;
 import cn.haohao.cis.rule.model.IncomeRule;
 import cn.haohao.cis.rule.model.IncomeSetting;
 import cn.haohao.cis.rule.model.VUserIncomeSetting;
+import cn.haohao.cis.rule.model.VspecialSetting;
 import cn.haohao.cis.rule.service.IIncomeRuleService;
 import cn.haohao.cis.rule.service.IIncomeSettingService;
-import cn.haohao.cis.rule.service.ISpecialSettingService;
 import cn.haohao.cis.rule.service.IVUserIncomeSettingService;
+import cn.haohao.cis.rule.service.IVspecialSettingService;
 import cn.haohao.cis.rule.vo.IncomeRuleQueryObj;
 import cn.haohao.cis.rule.vo.IncomeSettingQueryObj;
 import cn.haohao.cis.rule.vo.VUserIncomeSettingQueryObj;
+import cn.haohao.cis.rule.vo.VspecialSettingQueryObj;
 import cn.haohao.cis.user.model.User;
 import cn.haohao.cis.user.service.IUserService;
-import cn.haohao.cis.user.service.IVuserIncomeService;
 import cn.haohao.cis.user.vo.UserQueryObj;
+import cn.haohao.cis.utils.BaseUtils;
 import cn.haohao.cis.utils.Constants;
 
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
@@ -43,15 +53,15 @@ public class UserIncomeMgrController extends MultiActionController{
 	@Autowired
 	private IUserIncomeService userIncomeService;
 	@Autowired
-	private IVuserIncomeService vuserIncomeService;
-	@Autowired
 	private IIncomeRuleService incomeRuleService;
 	@Autowired
 	private IVUserIncomeSettingService vUserIncomeSettingService;
 	@Autowired
-	private ISpecialSettingService specialSettingService;
+	private IVspecialSettingService vspecialService;
 	@Autowired
 	private IIncomeSettingService incomeSettingService;
+	@Autowired
+	private IVuserIncomeService vuserIncomeService;
 	
 	private Log log = LogFactory.getLog("adminLog");
 	
@@ -70,19 +80,31 @@ public class UserIncomeMgrController extends MultiActionController{
 			return "index";
 	}
 	
+	@RequestMapping("/getUserIncomeList")
+	public @ResponseBody Page<VuserIncome> getUserIncomeList(HttpServletRequest request, VuserIncomeQueryObj queryObj){
+		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
+		if(!loginedUser.isAdmin())
+			return null;
+		queryObj.setStatus(1);
+		List<Sort.Order> orders = new ArrayList<Sort.Order>();
+		orders.add(new Order("level"));
+		queryObj.setSort(orders);
+		return this.vuserIncomeService.pageQueryVuserIncome(queryObj);
+	}
+	
 	/**
 	 * 获取x级员工各个上级的人员及提成比例
 	 * @param queryObj
 	 * @param request
 	 */
 	@RequestMapping("/getUserList")
-	public @ResponseBody Map<String,Object> getIncomeInfo(HttpServletRequest request, Integer userId){
+	public @ResponseBody Map<String,Object> getUserList(HttpServletRequest request, UserIncomeInputObj inputObj){
 		
 		Map<String,Object> resMap = new HashMap<String, Object>();
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(!loginedUser.isAdmin())
 			return resMap;
-		User user = this.userService.getUserById(userId);
+		User user = this.userService.getUserById(inputObj.getUserId());
 		if( !"X".equalsIgnoreCase(user.getLevel())){
 			resMap.put("msg", "只能选择X级别的员工");
 			return resMap;
@@ -102,7 +124,7 @@ public class UserIncomeMgrController extends MultiActionController{
 		if( rules != null && rules.size() ==1){
 			rule = rules.get(0);
 		}
-		this.setUsersIncomeSetting(rule, userUplineList);
+		this.setUsersIncomeSetting(rule, userUplineList, inputObj.getDate());
 		resMap.put("currentRule", rule);
 		resMap.put("userUplineList", userUplineList);
 		IncomeSettingQueryObj incomeSettingQueryObj = new IncomeSettingQueryObj();
@@ -126,7 +148,7 @@ public class UserIncomeMgrController extends MultiActionController{
 		List<User> userUplineList = new ArrayList<User>();
 		try{
 			userUplineList = this.getUserUplineWithSetting(user, userUplineList);
-			this.setUsersIncomeSetting(this.incomeRuleService.getIncomeRuleById(inputObj.getRuleId()), userUplineList);
+			this.setUsersIncomeSetting(this.incomeRuleService.getIncomeRuleById(inputObj.getRuleId()), userUplineList, inputObj.getDate());
 			this.userIncomeService.createUserIncome(userUplineList, inputObj);
 			resMap.put("result", true);
 			log.info(loginedUser.getName()+"-添加了创收信息->"+user.getName()+"("+user.getIdCard()+"):"+inputObj.getIncome());
@@ -138,46 +160,47 @@ public class UserIncomeMgrController extends MultiActionController{
 		return resMap;
 	}
 	
-	private void setUsersIncomeSetting(IncomeRule rule, List<User> list){
+	private void setUsersIncomeSetting(IncomeRule rule, List<User> list , Date forDate){
 		if(rule.getDetailContent().length() > 2){
 			for (User user : list) {
 				if( !user.isLevelB() ){
-					VUserIncomeSettingQueryObj vUserIncomeSettingQueryObj = new VUserIncomeSettingQueryObj();
-					vUserIncomeSettingQueryObj.setUserId(user.getUserId());
-					vUserIncomeSettingQueryObj.setRuleId(rule.getRuleId());
-					List<VUserIncomeSetting> currentUserSetting = this.vUserIncomeSettingService.queryVUserIncomeSetting(vUserIncomeSettingQueryObj);
-					if(currentUserSetting != null && currentUserSetting.size() == 1){
-						Integer settingId = currentUserSetting.get(0).getSpecialSettingId();
-						IncomeSetting setting = this.incomeSettingService.getIncomeSettingById(settingId);
-						user.setIncomeSetting(setting);
+					VspecialSettingQueryObj vspecialSettingQueryObj = new VspecialSettingQueryObj();
+					vspecialSettingQueryObj.setUserId(user.getUserId());
+					vspecialSettingQueryObj.setEffectiveDate(forDate);
+					vspecialSettingQueryObj.setRuleId(rule.getRuleId());
+					List<VspecialSetting> specialSettings = this.vspecialService.queryVspecialSetting(vspecialSettingQueryObj);
+					if( BaseUtils.isListOnlyHasOne(specialSettings)){
+						user.setIncomeSetting(this.incomeSettingService.getIncomeSettingById(specialSettings.get(0).getSettingId()));
 					} else {
-						IncomeSettingQueryObj queryObj = new IncomeSettingQueryObj();
-						queryObj.setStatus(1);
-						queryObj.setType(1);
-						queryObj.setRuleId(rule.getRuleId());
-						queryObj.setSettingLevel(user.getLevel());
-						IncomeSetting setting = this.incomeSettingService.queryIncomeSetting(queryObj).get(0);
-						user.setIncomeSetting(setting);
+						IncomeSettingQueryObj incomeSettingQueryObj = new IncomeSettingQueryObj();
+						incomeSettingQueryObj.setRuleId(rule.getRuleId());
+						incomeSettingQueryObj.setType(1);
+						incomeSettingQueryObj.setSettingLevel(user.getLevel());
+						incomeSettingQueryObj.setEffectiveDate(forDate);
+						List<IncomeSetting> commonSetting = this.incomeSettingService.queryIncomeSetting(incomeSettingQueryObj);
+						if( BaseUtils.isListOnlyHasOne(commonSetting) ){
+							user.setIncomeSetting(this.incomeSettingService.queryIncomeSetting(incomeSettingQueryObj).get(0));
+						}
 					}
 				}
 			}
 		} else {
-			VUserIncomeSettingQueryObj vUserIncomeSettingQueryObj = new VUserIncomeSettingQueryObj();
-			vUserIncomeSettingQueryObj.setUserId(list.get(0).getUserId());
-			vUserIncomeSettingQueryObj.setRuleId(rule.getRuleId());
-			List<VUserIncomeSetting> currentUserSetting = this.vUserIncomeSettingService.queryVUserIncomeSetting(vUserIncomeSettingQueryObj);
-			if(currentUserSetting != null && currentUserSetting.size() == 1){
-				Integer settingId = currentUserSetting.get(0).getSpecialSettingId();
-				IncomeSetting setting = this.incomeSettingService.getIncomeSettingById(settingId);
-				list.get(0).setIncomeSetting(setting);
+			VspecialSettingQueryObj vspecialSettingQueryObj = new VspecialSettingQueryObj();
+			vspecialSettingQueryObj.setUserId(list.get(0).getUserId());
+			vspecialSettingQueryObj.setEffectiveDate(forDate);
+			List<VspecialSetting> specialSettings = this.vspecialService.queryVspecialSetting(vspecialSettingQueryObj);
+			if( BaseUtils.isListOnlyHasOne(specialSettings)){
+				list.get(0).setIncomeSetting(this.incomeSettingService.getIncomeSettingById(specialSettings.get(0).getUserId()));
 			} else {
-				IncomeSettingQueryObj queryObj = new IncomeSettingQueryObj();
-				queryObj.setStatus(1);
-				queryObj.setType(1);
-				queryObj.setRuleId(rule.getRuleId());
-				queryObj.setSettingLevel(list.get(0).getLevel());
-				IncomeSetting setting = this.incomeSettingService.queryIncomeSetting(queryObj).get(0);
-				list.get(0).setIncomeSetting(setting);
+				IncomeSettingQueryObj incomeSettingQueryObj = new IncomeSettingQueryObj();
+				incomeSettingQueryObj.setRuleId(rule.getRuleId());
+				incomeSettingQueryObj.setType(1);
+				incomeSettingQueryObj.setSettingLevel(list.get(0).getLevel());
+				incomeSettingQueryObj.setEffectiveDate(forDate);
+				List<IncomeSetting> commonSetting = this.incomeSettingService.queryIncomeSetting(incomeSettingQueryObj);
+				if( BaseUtils.isListOnlyHasOne(commonSetting) ){
+					list.get(0).setIncomeSetting(this.incomeSettingService.queryIncomeSetting(incomeSettingQueryObj).get(0));
+				}
 			}
 		}
 	}

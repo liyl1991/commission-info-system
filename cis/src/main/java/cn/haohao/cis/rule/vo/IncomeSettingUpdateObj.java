@@ -1,5 +1,7 @@
 package cn.haohao.cis.rule.vo;
+import java.util.Date;
 import java.util.List;
+
 
 //j-import-b
 import cn.haohao.cis.rule.model.IncomeSetting;
@@ -11,6 +13,14 @@ public class IncomeSettingUpdateObj extends IncomeSetting {
 	
 	private static final long serialVersionUID = 1L;
 	private IncomeSetting newUpdAttObj=new IncomeSetting();
+	private Date effectiveDate;
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
 
 	private List<IncomeSetting> settings;
 	

@@ -2,10 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="VuserIncome">
 	
-	<resultMap id="VuserIncomeResult" type="cn.haohao.cis.user.model.VuserIncome">
+	<resultMap id="VuserIncomeResult" type="cn.haohao.cis.income.model.VuserIncome">
 		<result property="userId" column="USER_ID" />
 		<result property="idCard" column="ID_CARD" />
 		<result property="name" column="NAME" />
+		<result property="password" column="PASSWORD" />
 		<result property="sex" column="SEX" />
 		<result property="birthday" column="BIRTHDAY" />
 		<result property="address" column="ADDRESS" />
@@ -16,8 +17,15 @@
 		<result property="uplineUser" column="UPLINE_USER" />
 		<result property="extend1" column="EXTEND1" />
 		<result property="extend2" column="EXTEND2" />
-		<result property="preMonthIncome" column="PRE_MONTH_INCOME" />
-		<result property="preMonthPerformance" column="PRE_MONTH_PERFORMANCE" />
+		<result property="incomeDate" column="INCOME_DATE" />
+		<result property="income" column="INCOME" />
+		<result property="performance" column="PERFORMANCE" />
+	</resultMap>
+	
+	<resultMap id="VuserIncomeSumResult" type="cn.haohao.cis.income.model.VuserIncome">
+		<result property="userId" column="USER_ID" />
+		<result property="income" column="INCOME" />
+		<result property="performance" column="PERFORMANCE" />
 	</resultMap>
 	
 	<select id="VuserIncome.getById" resultMap="VuserIncomeResult">
@@ -28,6 +36,14 @@
 		]]>
 	</select>
 
+	<select id="VuserIncome.getIncomeSum" resultMap="VuserIncomeSumResult">
+		<![CDATA[
+			select t.USER_ID,sum(t.INCOME) income,sum(t.PERFORMANCE) performance
+			from V_USER_INCOME t
+			group by t.USER_ID
+			having t.USER_ID = #{userId}
+		]]>
+	</select>
 		
 	<sql id="VuserIncome.whereClause">
 	 <where>
@@ -35,6 +51,7 @@
 		   <if test="userId != null">and t.USER_ID = #{userId}</if>
 		   <if test="idCard != null">and t.ID_CARD = #{idCard}</if>
 		   <if test="name != null">and t.NAME = #{name}</if>
+		   <if test="password != null">and t.PASSWORD = #{password}</if>
 		   <if test="sex != null">and t.SEX = #{sex}</if>
 		   <if test="birthday != null">and t.BIRTHDAY = #{birthday}</if>
 		   <if test="address != null">and t.ADDRESS = #{address}</if>
@@ -45,10 +62,25 @@
 		   <if test="uplineUser != null">and t.UPLINE_USER = #{uplineUser}</if>
 		   <if test="extend1 != null">and t.EXTEND1 = #{extend1}</if>
 		   <if test="extend2 != null">and t.EXTEND2 = #{extend2}</if>
-		   <if test="preMonthIncome != null">and t.PRE_MONTH_INCOME = #{preMonthIncome}</if>
-		   <if test="preMonthPerformance != null">and t.PRE_MONTH_PERFORMANCE = #{preMonthPerformance}</if>
+		   <if test="incomeDate != null">and t.INCOME_DATE = #{incomeDate}</if>
+		   <if test="income != null">and t.INCOME = #{income}</if>
+		   <if test="performance != null">and t.PERFORMANCE = #{performance}</if>
+		   <if test="nameOrIdCardLike != null">and (t.NAME like #{nameOrIdCardLike} or t.ID_CARD like #{nameOrIdCardLike})</if>
+		   <if test="levelIn != null">
+		   		and t.level in 
+				<foreach collection="levelIn" item="level" separator="," open="(" close=")">
+					#{level}
+				</foreach>
+		   </if>
+		   <if test="dateSearch != null">and t.INCOME_DATE = #{dateSearch}</if>
 	   </trim>
 	 </where>
+	 <if test="sort != null">
+			order by
+			<foreach collection="sort" item="order" separator=",">
+				t.${order.property} ${order.direction}
+			</foreach>
+	</if>
 	</sql>
 	
 	<select id="VuserIncome.getSequence" resultType="java.lang.Long">
@@ -59,15 +91,15 @@
 	
 	<insert id="VuserIncome.create">
 		<![CDATA[
-			insert into V_USER_INCOME (  USER_ID ,  ID_CARD ,  NAME ,  SEX ,  BIRTHDAY ,  ADDRESS ,  CAREER ,  LEVEL ,  STATUS ,  USER_ROLE ,  UPLINE_USER ,  EXTEND1 ,  EXTEND2 ,  PRE_MONTH_INCOME ,  PRE_MONTH_PERFORMANCE   ) 
-			values (  #{userId} ,  #{idCard} ,  #{name} ,  #{sex} ,  #{birthday} ,  #{address} ,  #{career} ,  #{level} ,  #{status} ,  #{userRole} ,  #{uplineUser} ,  #{extend1} ,  #{extend2} ,  #{preMonthIncome} ,  #{preMonthPerformance}   )
+			insert into V_USER_INCOME (  USER_ID ,  ID_CARD ,  NAME ,  PASSWORD ,  SEX ,  BIRTHDAY ,  ADDRESS ,  CAREER ,  LEVEL ,  STATUS ,  USER_ROLE ,  UPLINE_USER ,  EXTEND1 ,  EXTEND2 ,  INCOME_DATE ,  INCOME ,  PERFORMANCE   ) 
+			values (  #{userId} ,  #{idCard} ,  #{name} ,  #{password} ,  #{sex} ,  #{birthday} ,  #{address} ,  #{career} ,  #{level} ,  #{status} ,  #{userRole} ,  #{uplineUser} ,  #{extend1} ,  #{extend2} ,  #{incomeDate} ,  #{income} ,  #{performance}   )
 		]]>
 	</insert>
 	
 	<update id="VuserIncome.update">
 		<![CDATA[
 			update V_USER_INCOME set 
-			 USER_ID=#{userId} , ID_CARD=#{idCard} , NAME=#{name} , SEX=#{sex} , BIRTHDAY=#{birthday} , ADDRESS=#{address} , CAREER=#{career} , LEVEL=#{level} , STATUS=#{status} , USER_ROLE=#{userRole} , UPLINE_USER=#{uplineUser} , EXTEND1=#{extend1} , EXTEND2=#{extend2} , PRE_MONTH_INCOME=#{preMonthIncome} , PRE_MONTH_PERFORMANCE=#{preMonthPerformance} 
+			 USER_ID=#{userId} , ID_CARD=#{idCard} , NAME=#{name} , PASSWORD=#{password} , SEX=#{sex} , BIRTHDAY=#{birthday} , ADDRESS=#{address} , CAREER=#{career} , LEVEL=#{level} , STATUS=#{status} , USER_ROLE=#{userRole} , UPLINE_USER=#{uplineUser} , EXTEND1=#{extend1} , EXTEND2=#{extend2} , INCOME_DATE=#{incomeDate} , INCOME=#{income} , PERFORMANCE=#{performance} 
 			where user_id = #{userId}
 		]]>
 	</update>
@@ -78,6 +110,7 @@
 			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
 			<if test="newUpdAttObj.idCard != null">t.ID_CARD = #{newUpdAttObj.idCard},</if>	
 			<if test="newUpdAttObj.name != null">t.NAME = #{newUpdAttObj.name},</if>	
+			<if test="newUpdAttObj.password != null">t.PASSWORD = #{newUpdAttObj.password},</if>	
 			<if test="newUpdAttObj.sex != null">t.SEX = #{newUpdAttObj.sex},</if>	
 			<if test="newUpdAttObj.birthday != null">t.BIRTHDAY = #{newUpdAttObj.birthday},</if>	
 			<if test="newUpdAttObj.address != null">t.ADDRESS = #{newUpdAttObj.address},</if>	
@@ -88,8 +121,9 @@
 			<if test="newUpdAttObj.uplineUser != null">t.UPLINE_USER = #{newUpdAttObj.uplineUser},</if>	
 			<if test="newUpdAttObj.extend1 != null">t.EXTEND1 = #{newUpdAttObj.extend1},</if>	
 			<if test="newUpdAttObj.extend2 != null">t.EXTEND2 = #{newUpdAttObj.extend2},</if>	
-			<if test="newUpdAttObj.preMonthIncome != null">t.PRE_MONTH_INCOME = #{newUpdAttObj.preMonthIncome},</if>	
-			<if test="newUpdAttObj.preMonthPerformance != null">t.PRE_MONTH_PERFORMANCE = #{newUpdAttObj.preMonthPerformance},</if>	
+			<if test="newUpdAttObj.incomeDate != null">t.INCOME_DATE = #{newUpdAttObj.incomeDate},</if>	
+			<if test="newUpdAttObj.income != null">t.INCOME = #{newUpdAttObj.income},</if>	
+			<if test="newUpdAttObj.performance != null">t.PERFORMANCE = #{newUpdAttObj.performance},</if>	
 		</set>
 		<include refid="VuserIncome.whereClause" />
 	</update>
@@ -114,8 +148,8 @@
 	<select id="VuserIncome.pageCountByArgs" resultMap="VuserIncomeResult">
 		<![CDATA[
 			select t.*
-		]]>
 			from V_USER_INCOME t 
+		]]>
 		<include refid="VuserIncome.whereClause" />
 		<![CDATA[
 			limit #{startRowNum},#{pageSize}

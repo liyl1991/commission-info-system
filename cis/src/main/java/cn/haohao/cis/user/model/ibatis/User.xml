@@ -48,7 +48,6 @@
 		   <if test="levelLt != null">and t.level &lt; #{levelLt}</if>
 		   <if test="levelNotEq != null">and t.level != #{levelNotEq}</if>
 		   <if test="levelNotIn != null">and t.level not in (${levelNotIn})</if>
-		   <if test="nameMatch != null">and (t.name like #{nameMatch} or t.ID_CARD like #{nameMatch})</if>
 		   <if test="grandUserId != null">
 		   	and t.UPLINE_USER in (
 		   			select user_id
@@ -56,8 +55,21 @@
 		   			where _user2.UPLINE_USER = #{grandUserId}	
 		   		) 
 		   	</if>
+		   	<if test="nameOrIdCardLike != null">and (t.NAME like #{nameOrIdCardLike} or t.ID_CARD like #{nameOrIdCardLike})</if>
+		   <if test="levelIn != null">
+		   		and t.level in 
+				<foreach collection="levelIn" item="level" separator="," open="(" close=")">
+					#{level}
+				</foreach>
+		   </if>
 	   </trim>
 	 </where>
+	 <if test="sort != null">
+		order by
+		<foreach collection="sort" item="order" separator=",">
+			t.${order.property} ${order.direction}
+		</foreach>
+	</if>
 	</sql>
 	
 	<select id="User.getSequence" resultType="java.lang.Long">
@@ -119,12 +131,6 @@
 			from T_USER t 
 		]]>
 		<include refid="User.whereClause" />
-		<if test="sort != null">
-			order by
-			<foreach collection="sort" item="order" separator=",">
-				t.${order.property} ${order.direction}
-			</foreach>
-		</if>
 	</select>
 	
 	<select id="User.pageCountByArgs" resultMap="UserResult">

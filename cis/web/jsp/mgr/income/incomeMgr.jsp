@@ -40,83 +40,69 @@
 							<div class="row">
 								<div class="col-xs-12">
 									<div class="row well no-margin" style="padding-top: 8px;">
-										<form class="form-horizontal" role="form">
+										<form id="searchForm" class="form-horizontal" role="form">
 											<div class="form-group col-md-3 no-margin">
-									          <label for="courseName" class="col-md-3 col-sm-2 control-label no-padding">姓名：</label>
+									          <label for="keyWordSearch" class="col-md-3 col-sm-2 control-label no-padding-left no-padding-right">搜索：</label>
 									          <div class="col-md-9 col-sm-8">
-									            <input type="text" name="name" class="form-control input-sm" id="courseName"/>
+									            <input type="text" name="nameOrIdCardLike" class="form-control input-sm" id="keyWordSearch" placeholder="姓名或者身份证"/>
 									          </div>
 									        </div>
 									        <div class="form-group col-md-3 no-margin">
-									          <label for="courseName" class="col-md-3 col-sm-2 control-label no-padding">等级：</label>
+									          <label for="level-chosen" class="col-md-3 col-sm-2 control-label no-padding-left no-padding-right">等级：</label> 
 									          <div class="col-md-9 col-sm-8">
-									            <input type="text" name="name" class="form-control input-sm" id="courseName"/>
+									            <select id="level-chosen" class="form-control col-sm-2 tag-input-style" multiple data-placeholder="选择等级...">
+									            	<option value="B">B级</option>
+									            	<option value="C">C级</option>
+									            	<option value="D">D级</option>
+									            	<option value="E">E级</option>
+									            	<option value="X">X级</option>
+									            </select>
 									          </div>
 									        </div>
 									        <div class="form-group col-md-2 no-margin">
-									          <label for="courseName" class="col-md-3 control-label no-padding">年：</label>
+									          <label for="yearSelect" class="col-md-3 control-label no-padding-left no-padding-right">年：</label>
 									          <div class="col-md-9">
-									            <input type="text" name="name" class="form-control input-sm" id="courseName"/>
+									            <select id="yearSelect" class="form-control col-sm-2 year"></select>
 									          </div>
 									        </div>
 									        <div class="form-group col-md-2 no-margin">
-									          <label for="courseName" class="col-md-3 control-label no-padding">月：</label>
+									          <label for="monthSelect" class="col-md-3 control-label no-padding-left no-padding-right">月：</label>
 									          <div class="col-md-9">
-									            <input type="text" name="name" class="form-control input-sm" id="courseName"/>
+									           <select id="monthSelect" class="form-control col-sm-2 month">
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+													<option value="10">10</option>
+													<option value="11">11</option>
+													<option value="12">12</option>
+												</select>
 									          </div>
 									        </div>
 										</form>
 										<div class="col-md-2 no-margin">
-											<button type="submit" class="btn btn-xs btn-info">搜索</button>
+											<button type="button" class="btn btn-xs btn-info" onclick="doQuery()">搜索</button>
 											<button type="button" class="btn btn-xs btn-purple" id="inputIncomeBtn">录入收入信息</button>
 										</div>
 									</div>
 									<div class="table-responsive">
-										<table id="sample-table-2" class="table table-striped table-bordered table-hover">
+										<table id="userIncomeTable" class="table table-striped table-bordered table-hover">
 											<thead>
 												<tr>
 													<th>姓名</th>
+													<th class="hidden-480">身份证</th>
 													<th class="hidden-480">性别</th>
 													<th class="hidden-480">等级</th>
-													<th>上月收入</th>
-													<th>上月业绩</th>
-													<th class="hidden-480">职业</th>
-													<th></th>
+													<th>收入</th>
+													<th>业绩</th>
 												</tr>
 											</thead>
-	
 											<tbody>
-												<!-- <tr>
-													<td>
-														<a href="#">李四</a>
-													</td>
-													<td>男</td>
-													<td class="hidden-480">D</td>
-													<td>15555</td>
-	
-													<td class="hidden-480">
-														<span class="label label-sm label-warning">律师</span>
-													</td>
-	
-													<td>
-														<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-															<a class="blue" href="#" title="查看">
-																<i class="icon-zoom-in bigger-130"></i>
-															</a>
-	
-															<a class="green" href="#" title="编辑">
-																<i class="icon-pencil bigger-130"></i>
-															</a>
-	
-															<a class="red" href="#" title="删除">
-																<i class="icon-trash bigger-130"></i>
-															</a>
-															<a class="red" href="#" title="降级">
-																<i class="icon-arrow-down bigger-130"></i>
-															</a>
-														</div>
-													</td>
-												</tr> -->
 											</tbody>
 										</table>
 										<div>
@@ -167,10 +153,9 @@
 								<label class="col-sm-4 control-label no-padding-right" for="form-field-income"> 日期 </label>
 								<div class="col-sm-8">
 									<label class="col-sm-1" style="padding-top: 4px;">年</label>
-									<select id="year" class="col-sm-2">
-									</select>
+									<select class="col-sm-2 year"></select>
 									<label class="col-sm-1" style="padding-top: 4px;">月</label>
-									<select id="month" class="col-sm-2">
+									<select class="col-sm-2 month">
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3">3</option>

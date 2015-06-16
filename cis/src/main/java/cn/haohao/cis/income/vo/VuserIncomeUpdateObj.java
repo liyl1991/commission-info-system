@@ -1,6 +1,6 @@
-package cn.haohao.cis.user.vo;
+package cn.haohao.cis.income.vo;
 //j-import-b
-import cn.haohao.cis.user.model.VuserIncome;
+import cn.haohao.cis.income.model.VuserIncome;
 //j-import-e
 /**
  *	VO
