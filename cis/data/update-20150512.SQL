@@ -77,7 +77,7 @@ CREATE TABLE t_special_setting
 
 create or replace view v_special_setting
 as
-SELECT se.setting_id,st.proportion,st.rule_id ,se.user_id,st.setting_level,st.using_date,st.end_date
+SELECT se.setting_id,st.proportion,st.rule_id ,se.user_id,st.setting_level,st.using_date,st.end_date,st.status
 from t_special_setting se
 left join t_income_setting st
 on se.setting_id = st.setting_id;

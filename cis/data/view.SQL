@@ -1,4 +1,12 @@
 
+--月收入统计视图
+create or replace view v_income_month_count
+as
+select a.user_id,a.income_date,sum(a.income) income,sum(a.performance) performance
+from t_user_income a
+group by a.income_date,a.user_id
+
+
 --用户收入视图
 create or replace view v_user_income
 as
@@ -28,10 +36,11 @@ from t_audit_info ai
 left join t_user u
 on ai.user_id = u.user_id
 
+/*
 --特殊提成配置视图
 create or replace view v_special_setting
 as
-SELECT se.setting_id,st.proportion,st.rule_id ,se.user_id,st.setting_level,st.using_date,st.end_date
+SELECT se.setting_id,st.proportion,st.rule_id ,se.user_id,st.setting_level,st.using_date,st.end_date,st.status
 from t_special_setting se
 left join t_income_setting st
 on se.setting_id = st.setting_id;
@@ -49,10 +58,4 @@ left join t_income_setting c
 on a.rule_id = c.rule_id and c.status = 1 and c.type = 1
 left join v_special_setting b 
 on a.rule_id = b.rule_id and c.setting_level = b.setting_level and b.status = 1;
-
---月收入统计视图
-create or replace view v_income_month_count
-as
-select a.user_id,a.income_date,sum(a.income) income,sum(a.performance) performace
-from t_user_income a
-group by a.income_date,a.user_id
+*/
