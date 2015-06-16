@@ -1,8 +1,10 @@
-package cn.haohao.cis.user.dao.impl;
+package cn.haohao.cis.income.dao.impl;
 //j-import-b
-import cn.haohao.cis.user.model.VuserIncome;
-import cn.haohao.cis.user.dao.IVuserIncomeDao;
+import cn.haohao.cis.income.model.VuserIncome;
+import cn.haohao.cis.income.dao.IVuserIncomeDao;
+
 import org.springframework.stereotype.Repository;
+
 import cn.haohao.vas.core.dao.BaseDaoMybatisImpl;
 //j-import-e
 /**
@@ -15,5 +17,9 @@ public class VuserIncomeDaoImpl extends BaseDaoMybatisImpl<VuserIncome> implemen
 	}
 	public VuserIncomeDaoImpl(Class<VuserIncome> type) {
 		super(type);
+	}
+	@Override
+	public VuserIncome getIncomeSum(Integer userId) {
+		return this.sqlSessionTemplate.selectOne(this.getStatementName() + ".getIncomeSum",userId);
 	}
 }

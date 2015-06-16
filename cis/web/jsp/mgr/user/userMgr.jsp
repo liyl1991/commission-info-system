@@ -38,59 +38,45 @@
 						<div class="page-content">
 							<div class="row">
 								<div class="col-xs-12">
-									<div class="table-header">
-										<a href="<%=path %>/admin/goInputUser" class="btn btn-xs btn-info">
-											<i class="icon-edit"></i>
-											<span class="no-text-shadow">新增</span>
-										</a>
+									<div class="row well no-margin" style="padding-top: 8px;">
+										<form id="searchForm" class="form-horizontal" role="form">
+											<div class="form-group col-md-4 no-margin">
+									          <label for="keyWordSearch" class="col-md-3 col-sm-2 control-label no-padding-left no-padding-right">搜索：</label>
+									          <div class="col-md-9 col-sm-8">
+									            <input type="text" name="nameOrIdCardLike" class="form-control input-sm" id="keyWordSearch" placeholder="姓名或者身份证"/>
+									          </div>
+									        </div>
+									        <div class="form-group col-md-5 no-margin">
+									          <label for="level-chosen" class="col-md-3 control-label no-padding-left no-padding-right">等级：</label> 
+									          <div class="col-md-9 no-padding">
+									            <select id="level-chosen" class="form-control col-sm-2 tag-input-style" multiple data-placeholder="选择等级...">
+									            	<option value="B">B级</option>
+									            	<option value="C">C级</option>
+									            	<option value="D">D级</option>
+									            	<option value="E">E级</option>
+									            	<option value="X">X级</option>
+									            </select>
+									          </div>
+									        </div>
+										</form>
+										<div class="col-md-2 no-margin">
+											<button type="button" class="btn btn-xs btn-info" onclick="doQuery()">搜索</button>
+											<a href="<%=path %>/userMgr/goInputUser" class="btn btn-xs btn-purple">新增</a>
+										</div>
 									</div>
 									<div class="table-responsive">
 										<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 											<thead>
 												<tr>
 													<th>姓名</th>
+													<th>身份证</th>
 													<th class="hidden-480">性别</th>
 													<th class="hidden-480">等级</th>
-													<th>上月收入</th>
-													<th>上月业绩</th>
 													<th class="hidden-480">职业</th>
-													<th></th>
+													<th>操作</th>
 												</tr>
 											</thead>
-	
-											<tbody>
-												<!-- <tr>
-													<td>
-														<a href="#">李四</a>
-													</td>
-													<td>男</td>
-													<td class="hidden-480">D</td>
-													<td>15555</td>
-	
-													<td class="hidden-480">
-														<span class="label label-sm label-warning">律师</span>
-													</td>
-	
-													<td>
-														<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-															<a class="blue" href="#" title="查看">
-																<i class="icon-zoom-in bigger-130"></i>
-															</a>
-	
-															<a class="green" href="#" title="编辑">
-																<i class="icon-pencil bigger-130"></i>
-															</a>
-	
-															<a class="red" href="#" title="删除">
-																<i class="icon-trash bigger-130"></i>
-															</a>
-															<a class="red" href="#" title="降级">
-																<i class="icon-arrow-down bigger-130"></i>
-															</a>
-														</div>
-													</td>
-												</tr> -->
-											</tbody>
+											<tbody></tbody>
 										</table>
 										<div>
 											<ul class="pagination">
@@ -109,7 +95,8 @@
 		<jsp:include page="/common/inc_js.jsp"></jsp:include>
 		<script src="<%=path %>/assets/js/jqPaginator.js" type="text/javascript"></script>
 		<script src="<%=path %>/assets/js/jquery.gritter.min.js"></script>
-		<script src="<%=path %>/jsp/mgr/adminMgr.js" type="text/javascript"></script>
+		<script src="<%=path %>/assets/js/chosen.jquery.min.js"></script>
+		<script src="<%=path %>/jsp/mgr/user/userMgr.js" type="text/javascript"></script>
 		
 </body>
 </html>

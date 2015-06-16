@@ -278,7 +278,7 @@ public class IncomeRuleController extends MultiActionController{
 		SpecialSettingQueryObj specialSettingQueryObj = new SpecialSettingQueryObj();
 		specialSettingQueryObj.setUserId(userId);
 		specialSettingQueryObj.setType(2);
-		List<SpecialSetting> specialSettings = this.specialSettingService.querySepcialSetting(specialSettingQueryObj);
+		List<SpecialSetting> specialSettings = this.specialSettingService.querySpecialSetting(specialSettingQueryObj);
 		ReachSettingQueryObj reachSettingQueryObj = new ReachSettingQueryObj();
 		if(!"B".equals(user.getLevel())){
 			if(specialSettings != null && specialSettings.size() == 1){

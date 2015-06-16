@@ -1,4 +1,4 @@
-package cn.haohao.cis.user.model;
+package cn.haohao.cis.income.model;
 
 //j-import-b
 import java.io.Serializable;
@@ -36,6 +36,10 @@ public class VuserIncome implements Serializable{
 	 */
 	private java.lang.String name;
 	/*
+	 * 密码
+	 */
+	private java.lang.String password;
+	/*
 	 * 性别：1、男，2、女，3、保密
 	 */
 	private java.lang.String sex;
@@ -56,9 +60,8 @@ public class VuserIncome implements Serializable{
 	 */
 	private java.lang.String level;
 	/*
-	 * 状态：1、正常、2、不可用
+	 * 状态：1、正常、2、不可用、3、待审核
 	 */
-	private java.lang.Integer status;
 	/*
 	 * 角色：1、用户，2、管理员
 	 */
@@ -76,13 +79,19 @@ public class VuserIncome implements Serializable{
 	 */
 	private java.lang.String extend2;
 	/*
-	 * 收入
+	 * 月份
 	 */
-	private java.lang.Float preMonthIncome;
+	private java.util.Date incomeDate;
 	/*
-	 * 业绩
+	 * income
 	 */
-	private java.lang.Float preMonthPerformance;
+	private java.lang.Float income;
+	/*
+	 * performance
+	 */
+	private java.lang.Float performance;
+	
+	private Integer status;
 	//属性 end
 	
 	//方法 begin
@@ -121,6 +130,18 @@ public class VuserIncome implements Serializable{
 	 */
 	public void setName(java.lang.String name){
 		this.name = name;
+	}
+	/*
+	 * 获取 密码
+	 */
+	public java.lang.String getPassword(){
+		return this.password;
+	}
+	/*
+	 * 设置 密码
+	 */
+	public void setPassword(java.lang.String password){
+		this.password = password;
 	}
 	/*
 	 * 获取 性别：1、男，2、女，3、保密
@@ -183,13 +204,13 @@ public class VuserIncome implements Serializable{
 		this.level = level;
 	}
 	/*
-	 * 获取 状态：1、正常、2、不可用
+	 * 获取 状态：1、正常、2、不可用、3、待审核
 	 */
 	public java.lang.Integer getStatus(){
 		return this.status;
 	}
 	/*
-	 * 设置 状态：1、正常、2、不可用
+	 * 设置 状态：1、正常、2、不可用、3、待审核
 	 */
 	public void setStatus(java.lang.Integer status){
 		this.status = status;
@@ -243,28 +264,40 @@ public class VuserIncome implements Serializable{
 		this.extend2 = extend2;
 	}
 	/*
-	 * 获取 收入
+	 * 获取 月份
 	 */
-	public java.lang.Float getPreMonthIncome(){
-		return this.preMonthIncome;
+	public java.util.Date getIncomeDate(){
+		return this.incomeDate;
 	}
 	/*
-	 * 设置 收入
+	 * 设置 月份
 	 */
-	public void setPreMonthIncome(java.lang.Float preMonthIncome){
-		this.preMonthIncome = preMonthIncome;
+	public void setIncomeDate(java.util.Date incomeDate){
+		this.incomeDate = incomeDate;
 	}
 	/*
-	 * 获取 业绩
+	 * 获取 income
 	 */
-	public java.lang.Float getPreMonthPerformance(){
-		return this.preMonthPerformance;
+	public java.lang.Float getIncome(){
+		return this.income;
 	}
 	/*
-	 * 设置 业绩
+	 * 设置 income
 	 */
-	public void setPreMonthPerformance(java.lang.Float preMonthPerformance){
-		this.preMonthPerformance = preMonthPerformance;
+	public void setIncome(java.lang.Float income){
+		this.income = income;
+	}
+	/*
+	 * 获取 performance
+	 */
+	public java.lang.Float getPerformance(){
+		return this.performance;
+	}
+	/*
+	 * 设置 performance
+	 */
+	public void setPerformance(java.lang.Float performance){
+		this.performance = performance;
 	}
 	//方法 end
 
@@ -272,4 +305,5 @@ public class VuserIncome implements Serializable{
 		if (userId==null) return null;
 		return Long.valueOf(this.userId);
 	}
+	
 }

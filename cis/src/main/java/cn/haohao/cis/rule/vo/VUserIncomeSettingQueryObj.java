@@ -1,9 +1,11 @@
 package cn.haohao.cis.rule.vo;
 //j-import-b
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+
 import cn.haohao.vas.core.vo.IPageable;
 import cn.haohao.cis.rule.model.VUserIncomeSetting;
 //j-import-e
@@ -18,6 +20,7 @@ public class VUserIncomeSettingQueryObj extends VUserIncomeSetting implements IP
 	private Integer userIdEqOrNull;
 	private String downlineUserLevel;
 	private List<Integer> uplineUserIds;
+	private Date effectiveDate;
 	/**
 	 * 页面大小
 	 */
@@ -108,6 +111,12 @@ public class VUserIncomeSettingQueryObj extends VUserIncomeSetting implements IP
 	}
 	public void setUplineUserIds(List<Integer> uplineUserIds) {
 		this.uplineUserIds = uplineUserIds;
+	}
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
 	}
 	
 }

@@ -33,13 +33,17 @@
 		   <if test="usingDate != null">and t.USING_DATE = #{usingDate}</if>
 		   <if test="endDate != null">and t.END_DATE = #{endDate}</if>
 		   <if test="status != null">and t.STATUS = #{status}</if>
+		   <if test="effectiveDate != null">
+		   		and t.USING_DATE &lt;= #{effectiveDate}
+		   		and (t.END_DATE &gt; #{effectiveDate} or (t.END_DATE is null and #{effectiveDate} &lt; now())) 
+		   </if>
 	   </trim>
 	 </where>
 	</sql>
 	
-	<select id="IncomeSetting.getSequence" resultType="java.lang.Long">
+	<select id="IncomeSetting.getSequence" resultType="java.lang.Integer">
 		<![CDATA[
-			select SEQ_T_INCOME_SETTING.nextval from dual
+			select max(SETTING_ID) + 1 from T_INCOME_SETTING
 		]]>
 	</select>
 	

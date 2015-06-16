@@ -58,7 +58,7 @@ public class LoginController extends MultiActionController{
 				request.getSession().setAttribute(Constants.LOGINED_USER_BEAN_NAME, current);
 				if(current.isAdmin()){
 					this.log.info(current.getName()+"-登陆系统！");
-					return "redirect:/admin/goAdminMgr";
+					return "redirect:/userMgr/goUserMgr";
 				}
 				else
 					return "redirect:/notice/goIndexNotice";

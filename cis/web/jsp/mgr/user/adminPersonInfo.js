@@ -14,7 +14,7 @@ UserDetail.prototype.init = function(){
 	var _own = this;
 	$(".submitUpdateBtn").click(function(){
 		$("#updateUserForm").ajaxSubmit({
-			url:path+"/admin/doUpdateUser",
+			url:path+"/userMgr/doUpdateUser",
     		type:'post',
 	    	"dataType":"json",
 	    	success: function (r) {
@@ -126,27 +126,23 @@ UserDetail.prototype.doQueryUserdownlines = function(pageNo){
 		pageSize:8
 	};
 	$.ajax({
-		url:path+'/admin/getUserDownlines',
+		url:path+'/userMgr/getUserDownlines',
 		type:"get",
 		dataType:"json",
 		data:queryObj,
 		success:function(r){
 			$(".downline-table tbody tr").remove();
-			if(r.downlines.content.length!=0){
+			if(r.content.length!=0){
 				$('#profile4 .pagination').show();
-				for(var i=0;i<r.downlines.content.length;i++){
+				for(var i=0;i<r.content.length;i++){
 				$('<tr>'+
-				  '  <td>'+
-					'	<a href="'+path+'/admin/goUserDetail/'+r.downlines.content[i].userId+'" title="点击查看详细">'+r.downlines.content[i].name+'</a>'+
+					'<td>'+
+					'	<a href="'+path+'/userMgr/goUserDetail/'+r.content[i].userId+'" title="点击查看详细">'+r.content[i].name+'</a>'+
 					'</td>'+
-					'<td>'+(r.downlines.content[i].sex=='1'?'男':(r.downlines.content[i].sex=='2'?'女':'保密'))+'</td>'+
-					'<td class="hidden-480">'+r.downlines.content[i].level+'级</td>'+
-					'<td>'+formatDate(r.downlines.content[i].incomeDate)+'</td>'+
-					'<td>'+(r.downlines.content[i].income?r.downlines.content[i].income:'暂无数据')+'</td>'+
-					'<td>'+(r.downlines.content[i].performance?r.downlines.content[i].performance:'暂无数据')+'</td>'+
-					'<td class="hidden-480">'+
-					'	<span>'+r.downlines.content[i].career+'</span>'+
-					'</td>'+
+					'<td>'+r.content[i].idCard+'</td>'+
+					'<td class="hidden-480">'+(r.content[i].sex=='1'?'男':(r.content[i].sex=='2'?'女':'保密'))+'</td>'+
+					'<td class="hidden-480">'+r.content[i].level+'级</td>'+
+					'<td class="hidden-480">'+r.content[i].career+'</td>'+
 				  '</tr>').appendTo('.downline-table tbody');
 				}
 			}else{
@@ -157,7 +153,7 @@ UserDetail.prototype.doQueryUserdownlines = function(pageNo){
 			}
 				
 			$('#profile4 .pagination').jqPaginator('option', {
-				totalPages: r.downlines.totalPages
+				totalPages: r.totalPages
 			});
 		},
 		error:function(){
@@ -173,7 +169,7 @@ UserDetail.prototype.doQueryUserIncome = function(pageNo){
 			"pageSize":8,
 			"userId":_own.userId}; 
 	$.ajax({
-		url:path+"/admin/getIncomeInfo",
+		url:path+"/userMgr/getIncomeInfo",
 		type:"post",
 		dataType:"json",
 		data:dataObj,
@@ -186,10 +182,9 @@ UserDetail.prototype.doQueryUserIncome = function(pageNo){
 					var statusClass = r.incomeList.content[i].isEnough==1?'success':'danger';
 					$('<tr class="'+statusClass+'">'+
 						'<td>'+formatDate(r.incomeList.content[i].incomeDate)+'</td>'+
-						'<td>'+(r.incomeList.content[i].income?("￥"+r.incomeList.content[i].income):'暂无数据')+'</td>'+
+						(r.incomeList.content[i].level != 'X'?('<td>'+r.incomeList.content[i].income+'</td>'):'')+
 						'<td>'+(r.incomeList.content[i].performance?("￥"+r.incomeList.content[i].performance):'暂无数据')+'</td>'+
-						'<td><i class="icon-'+isEnough+'"></i></td>'+
-						//'<td><a class="btn btn-minier btn-danger" href="javascript:doDelete('+r.incomeList.content[i].+')" title="删除该员工">删除</a></td>'+
+						/*'<td><i class="icon-'+isEnough+'"></i></td>'+*/
 					  '</tr>').appendTo(".income-table tbody");
 				}
 			}
@@ -201,8 +196,8 @@ UserDetail.prototype.doQueryUserIncome = function(pageNo){
 			}
 			//$(".pre-income,.pre-performance").remove infobox-green
 			if(r.preIncome){
-				$(".pre-income .money").text(r.preIncome.preMonthIncome?("￥"+r.preIncome.preMonthIncome):'暂无数据');
-				$(".pre-performance .money").text(r.preIncome.preMonthPerformance?("￥"+r.preIncome.preMonthPerformance):'暂无数据');
+				$(".pre-income .money").text(r.preIncome.income?("￥"+r.preIncome.income):'暂无数据');
+				$(".pre-performance .money").text(r.preIncome.performance?("￥"+r.preIncome.performance):'暂无数据');
 				if(r.preIncome.isEnough==1) $(".pre-performance").addClass("infobox-green");
 				else $(".pre-performance").addClass("infobox-red");
 			}
@@ -224,9 +219,6 @@ UserDetail.prototype.getDate = function(){
 		var dt = new Date(str);
 	  	var yy = dt.getFullYear();
 	  	var mm= dt.getMonth()+1<10?'0'+(dt.getMonth()+1):(dt.getMonth()+1);
-	  	/*var dd = dt.getDate()<10?'0'+dt.getDate():dt.getDate();
-	  	 var hh = dt.getHours()<10?'0'+dt.getHours():dt.getHours();
-	  	var mi = dt.getMinutes()<10?'0'+dt.getMinutes():dt.getMinutes(); */
 	  	return yy+"年"+mm+"月";
 	}else{
 		return '';

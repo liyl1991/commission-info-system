@@ -1,4 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <% String path = request.getContextPath();%>
 <!DOCTYPE html>
 <html>
@@ -43,27 +44,37 @@
 					<div class="container">
 						<div class="row clearfix income-content">
 							<div class="col-md-2 column">
+							    <c:if test="${downlineIncomeInfo.level != 'X' }">
 							    <div class="infobox infobox-green infobox-small infobox-dark pre-income">
 									<div class="infobox-data">
 										<div class="infobox-content">上月收入</div>
 										<div class="infobox-content money">暂无数据</div>
 									</div>
 								</div>
+								</c:if>
 							    <div class="infobox  infobox-green infobox-small infobox-dark pre-performance">
 									<div class="infobox-data">
-										<div class="infobox-content">上月业绩</div>
+										<div class="infobox-content">
+										<c:if test="${downlineIncomeInfo.level != 'X' }">上月业绩</c:if>
+										<c:if test="${downlineIncomeInfo.level eq 'X' }">上月创收</c:if>
+										</div>
 										<div class="infobox-content money">暂无数据</div>
 									</div>
 								</div>
+								<c:if test="${downlineIncomeInfo.level != 'X' }">
 								<div class="infobox infobox-blue infobox-small infobox-dark sum-income">
 									<div class="infobox-data">
 										<div class="infobox-content">总收入</div>
 										<div class="infobox-content money">暂无数据</div>
 									</div>
 								</div>
+								</c:if>
 								<div class="infobox infobox-blue infobox-small infobox-dark sum-performance">
 									<div class="infobox-data">
-										<div class="infobox-content">总业绩</div>
+										<div class="infobox-content">
+										<c:if test="${downlineIncomeInfo.level != 'X' }">总业绩</c:if>
+										<c:if test="${downlineIncomeInfo.level eq 'X' }">总创收</c:if>
+										</div>
 										<div class="infobox-content money">暂无数据</div>
 									</div>
 								</div>
@@ -72,27 +83,17 @@
 								<table class="table table-hover table-bordered">
 									<thead>
 										<tr>
-											<th>
-												月份
-											</th>
-											<th>
-												收入
-											</th>
-											<th>
-												业绩
-											</th>
-											<th>
-												是否达标
-											</th>
+											<th>月份</th>
+											<c:if test="${downlineIncomeInfo.level eq 'X' }">
+												<th>创收</th>
+											</c:if>
+											<c:if test="${downlineIncomeInfo.level != 'X' }">
+												<th>收入</th>
+												<th>业绩</th>
+											</c:if>
 										</tr>
 									</thead>
 									<tbody>
-										<!-- <tr class="success">
-											<td>2014年10月</td>
-											<td>1299.8</td>
-											<td>129</td>
-											<td><i class="icon-remove"></i></td>
-										</tr> -->
 									</tbody>
 								</table>
 								<div>
@@ -131,13 +132,18 @@
 						for(var i=0;i<r.incomeList.content.length;i++){
 							var isEnough = r.incomeList.content[i].isEnough==1?'ok':'remove';
 							var statusClass = r.incomeList.content[i].isEnough==1?'success':'danger';
-							$('<tr class="'+statusClass+'">'+
-								'<td>'+formatDate(r.incomeList.content[i].incomeDate)+'</td>'+
-								'<td>'+r.incomeList.content[i].income+'</td>'+
-								'<td>'+r.incomeList.content[i].performance+'</td>'+
-								'<td><i class="icon-'+isEnough+'"></i></td>'+
-							  '</tr>').appendTo(".container table tbody");
+							if(r.incomeList.content[i].incomeDate){
+								$('<tr class="'+statusClass+'">'+
+									'<td>'+formatDate(r.incomeList.content[i].incomeDate)+'</td>'+
+									(r.incomeList.content[i].level != 'X'?('<td>'+r.incomeList.content[i].income+'</td>'):'')+
+									'<td>'+r.incomeList.content[i].performance+'</td>'+
+									/* '<td><i class="icon-'+isEnough+'"></i></td>'+ */
+								  '</tr>').appendTo(".container table tbody");
+							}
 						}
+						$('.pagination').jqPaginator('option', {
+							totalPages: r.incomeList.totalPages
+						});
 					}
 					else{
 						$('.pagination').hide();
@@ -147,18 +153,15 @@
 					}
 					//$(".pre-income,.pre-performance").remove infobox-green
 					if(r.preIncome){
-						$(".pre-income .money").text(r.preIncome.preMonthIncome?("￥"+r.preIncome.preMonthIncome):'暂无数据');
-						$(".pre-performance .money").text(r.preIncome.preMonthPerformance?("￥"+r.preIncome.preMonthPerformance):'暂无数据');
+						$(".pre-income .money").text(r.preIncome.income?("￥"+r.preIncome.income):'暂无数据');
+						$(".pre-performance .money").text(r.preIncome.performance?("￥"+r.preIncome.performance):'暂无数据');
 						if(r.preIncome.isEnough==1) $(".pre-performance").addClass("infobox-green");
 						else $(".pre-performance").addClass("infobox-red");
 					}
 					if(r.incomeSum){
-						$(".sum-income .money").text("￥"+r.incomeSum.income);
-						$(".sum-performance .money").text("￥"+r.incomeSum.performance);
+						$(".sum-income .money").text(r.incomeSum.income?("￥"+r.incomeSum.income):'暂无数据');
+						$(".sum-performance .money").text(r.incomeSum.performance?("￥"+r.incomeSum.performance):'暂无数据');
 					}
-					$('.pagination').jqPaginator('option', {
-						totalPages: r.incomeList.totalPages
-					});
 				},
 				error:function(){}
 			});

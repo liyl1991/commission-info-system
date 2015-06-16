@@ -12,7 +12,7 @@ InputUser.prototype.init = function(){
 	var _own = this;
 	$(".submitBtn").click(function(){
 		$("#inputUserForm").ajaxSubmit({
-			url:path+"/admin/doInputUser",
+			url:path+"/userMgr/doInputUser",
     		type:'post',
 	    	"dataType":"json",
 	    	success: function (r) {

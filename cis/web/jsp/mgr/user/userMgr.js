@@ -1,44 +1,45 @@
 $(function(){
 	initPagination();
+	$("#level-chosen").chosen({no_results_text: "未找到匹配项"});
 });
 function doQuery(currentPage){
+	var keyWord = $.trim($('#keyWordSearch').val())?$.trim($('#keyWordSearch').val()):null;
 	var dataObj = { 
 			"currentPage":currentPage?currentPage:1,
-	"pageSize":8}; 
+			"pageSize":8,
+			"nameOrIdCardLike":keyWord
+	};
+	var lvs = $("#level-chosen").val();
+	var lvStr = '';
+	if( lvs ){
+		for (var i = 0; i < lvs.length; i++) {
+			lvStr += lvs[i];
+			if(i < lvs.length - 1) lvStr += ',';
+		}
+		dataObj.levelIn = lvStr;
+	}
 	$.ajax({
-		url:path+'/admin/getUserList',
+		url:path+'/userMgr/getUserList',
 		type:"post",
 		dataType:"json",
 		data:dataObj,
 		success:function(r){
 			$(".container table tbody tr").remove();
-			if(r.downlineUsers.content.length!=0){
+			if(r.content.length!=0){
 				$('.pagination').show();
-				for(var i=0;i<r.downlineUsers.content.length;i++){
+				for(var i=0;i<r.content.length;i++){
 				$('<tr>'+
 				  '  <td>'+
-					'	<a href="'+path+'/admin/goUserDetail/'+r.downlineUsers.content[i].userId+'" title="点击查看详细">'+r.downlineUsers.content[i].name+'</a>'+
+					'	<a href="'+path+'/userMgr/goUserDetail/'+r.content[i].userId+'" title="点击查看详细">'+r.content[i].name+'</a>'+
 					'</td>'+
-					'<td>'+(r.downlineUsers.content[i].sex=='1'?'男':(r.downlineUsers.content[i].sex=='2'?'女':'保密'))+'</td>'+
-					'<td class="hidden-480">'+r.downlineUsers.content[i].level+'级</td>'+
-					'<td>'+(r.downlineUsers.content[i].preMonthIncome?r.downlineUsers.content[i].preMonthIncome:'暂无数据')+'</td>'+
-					'<td>'+(r.downlineUsers.content[i].preMonthPerformance?r.downlineUsers.content[i].preMonthPerformance:'暂无数据')+'</td>'+
-					'<td class="hidden-480">'+
-					'	<span>'+r.downlineUsers.content[i].career+'</span>'+
-					'</td>'+
+					'<td>'+r.content[i].idCard+'</td>'+
+					'<td class="hidden-480">'+(r.content[i].sex=='1'?'男':(r.content[i].sex=='2'?'女':'保密'))+'</td>'+
+					'<td class="hidden-480">'+r.content[i].level+'级</td>'+
+					'<td class="hidden-480">'+r.content[i].career+'</td>'+
 					'<td>'+
-					'	<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">'+
-					'		<a class="btn btn-minier btn-primary" href="'+path+'/admin/goUserDetail/'+r.downlineUsers.content[i].userId+'" title="查看用户详细信息">查看</a>'+
-					'		<a class="btn btn-minier btn-danger" href="javascript:doDelete('+r.downlineUsers.content[i].userId+')" title="删除该员工">删除</a>'+
-				/* 	'		<a class="green" href="#" title="编辑">'+
-					'			<i class="icon-pencil bigger-130"></i>'+
-					'		</a>'+
-					'		<a class="red" href="#" title="删除">'+
-					'			<i class="icon-trash bigger-130"></i>'+
-					'		</a>'+
-					'		<a class="red" href="#" title="降级">'+
-					'			<i class="icon-arrow-down bigger-130"></i>'+
-					'		</a>'+ */
+					'	<div class="visible-md visible-lg visible-sm visible-xs action-buttons">'+
+					'		<a class="btn btn-minier btn-primary" href="'+path+'/admin/goUserDetail/'+r.content[i].userId+'" title="查看用户详细信息">查看</a>'+
+					'		<a class="btn btn-minier btn-danger" href="javascript:doDelete('+r.content[i].userId+')" title="删除该员工">删除</a>'+
 					'	</div>'+
 					'</td>'+
 				  '</tr>').appendTo('.container table tbody');
@@ -51,7 +52,7 @@ function doQuery(currentPage){
 			}
 				
 			$('.pagination').jqPaginator('option', {
-				totalPages: r.downlineUsers.totalPages
+				totalPages: r.totalPages
 			});
 		},
 		error:function(){

@@ -1,15 +1,16 @@
-package cn.haohao.cis.user.service.impl;
+package cn.haohao.cis.income.service.impl;
 //j-import-b
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
-import cn.haohao.cis.user.dao.IVuserIncomeDao;
-import cn.haohao.cis.user.service.IVuserIncomeService;
-import cn.haohao.cis.user.model.VuserIncome;
-import cn.haohao.cis.user.vo.VuserIncomeQueryObj;
-import cn.haohao.cis.user.vo.VuserIncomeUpdateObj;
+
+import cn.haohao.cis.income.dao.IVuserIncomeDao;
+import cn.haohao.cis.income.service.IVuserIncomeService;
+import cn.haohao.cis.income.model.VuserIncome;
+import cn.haohao.cis.income.vo.VuserIncomeQueryObj;
+import cn.haohao.cis.income.vo.VuserIncomeUpdateObj;
 //j-import-e
 /**
  *	SERVICE IMPL
@@ -55,5 +56,10 @@ public class VuserIncomeService implements IVuserIncomeService {
 	}
 	public Long countByArgs(VuserIncomeQueryObj queryObj){
 		return vuserIncomeDao.countByArgs(queryObj);
+	}
+
+	@Override
+	public VuserIncome getIncomeSum(Integer userId) {
+		return this.vuserIncomeDao.getIncomeSum(userId);
 	}
 }

@@ -72,11 +72,6 @@ public class UserIncomeService implements IUserIncomeService {
 	}
 
 	@Override
-	public UserIncome getIncomeSum(Integer userId) {
-		return this.userIncomeDao.getIncomeSum(userId);
-	}
-
-	@Override
 	public void createUserIncome(List<User> userUplineList,UserIncomeInputObj inputObj) {
 		List<UserIncome> incomes = new ArrayList<UserIncome>();
 		//x创收

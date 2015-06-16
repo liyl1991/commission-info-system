@@ -7,6 +7,4 @@ import cn.haohao.vas.core.dao.BaseDao;
  */
 public interface IUserIncomeDao extends BaseDao<UserIncome> {
 	
-	public UserIncome getIncomeSum(Integer userId);
-	
 }

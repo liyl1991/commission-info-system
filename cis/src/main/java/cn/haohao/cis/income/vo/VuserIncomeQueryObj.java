@@ -1,33 +1,23 @@
-package cn.haohao.cis.user.vo;
+package cn.haohao.cis.income.vo;
 //j-import-b
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
 import cn.haohao.vas.core.vo.IPageable;
-import cn.haohao.cis.user.model.User;
+import cn.haohao.cis.income.model.VuserIncome;
 //j-import-e
 /**
  *	VO
  */
-public class UserQueryObj extends User implements IPageable{
-	/**
-	 * 等级小于
-	 */
-	private String levelLt;
-	/**
-	 * 不等于
-	 */
-	private String levelNotEq;
+public class VuserIncomeQueryObj extends VuserIncome implements IPageable{
 	
-	private String levelNotIn;
-	
-	private Integer grandUserId;
-	
-	private String nameOrIdCardLike;
-	private String levelIn;
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 页面大小
@@ -37,6 +27,14 @@ public class UserQueryObj extends User implements IPageable{
 	 * 当前页
 	 */
 	private int currentPage = 1;
+	
+	private String nameOrIdCardLike;
+	
+	private String levelIn;
+	
+	private Integer year;
+	
+	private Integer month;
 	/**
 	 * 排序 
 	 */
@@ -63,16 +61,16 @@ public class UserQueryObj extends User implements IPageable{
 	public Sort getSort() {
 		return this.sort;
 	}
-	public UserQueryObj next() {
+	public VuserIncomeQueryObj next() {
 		this.currentPage += 1;
 		return this;
 	}
-	public UserQueryObj previousOrFirst() {
+	public VuserIncomeQueryObj previousOrFirst() {
 		if(currentPage != 1)
 			this.currentPage -= 1;
 		return this;
 	}
-	public UserQueryObj first() {
+	public VuserIncomeQueryObj first() {
 		this.currentPage = 1;
 		return this;
 	}
@@ -96,34 +94,10 @@ public class UserQueryObj extends User implements IPageable{
 	public void setSort(List<Order> orders){
 		this.sort = new Sort(orders);
 	}
-	public String getLevelLt() {
-		return levelLt;
-	}
-	public void setLevelLt(String levelLt) {
-		this.levelLt = levelLt;
-	}
-	public String getLevelNotEq() {
-		return levelNotEq;
-	}
-	public void setLevelNotEq(String levelNotEq) {
-		this.levelNotEq = levelNotEq;
-	}
-	public Integer getGrandUserId() {
-		return grandUserId;
-	}
-	public void setGrandUserId(Integer grandUserId) {
-		this.grandUserId = grandUserId;
-	}
-	public String getLevelNotIn() {
-		return levelNotIn;
-	}
-	public void setLevelNotIn(String levelNotIn) {
-		this.levelNotIn = levelNotIn;
-	}
 	public String getNameOrIdCardLike() {
-		if(this.nameOrIdCardLike == null)
-			return null;
-		return "%"+nameOrIdCardLike+"%";
+		if(StringUtils.isNotEmpty(nameOrIdCardLike))
+			return "%"+this.nameOrIdCardLike+"%";
+		return null;
 	}
 	public void setNameOrIdCardLike(String nameOrIdCardLike) {
 		this.nameOrIdCardLike = nameOrIdCardLike;
@@ -141,5 +115,19 @@ public class UserQueryObj extends User implements IPageable{
 	public void setLevelIn(String levelIn) {
 		this.levelIn = levelIn;
 	}
-	
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+	public void setMonth(Integer month) {
+		this.month = month;
+	}
+	public Date getDateSearch(){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		try {
+			return sdf.parse(this.year + "/" + this.month + "/01");
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

@@ -25,7 +25,7 @@
 	  </c:if>
 	  <c:if test="${loginedUser.userRole==2 }">
 		<li class="${adminMgrActive}">
-			<a href="<%=path%>/admin/goAdminMgr">
+			<a href="<%=path%>/userMgr/goUserMgr">
 				<i class="icon-flag"></i>
 				<span class="menu-text"> 员工管理 </span>
 			</a>

@@ -80,5 +80,4 @@ public interface IUserIncomeService {
 	 */
 	public Long countByArgs(UserIncomeQueryObj queryObj);
 	
-	public UserIncome getIncomeSum(Integer userId);
 }

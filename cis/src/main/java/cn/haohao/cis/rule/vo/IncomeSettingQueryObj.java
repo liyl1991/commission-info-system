@@ -1,9 +1,11 @@
 package cn.haohao.cis.rule.vo;
 //j-import-b
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+
 import cn.haohao.vas.core.vo.IPageable;
 import cn.haohao.cis.rule.model.IncomeSetting;
 //j-import-e
@@ -13,6 +15,8 @@ import cn.haohao.cis.rule.model.IncomeSetting;
 public class IncomeSettingQueryObj extends IncomeSetting implements IPageable{
 	
 	private static final long serialVersionUID = 1L;
+	
+	private Date effectiveDate;
 	/**
 	 * 页面大小
 	 */
@@ -80,4 +84,11 @@ public class IncomeSettingQueryObj extends IncomeSetting implements IPageable{
 	public void setSort(List<Order> orders){
 		this.sort = new Sort(orders);
 	}
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+	
 }

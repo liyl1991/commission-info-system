@@ -1,11 +1,6 @@
 package cn.haohao.cis.user.web;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,13 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.haohao.cis.user.model.User;
-import cn.haohao.cis.user.model.VuserIncome;
 import cn.haohao.cis.user.service.IUserService;
-import cn.haohao.cis.user.service.IVuserIncomeService;
 import cn.haohao.cis.user.vo.UserPwdUpdateObj;
 import cn.haohao.cis.user.vo.UserQueryObj;
 import cn.haohao.cis.user.vo.UserUpdateObj;
-import cn.haohao.cis.user.vo.VuserIncomeQueryObj;
 import cn.haohao.cis.utils.Constants;
 import cn.haohao.vas.core.utils.MD5Encoder;
 
@@ -35,8 +27,6 @@ public class UserController extends MultiActionController{
 	
 	@Autowired
 	private IUserService userService;
-	@Autowired
-	private IVuserIncomeService vuserIncomeService;
 	
 	@RequestMapping("/goPersonInfo")
 	public String goPersonInfo(HttpServletRequest request){
@@ -91,14 +81,11 @@ public class UserController extends MultiActionController{
 		return resMap;
 	}
 	@RequestMapping("/getDownline")
-	public @ResponseBody Map<String,Object> getDownline(VuserIncomeQueryObj queryObj,HttpServletRequest request){
-		Map<String,Object> resMap = new HashMap<String, Object>();
+	public @ResponseBody Page<User> getDownline(UserQueryObj queryObj,HttpServletRequest request){
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		queryObj.setStatus(1);
 		queryObj.setUplineUser(loginedUser.getUserId());
-		Page<VuserIncome> downlineUsers = this.vuserIncomeService.pageQueryVuserIncome(queryObj);
-		resMap.put("downlineUsers", downlineUsers);
-		return resMap;
+		return this.userService.pageQueryUser(queryObj);
 	}
 	/**
 	 * 统计下线人员数

@@ -13,52 +13,52 @@ public interface ISpecialSettingService {
 	/**
 	 * u-insert-b@note1.0@
 	 * u-insert-e@note1.0@
-	 * @param sepcialSetting
+	 * @param specialSetting
 	 * @return
 	 */
-	public SpecialSetting createSepcialSetting(SpecialSetting sepcialSetting);
+	public SpecialSetting createSpecialSetting(SpecialSetting specialSetting);
 	/**
 	 * u-insert-b@note2.0@
 	 * u-insert-e@note2.0@
-	 * @param sepcialSetting
+	 * @param specialSetting
 	 * @return
 	 */
-	public SpecialSetting modifySepcialSetting(SpecialSetting sepcialSetting);
+	public SpecialSetting modifySpecialSetting(SpecialSetting specialSetting);
 	/**
 	 * u-insert-b@note3.0@
 	 * u-insert-e@note3.0@
-	 * @param sepcialSetting
+	 * @param specialSetting
 	 * @return
 	 */
-	public void deleteSepcialSetting(SpecialSettingQueryObj sepcialSettingQueryObj);
+	public void deleteSpecialSetting(SpecialSettingQueryObj specialSettingQueryObj);
 	/**
 	 * u-insert-b@note4.0@
 	 * u-insert-e@note4.0@
-	 * @param sepcialSettingList
+	 * @param specialSettingList
 	 * @return
 	 */
-	public void batchDeleteSepcialSetting(List<SpecialSetting> sepcialSettingList);
+	public void batchDeleteSpecialSetting(List<SpecialSetting> specialSettingList);
 	/**
 	 * u-insert-b@note5.0@
 	 * u-insert-e@note5.0@
-	 * @param sepcialSettingId
+	 * @param specialSettingId
 	 * @return
 	 */
-	public SpecialSetting getSepcialSettingById(Long sepcialSettingId);
+	public SpecialSetting getSpecialSettingById(Integer specialSettingId);
 	/**
 	 * u-insert-b@note6.0@
 	 * u-insert-e@note6.0@
-	 * @param sepcialSettingqueryObj
+	 * @param specialSettingqueryObj
 	 * @return
 	 */
-	public Page<SpecialSetting> pageQuerySepcialSetting(SpecialSettingQueryObj sepcialSettingqueryObj);
+	public Page<SpecialSetting> pageQuerySpecialSetting(SpecialSettingQueryObj specialSettingqueryObj);
 	/**
 	 * u-insert-b@note7.0@
 	 * u-insert-e@note7.0@
-	 * @param sepcialSettingqueryObj
+	 * @param specialSettingqueryObj
 	 * @return
 	 */
-	public List<SpecialSetting> querySepcialSetting(SpecialSettingQueryObj sepcialSettingqueryObj);
+	public List<SpecialSetting> querySpecialSetting(SpecialSettingQueryObj specialSettingqueryObj);
 	/**
 	 * u-insert-b@note8.0@
 	 * u-insert-e@note8.0@

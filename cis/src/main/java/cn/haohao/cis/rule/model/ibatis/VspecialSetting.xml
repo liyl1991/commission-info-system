@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="VspecialSetting">
+	
+	<resultMap id="VspecialSettingResult" type="cn.haohao.cis.rule.model.VspecialSetting">
+		<result property="settingId" column="SETTING_ID" />
+		<result property="proportion" column="PROPORTION" />
+		<result property="ruleId" column="RULE_ID" />
+		<result property="userId" column="USER_ID" />
+		<result property="settingLevel" column="SETTING_LEVEL" />
+		<result property="usingDate" column="USING_DATE" />
+		<result property="endDate" column="END_DATE" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+	
+	<select id="VspecialSetting.getById" resultMap="VspecialSettingResult">
+		<![CDATA[
+			select t.*
+			from V_SPECIAL_SETTING t
+			where setting_id = #{settingId}
+		]]>
+	</select>
+
+		
+	<sql id="VspecialSetting.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="settingId != null">and t.SETTING_ID = #{settingId}</if>
+		   <if test="proportion != null">and t.PROPORTION = #{proportion}</if>
+		   <if test="ruleId != null">and t.RULE_ID = #{ruleId}</if>
+		   <if test="userId != null">and t.USER_ID = #{userId}</if>
+		   <if test="settingLevel != null">and t.SETTING_LEVEL = #{settingLevel}</if>
+		   <if test="usingDate != null">and t.USING_DATE = #{usingDate}</if>
+		   <if test="endDate != null">and t.END_DATE = #{endDate}</if>
+		   <if test="status != null">and t.STATUS = #{status}</if>
+		   <if test="effectiveDate != null">
+		   		and t.USING_DATE &lt;= #{effectiveDate}
+		   		and (t.END_DATE &gt; #{effectiveDate} or (t.END_DATE is null and #{effectiveDate} &lt; now())) 
+		   </if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="VspecialSetting.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_V_SPECIAL_SETTING.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="VspecialSetting.create">
+		<![CDATA[
+			insert into V_SPECIAL_SETTING (  SETTING_ID ,  PROPORTION ,  RULE_ID ,  USER_ID ,  SETTING_LEVEL ,  USING_DATE ,  END_DATE   ) 
+			values (  #{settingId} ,  #{proportion} ,  #{ruleId} ,  #{userId} ,  #{settingLevel} ,  #{usingDate} ,  #{endDate}   )
+		]]>
+	</insert>
+	
+	<update id="VspecialSetting.update">
+		<![CDATA[
+			update V_SPECIAL_SETTING set 
+			 SETTING_ID=#{settingId} , PROPORTION=#{proportion} , RULE_ID=#{ruleId} , USER_ID=#{userId} , SETTING_LEVEL=#{settingLevel} , USING_DATE=#{usingDate} , END_DATE=#{endDate} 
+			where setting_id = #{settingId}
+		]]>
+	</update>
+	
+	<update id="VspecialSetting.updateDynamic">
+		update V_SPECIAL_SETTING t 
+		<set>
+			<if test="newUpdAttObj.settingId != null">t.SETTING_ID = #{newUpdAttObj.settingId},</if>	
+			<if test="newUpdAttObj.proportion != null">t.PROPORTION = #{newUpdAttObj.proportion},</if>	
+			<if test="newUpdAttObj.ruleId != null">t.RULE_ID = #{newUpdAttObj.ruleId},</if>	
+			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
+			<if test="newUpdAttObj.settingLevel != null">t.SETTING_LEVEL = #{newUpdAttObj.settingLevel},</if>	
+			<if test="newUpdAttObj.usingDate != null">t.USING_DATE = #{newUpdAttObj.usingDate},</if>	
+			<if test="newUpdAttObj.endDate != null">t.END_DATE = #{newUpdAttObj.endDate},</if>	
+		</set>
+		<include refid="VspecialSetting.whereClause" />
+	</update>
+	
+	<delete id="VspecialSetting.delete">
+		<![CDATA[
+		delete from V_SPECIAL_SETTING t
+		]]>
+		<include refid="VspecialSetting.whereClause" />
+	</delete>
+	
+	<select id="VspecialSetting.queryByArgs" resultMap="VspecialSettingResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from V_SPECIAL_SETTING t 
+		]]>
+		<include refid="VspecialSetting.whereClause" />
+	</select>
+	
+	<select id="VspecialSetting.pageCountByArgs" resultMap="VspecialSettingResult">
+		<![CDATA[
+			SELECT * FROM (SELECT ROWS_.*, ROWNUM ROWNUM_ FROM (
+			select t.*
+		]]>
+			from V_SPECIAL_SETTING t 
+		<include refid="VspecialSetting.whereClause" />
+		<![CDATA[
+			) ROWS_ WHERE ROWNUM <= #{endRowNum} ) WHERE ROWNUM_ >= #{startRowNum}
+		]]>
+	</select>
+	
+	<select id="VspecialSetting.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from V_SPECIAL_SETTING t 
+		<include refid="VspecialSetting.whereClause" />
+	</select>
+	
+	<select id="VspecialSetting.countByArgs" resultType="java.lang.Long">
+		select count(1) from V_SPECIAL_SETTING t 
+		<include refid="VspecialSetting.whereClause" />
+	</select>
+</mapper>
