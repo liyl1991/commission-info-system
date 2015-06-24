@@ -19,6 +19,7 @@ import cn.haohao.cis.rule.model.IncomeRule;
 import cn.haohao.cis.rule.model.IncomeSetting;
 import cn.haohao.cis.rule.vo.IncomeSettingQueryObj;
 import cn.haohao.cis.user.model.User;
+import cn.haohao.cis.utils.Arith;
 import cn.haohao.vas.core.exception.BusinessException;
 //j-import-e
 /**
@@ -92,7 +93,7 @@ public class UserIncomeService implements IUserIncomeService {
 				income.setUserId(user.getUserId());
 				income.setPerformance(inputObj.getIncome());
 				income.setSettingId(user.getIncomeSetting().getSettingId());
-				income.setIncome(inputObj.getIncome() * user.getIncomeSetting().getProportion());
+				income.setIncome(Arith.mul(inputObj.getIncome().floatValue(), user.getIncomeSetting().getProportion().floatValue()));
 				incomes.add(income);
 			}
 		} else {
@@ -106,14 +107,14 @@ public class UserIncomeService implements IUserIncomeService {
 				if( "B".equalsIgnoreCase(user.getLevel())){
 					userB = user;
 				} else {
-					base -= user.getIncomeSetting().getProportion();
+					base = Arith.sub(base.floatValue(), user.getIncomeSetting().getProportion().floatValue());
 					UserIncome income = new UserIncome();
 					income.setFromIncomeId(incomeId);
 					income.setIncomeDate(inputObj.getDate());
 					income.setUserId(user.getUserId());
 					income.setPerformance(inputObj.getIncome());
 					income.setSettingId(user.getIncomeSetting().getSettingId());
-					income.setIncome(inputObj.getIncome() * user.getIncomeSetting().getProportion());
+					income.setIncome( Arith.mul(inputObj.getIncome().floatValue(), user.getIncomeSetting().getProportion().floatValue()) );
 					incomes.add(income);
 				}
 			}
@@ -125,7 +126,7 @@ public class UserIncomeService implements IUserIncomeService {
 				income.setIncomeDate(inputObj.getDate());
 				income.setUserId(userB.getUserId());
 				income.setPerformance(inputObj.getIncome());
-				income.setIncome(inputObj.getIncome() * base);
+				income.setIncome(Arith.mul(inputObj.getIncome().floatValue(), base.floatValue()));
 				incomes.add(income);
 			}
 		}

@@ -118,8 +118,8 @@ function eventInit(){
 		if(isNaN(v)){
 			msg = '比例请填写数字！';
 		}
-		else if( parseFloat(v) > 1){
-			msg = '比例设置不得大于1';
+		else if( parseFloat(v) > 100){
+			msg = '比例设置不得大于100';
 		}
 		if(msg){	
 			$.gritter.add({
@@ -372,7 +372,7 @@ function buildRuleEditForm(){
 	    	"dataType":"json",
 	    	success: function (r) {
     			$('#updateRuleForm .rule-setting,#updateRuleForm .rule-base-lvlb').remove();
-    			$('#updateRuleForm input[name="baseRule"]').val(r.baseRuleSetting.proportion);
+    			$('#updateRuleForm input[name="baseRule"]').val(FloatMul(r.baseRuleSetting.proportion, 100));
     			baseProportion = r.baseRuleSetting.proportion;
     			downTotal = 0;
 	    		for(var i = 0 ; i < r.settings.length ; i++){
@@ -381,11 +381,11 @@ function buildRuleEditForm(){
 	    				'<div class="form-group rule-setting" style="height: 31px">'+
 						'	<label class="col-sm-3 control-label no-padding-right" for="form-field-icmset' + r.settings[i].settingLevel + '">' + r.settings[i].settingLevel + '级</label>'+
 						'	<div class="col-sm-9">'+
-						'		<input type="text" name="settings['+i+'].proportion" value="' + r.settings[i].proportion + '" id="form-field-icmset' + r.settings[i].settingLevel + '" class="col-xs-10 col-sm-5" />'+
+						'		<input type="text" name="settings['+i+'].proportion" value="' + FloatMul(r.settings[i].proportion, 100 )+ '" id="form-field-icmset' + r.settings[i].settingLevel + '" class="col-xs-10 col-sm-5" />'+
 						'		<input type="hidden" name="settings['+i+'].settingLevel" value="' + r.settings[i].settingLevel + '"/>'+
 						'	</div>'+
 						'</div>';
-					$('#updateRuleForm .form-actions').before(htm);
+					$('#updateRuleForm .use-time').before(htm);
 					downTotal += r.settings[i].proportion;
 	    		}
     			if( rule != 'BX' ){
@@ -393,7 +393,7 @@ function buildRuleEditForm(){
 	    				'<div class="form-group rule-base-lvlb" style="height: 31px">'+
 						'	<label class="col-sm-3 control-label no-padding-right">B级</label>'+
 						'	<div class="col-sm-9">'+
-						'		<input type="text" readonly value="' +FloatSub(baseProportion,downTotal)+ '" class="col-xs-10 col-sm-5" />'+
+						'		<input type="text" readonly value="' +FloatMul(FloatSub(baseProportion,downTotal), 100)+ '" class="col-xs-10 col-sm-5" />'+
 						'	</div>'+
 						'</div>';
     				$('#updateRuleForm .rule-setting').eq(0).before(htm);
@@ -451,8 +451,8 @@ function validateIncomeSetting(){
 			newTotal = FloatAdd( newTotal ,parseFloat($(this).val()));
 		}
 	});
-	$('#updateRuleForm .rule-base-lvlb input:text').val( FloatSub(baseProportion, newTotal) );
-	if((newTotal >= baseProportion && rule !='BX')||(newTotal > baseProportion && rule =='BX')){
+	$('#updateRuleForm .rule-base-lvlb input:text').val( FloatSub(FloatMul(baseProportion, 100), newTotal) );
+	if((newTotal >= FloatMul(baseProportion,100) && rule !='BX')||(newTotal > FloatMul(baseProportion,100) && rule =='BX')){
 		if(flag){
 			$.gritter.add({
 				title: '输入数据出错',

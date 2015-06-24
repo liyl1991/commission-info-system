@@ -8,6 +8,19 @@ import java.util.List;
 
 public class BaseUtils {
 
+	public static Date getFirstDayOnNextMonth(){
+		Calendar calendar = Calendar.getInstance();
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+		try {
+			return sdf.parse(year+"-"+(month+2)+"-"+"01");
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static Date getFirstDayOnCurrentMonth(){
 		Calendar calendar = Calendar.getInstance();
 		int year = calendar.get(Calendar.YEAR);

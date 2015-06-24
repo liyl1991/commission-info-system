@@ -81,6 +81,23 @@
 										<input type="text" readonly name="baseRule" value="${baseRuleSetting.proportion}" class="col-xs-10 col-sm-5" />
 									</div>
 								</div>
+								<div class="form-group use-time">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-sex"> 何时生效 </label>
+									<div class="col-sm-9">
+									  <div class="col-sm-2">
+										<label>
+											<input type="radio" class="ace" name="usingFlag" value="1" checked="checked"/>
+											<span class="lbl"> 本月</span>
+										</label>
+									  </div>
+									  <div class="col-sm-2">
+										<label>
+											<input type="radio" class="ace" name="usingFlag" value="2"/>
+											<span class="lbl"> 下月</span>
+										</label>
+									  </div>
+									</div>
+								</div>
 								<div class="clearfix form-actions">
 									<div class="col-md-offset-3 col-md-9">
 										<button class="btn btn-primary submitUpdateBtn" type="button">

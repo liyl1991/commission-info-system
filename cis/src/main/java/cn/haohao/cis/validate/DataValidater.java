@@ -18,6 +18,7 @@ import cn.haohao.cis.rule.vo.IncomeSettingQueryObj;
 import cn.haohao.cis.user.model.User;
 import cn.haohao.cis.user.service.IUserService;
 import cn.haohao.cis.user.vo.UserQueryObj;
+import cn.haohao.cis.utils.Arith;
 import cn.haohao.vas.core.exception.BusinessException;
 
 public class DataValidater {
@@ -165,17 +166,18 @@ public class DataValidater {
 			throw new BusinessException("系统出错！");
 		Float newTotal = 0F;
 		for (IncomeSetting incomeSetting : newSettings) {
-			if(incomeSetting.getProportion().floatValue() > 1F){
-				throw new BusinessException("比例填写不能大于1！");
+			if(incomeSetting.getProportion().floatValue() > 100F){
+				throw new BusinessException("比例填写不能大于100！");
 			}
-			newTotal += incomeSetting.getProportion();
+			newTotal = Arith.add(newTotal.floatValue(), incomeSetting.getProportion().floatValue());
 		}
 		IncomeSettingQueryObj incomeSettingQueryObj = new IncomeSettingQueryObj();
 		incomeSettingQueryObj.setRuleId(0);
 		incomeSettingQueryObj.setStatus(1);
 		IncomeSetting baseIncomeSetting = incomeSettingService.getIncomeSetting(incomeSettingQueryObj);
-		if((newTotal.floatValue() >= baseIncomeSetting.getProportion().floatValue() && !"B".equals(newSettings.get(0).getSettingLevel()))
-				||(newTotal.floatValue() > baseIncomeSetting.getProportion().floatValue() && "B".equals(newSettings.get(0).getSettingLevel()))){
+		Float base = Arith.mul(baseIncomeSetting.getProportion().floatValue(), 100F);
+		if((newTotal.floatValue() >= base && !"B".equals(newSettings.get(0).getSettingLevel()))
+				||(newTotal.floatValue() > base && "B".equals(newSettings.get(0).getSettingLevel()))){
 			throw new BusinessException("总提成比例不能为大于基础提成比例，且【B级】所剩提成比例不能为0！");
 		}
 	}

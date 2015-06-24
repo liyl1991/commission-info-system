@@ -79,6 +79,8 @@ public interface IIncomeSettingService {
 	 */
 	public void updateDynamic(IncomeSettingUpdateObj updateObj);
 	
+	public void updateDynamic(IncomeSettingUpdateObj updateObj1,IncomeSettingUpdateObj updateObj2);
+	
 	public void updateDynamic(IncomeSettingUpdateObj updateObj,IncomeSetting newSetting);
 	/**
 	 * u-insert-b@note9.0@

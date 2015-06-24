@@ -38,7 +38,7 @@ function doQuery(currentPage){
 					'<td class="hidden-480">'+r.content[i].career+'</td>'+
 					'<td>'+
 					'	<div class="visible-md visible-lg visible-sm visible-xs action-buttons">'+
-					'		<a class="btn btn-minier btn-primary" href="'+path+'/admin/goUserDetail/'+r.content[i].userId+'" title="查看用户详细信息">查看</a>'+
+					'		<a class="btn btn-minier btn-primary" href="'+path+'/userMgr/goUserDetail/'+r.content[i].userId+'" title="查看用户详细信息">查看</a>'+
 					'		<a class="btn btn-minier btn-danger" href="javascript:doDelete('+r.content[i].userId+')" title="删除该员工">删除</a>'+
 					'	</div>'+
 					'</td>'+
@@ -78,7 +78,7 @@ $(".pagination").jqPaginator({
 function doDelete(userId){
 	if(confirm("您确认要删除该员工？")){
 	$.ajax({
-		url:path+'/admin/doDeleteUser/'+userId,
+		url:path+'/userMgr/doDeleteUser/'+userId,
 		type:"post",
 		dataType:"json",
 		success:function(r){

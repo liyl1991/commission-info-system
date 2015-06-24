@@ -91,30 +91,6 @@ UserDetail.prototype.init = function(){
 			});
 			return;
 		}
-		$("#inputUserIncomeForm").ajaxSubmit({
-			url:path+"/admin/doInputUserIncome",
-    		type:'post',
-	    	"dataType":"json",
-	    	success: function (r) {
-	    		if(r.result){
-	    			$("#modal-form").modal('hide');
-	    			_own.doQueryUserIncome(1);
-	    			$.gritter.add({
-						title: '添加员工收入信息成功',
-						text: '',
-						time:'1600',
-						class_name: 'gritter-success gritter-light'
-					});
-	    		}else{
-	    			$.gritter.add({
-						title: '添加员工收入出错',
-						text: r.msg,
-						time:'3700',
-						class_name: 'gritter-error gritter-light'
-					});
-	    		}
-	    	}
-		});
 	});
 };
 //查询用户下线

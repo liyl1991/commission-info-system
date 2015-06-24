@@ -1,0 +1,1 @@
+alter table t_user_income add column from_downline int COMMENT '来源下线';

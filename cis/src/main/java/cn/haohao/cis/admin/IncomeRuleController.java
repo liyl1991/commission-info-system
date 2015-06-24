@@ -1,6 +1,7 @@
 package cn.haohao.cis.admin;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ import cn.haohao.cis.rule.vo.VUserIncomeSettingQueryObj;
 import cn.haohao.cis.user.model.User;
 import cn.haohao.cis.user.service.IUserService;
 import cn.haohao.cis.user.vo.UserQueryObj;
+import cn.haohao.cis.utils.Arith;
 import cn.haohao.cis.utils.BaseUtils;
 import cn.haohao.cis.utils.Constants;
 import cn.haohao.cis.validate.DataValidater;
@@ -72,7 +74,9 @@ public class IncomeRuleController extends MultiActionController{
 			IncomeSettingQueryObj incomeSettingQueryObj = new IncomeSettingQueryObj();
 			incomeSettingQueryObj.setRuleId(0);
 			incomeSettingQueryObj.setStatus(1);
-			request.setAttribute("baseRuleSetting", this.incomeSettingService.getIncomeSetting(incomeSettingQueryObj));
+			IncomeSetting baseRulSetting = this.incomeSettingService.getIncomeSetting(incomeSettingQueryObj);
+			baseRulSetting.setProportion(Arith.mul(baseRulSetting.getProportion().floatValue(), 100F));
+			request.setAttribute("baseRuleSetting", baseRulSetting);
 			request.setAttribute("incomeRules", incomeRules);
 			request.setAttribute("reachSettings", reachSettings);
 			request.setAttribute("ruleMgrActive", Constants.ACTIVE_CLASS);
@@ -151,7 +155,7 @@ public class IncomeRuleController extends MultiActionController{
 	 * @param request
 	 */
 	@RequestMapping("/doUpdateIncomeRule")
-	public @ResponseBody Map<String,Object> doUpdateIncomeRule(HttpServletRequest request, IncomeSettingUpdateObj updateObj, Integer incomeRuleId){
+	public @ResponseBody Map<String,Object> doUpdateIncomeRule(HttpServletRequest request, IncomeSettingUpdateObj updateObj, Integer incomeRuleId,Integer usingFlag){
 		Map<String,Object> resMap = new HashMap<String,Object>();
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(!loginedUser.isAdmin())
@@ -170,17 +174,38 @@ public class IncomeRuleController extends MultiActionController{
 			incomeSettingQueryObj.setStatus(1);
 			incomeSettingQueryObj.setRuleId(incomeRuleId);
 			incomeSettingQueryObj.setSettingLevel(incomeSetting.getSettingLevel());
+			incomeSettingQueryObj.setType(1);
 			IncomeSetting oldSetting = this.incomeSettingService.getIncomeSetting(incomeSettingQueryObj);
-			if(oldSetting.getProportion().floatValue() != incomeSetting.getProportion().floatValue()){
+			if(Arith.mul(oldSetting.getProportion().floatValue(), 100F) != incomeSetting.getProportion().floatValue()){
 				IncomeSettingUpdateObj settingUpdateObj = new IncomeSettingUpdateObj();
 				settingUpdateObj.setSettingId(oldSetting.getSettingId());
-				settingUpdateObj.getNewUpdAttObj().setStatus(2);
-				settingUpdateObj.getNewUpdAttObj().setEndDate(BaseUtils.getFirstDayOnCurrentMonth());
-				incomeSetting.setStatus(1);
-				incomeSetting.setRuleId(incomeRuleId);
-				incomeSetting.setType(1);
-				incomeSetting.setUsingDate(BaseUtils.getFirstDayOnCurrentMonth());
-				this.incomeSettingService.updateDynamic(settingUpdateObj, incomeSetting);
+				Date usingDate = usingFlag == 1 ? BaseUtils.getFirstDayOnCurrentMonth() : BaseUtils.getFirstDayOnNextMonth();
+				if( oldSetting.getUsingDate().equals(usingDate)){
+					settingUpdateObj.getNewUpdAttObj().setProportion(Arith.div(incomeSetting.getProportion().floatValue(), 100F));
+					settingUpdateObj.getNewUpdAttObj().setUsingDate(usingDate);
+					this.incomeSettingService.updateDynamic(settingUpdateObj);
+				} else if(oldSetting.getUsingDate().after(usingDate)){ 
+					settingUpdateObj.getNewUpdAttObj().setProportion(Arith.div(incomeSetting.getProportion().floatValue(), 100F));
+					settingUpdateObj.getNewUpdAttObj().setUsingDate(usingDate);
+					
+					IncomeSettingUpdateObj olderUpdateObj = new IncomeSettingUpdateObj();
+					olderUpdateObj.setStatus(2);
+					olderUpdateObj.setRuleId(incomeRuleId);
+					olderUpdateObj.setSettingLevel(incomeSetting.getSettingLevel());
+					olderUpdateObj.setType(1);
+					olderUpdateObj.setEndDate(BaseUtils.getFirstDayOnNextMonth());
+					olderUpdateObj.getNewUpdAttObj().setEndDate(usingDate);
+					this.incomeSettingService.updateDynamic(settingUpdateObj, olderUpdateObj);
+				} else {
+					settingUpdateObj.getNewUpdAttObj().setStatus(2);
+					settingUpdateObj.getNewUpdAttObj().setEndDate(usingDate);
+					incomeSetting.setStatus(1);
+					incomeSetting.setRuleId(incomeRuleId);
+					incomeSetting.setType(1);
+					incomeSetting.setUsingDate(usingDate);
+					incomeSetting.setProportion(Arith.div(incomeSetting.getProportion().floatValue(), 100F));
+					this.incomeSettingService.updateDynamic(settingUpdateObj, incomeSetting);
+				}
 				updatedCnt++;
 			}
 		}
@@ -203,9 +228,9 @@ public class IncomeRuleController extends MultiActionController{
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(!loginedUser.isAdmin())
 			return resMap;
-		if( newProportion.floatValue() > 1F){
+		if( newProportion.floatValue() > 100F){
 			resMap.put("result", false);
-			resMap.put("msg", "比例设置不得大于1");
+			resMap.put("msg", "比例设置不得大于100");
 			return resMap;
 		}
 		IncomeSettingQueryObj incomeSettingQueryObj = new IncomeSettingQueryObj();
@@ -213,19 +238,23 @@ public class IncomeRuleController extends MultiActionController{
 		incomeSettingQueryObj.setStatus(1);
 		IncomeSetting oldSetting = this.incomeSettingService.getIncomeSetting(incomeSettingQueryObj);
 		Boolean updatedFlag = false;
-		if(oldSetting.getProportion().floatValue() != newProportion.floatValue()){
+		if(Arith.mul(oldSetting.getProportion().floatValue(), 100F) != newProportion.floatValue()){
 			IncomeSettingUpdateObj settingUpdateObj = new IncomeSettingUpdateObj();
 			settingUpdateObj.setSettingId(oldSetting.getSettingId());
-			settingUpdateObj.getNewUpdAttObj().setStatus(2);
-			settingUpdateObj.getNewUpdAttObj().setEndDate(BaseUtils.getFirstDayOnCurrentMonth());
-			IncomeSetting incomeSetting = new IncomeSetting();
-			incomeSetting.setStatus(1);
-			incomeSetting.setRuleId(0);
-			incomeSetting.setType(1);
-			incomeSetting.setProportion(newProportion);
-			incomeSetting.setSettingLevel("0");
-			incomeSetting.setUsingDate(BaseUtils.getFirstDayOnCurrentMonth());
-			this.incomeSettingService.updateDynamic(settingUpdateObj, incomeSetting);
+			if( oldSetting.getUsingDate().equals(BaseUtils.getFirstDayOnCurrentMonth()) ){
+				settingUpdateObj.getNewUpdAttObj().setProportion(Arith.div(newProportion, 100F));
+			} else {
+				settingUpdateObj.getNewUpdAttObj().setStatus(2);
+				settingUpdateObj.getNewUpdAttObj().setEndDate(BaseUtils.getFirstDayOnCurrentMonth());
+				IncomeSetting incomeSetting = new IncomeSetting();
+				incomeSetting.setStatus(1);
+				incomeSetting.setRuleId(0);
+				incomeSetting.setType(1);
+				incomeSetting.setProportion(Arith.div(newProportion, 100F));
+				incomeSetting.setSettingLevel("0");
+				incomeSetting.setUsingDate(BaseUtils.getFirstDayOnCurrentMonth());
+				this.incomeSettingService.updateDynamic(settingUpdateObj, incomeSetting);
+			}
 			updatedFlag = true;
 		}
 		resMap.put("updatedFlag", updatedFlag);

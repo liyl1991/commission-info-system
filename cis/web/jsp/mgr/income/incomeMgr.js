@@ -190,7 +190,7 @@ function doQuery(currentPage){
 				for(var i=0;i<r.content.length;i++){
 				$('<tr>'+
 				  '  <td title="'+r.content[i].idCard+'">'+
-					'	<a href="'+path+'/admin/goUserDetail/'+r.content[i].userId+'" title="点击查看详细">'+r.content[i].name+'</a>'+
+					'	<a href="'+path+'/userMgr/goUserDetail/'+r.content[i].userId+'" title="点击查看详细">'+r.content[i].name+'</a>'+
 					'</td>'+
 					'<td class="hidden-480">'+r.content[i].idCard+'</td>'+
 					'<td class="hidden-480">'+(r.content[i].sex=='1'?'男':(r.content[i].sex=='2'?'女':'保密'))+'</td>'+

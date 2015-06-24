@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 
 import cn.haohao.cis.rule.dao.IIncomeSettingDao;
@@ -14,7 +13,6 @@ import cn.haohao.cis.rule.model.IncomeSetting;
 import cn.haohao.cis.rule.model.SpecialSetting;
 import cn.haohao.cis.rule.vo.IncomeSettingQueryObj;
 import cn.haohao.cis.rule.vo.IncomeSettingUpdateObj;
-import cn.haohao.cis.rule.vo.SpecialSettingQueryObj;
 import cn.haohao.cis.utils.BaseUtils;
 
 @Service
@@ -94,20 +92,18 @@ public class IncomeSettingService implements IIncomeSettingService {
 		updateObj.getNewUpdAttObj().setStatus(2);
 		updateObj.getNewUpdAttObj().setEndDate(BaseUtils.getFirstDayOnCurrentMonth());
 		this.incomeSettingDao.updateDynamic(updateObj);
-		
-		SpecialSettingQueryObj specialSettingQueryObj = new SpecialSettingQueryObj();
+		/*SpecialSettingQueryObj specialSettingQueryObj = new SpecialSettingQueryObj();
 		specialSettingQueryObj.setSettingId(incomeSetting.getSettingId());
 		specialSettingQueryObj.setUserId(userId);
 		specialSettingQueryObj.setType(1);
-		this.specialSettingDao.delete(specialSettingQueryObj);
+		this.specialSettingDao.delete(specialSettingQueryObj);*/
 		
-		incomeSetting.setSettingId(null);
+		Integer settingId = this.incomeSettingDao.getSequence();
+		incomeSetting.setSettingId(settingId);
 		incomeSetting.setUsingDate(BaseUtils.getFirstDayOnCurrentMonth());
 		this.incomeSettingDao.create(incomeSetting);
-		
-		Integer newSettingId = this.incomeSettingDao.queryByArgs(incomeSetting).get(0).getSettingId();
 		SpecialSetting newSpecialSetting = new SpecialSetting();
-		newSpecialSetting.setSettingId(newSettingId);
+		newSpecialSetting.setSettingId(settingId);
 		newSpecialSetting.setUserId(userId);
 		newSpecialSetting.setType(1);
 		this.specialSettingDao.create(newSpecialSetting);
@@ -132,12 +128,18 @@ public class IncomeSettingService implements IIncomeSettingService {
 		updateObj.getNewUpdAttObj().setStatus(2);
 		this.incomeSettingDao.updateDynamic(updateObj);
 		
-		SpecialSetting delObj = new SpecialSetting();
+		/*SpecialSetting delObj = new SpecialSetting();
 		delObj.setUserId(userId);
 		delObj.setSettingId(incomeSetting.getSettingId());
 		delObj.setType(1);
-		this.specialSettingDao.delete(delObj);
+		this.specialSettingDao.delete(delObj);*/
 		
+	}
+
+	@Override
+	public void updateDynamic(IncomeSettingUpdateObj updateObj1,IncomeSettingUpdateObj updateObj2) {
+		this.incomeSettingDao.updateDynamic(updateObj1);
+		this.incomeSettingDao.updateDynamic(updateObj2);
 	}
 
 }
