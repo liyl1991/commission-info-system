@@ -94,6 +94,7 @@ public class UserIncomeService implements IUserIncomeService {
 				income.setPerformance(inputObj.getIncome());
 				income.setSettingId(user.getIncomeSetting().getSettingId());
 				income.setIncome(Arith.mul(inputObj.getIncome().floatValue(), user.getIncomeSetting().getProportion().floatValue()));
+				income.setFromDownline(xIncome.getUserId());
 				incomes.add(income);
 			}
 		} else {
@@ -103,20 +104,26 @@ public class UserIncomeService implements IUserIncomeService {
 			IncomeSetting baseSetting = this.incomeSettingDao.queryByArgs(incomeSettingQueryObj).get(0);
 			Float base = baseSetting.getProportion();
 			User userB = null;
-			for (User user : userUplineList) {
-				if( "B".equalsIgnoreCase(user.getLevel())){
-					userB = user;
+			for (int i = 0; i < userUplineList.size(); i++) {
+				if( "B".equalsIgnoreCase(userUplineList.get(i).getLevel())){
+					userB = userUplineList.get(i);
 				} else {
-					base = Arith.sub(base.floatValue(), user.getIncomeSetting().getProportion().floatValue());
+					base = Arith.sub(base.floatValue(), userUplineList.get(i).getIncomeSetting().getProportion().floatValue());
 					UserIncome income = new UserIncome();
 					income.setFromIncomeId(incomeId);
 					income.setIncomeDate(inputObj.getDate());
-					income.setUserId(user.getUserId());
+					income.setUserId(userUplineList.get(i).getUserId());
 					income.setPerformance(inputObj.getIncome());
-					income.setSettingId(user.getIncomeSetting().getSettingId());
-					income.setIncome( Arith.mul(inputObj.getIncome().floatValue(), user.getIncomeSetting().getProportion().floatValue()) );
+					income.setSettingId(userUplineList.get(i).getIncomeSetting().getSettingId());
+					income.setIncome( Arith.mul(inputObj.getIncome().floatValue(), userUplineList.get(i).getIncomeSetting().getProportion().floatValue()) );
+					if( i == 0 ){
+						income.setFromDownline(xIncome.getUserId());
+					} else {
+						income.setFromDownline(userUplineList.get( i - 1 ).getUserId());
+					}
 					incomes.add(income);
 				}
+				
 			}
 			if(base <= 0) 
 				throw new BusinessException("录入信息有误");
@@ -127,6 +134,7 @@ public class UserIncomeService implements IUserIncomeService {
 				income.setUserId(userB.getUserId());
 				income.setPerformance(inputObj.getIncome());
 				income.setIncome(Arith.mul(inputObj.getIncome().floatValue(), base.floatValue()));
+				income.setFromDownline(userUplineList.get(userUplineList.size() - 2).getUserId());
 				incomes.add(income);
 			}
 		}

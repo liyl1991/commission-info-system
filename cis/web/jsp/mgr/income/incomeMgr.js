@@ -188,16 +188,24 @@ function doQuery(currentPage){
 			if(r && r.content.length!=0){
 				$('.pagination').show();
 				for(var i=0;i<r.content.length;i++){
-				$('<tr>'+
-				  '  <td title="'+r.content[i].idCard+'">'+
-					'	<a href="'+path+'/userMgr/goUserDetail/'+r.content[i].userId+'" title="点击查看详细">'+r.content[i].name+'</a>'+
-					'</td>'+
-					'<td class="hidden-480">'+r.content[i].idCard+'</td>'+
-					'<td class="hidden-480">'+(r.content[i].sex=='1'?'男':(r.content[i].sex=='2'?'女':'保密'))+'</td>'+
-					'<td class="hidden-480">'+r.content[i].level+'级</td>'+
-					'<td>'+(r.content[i].income?r.content[i].income:'暂无数据')+'</td>'+
-					'<td>'+(r.content[i].performance?r.content[i].performance:'暂无数据')+'</td>'+
-				  '</tr>').appendTo('.container table tbody');
+					var htm = 
+					  '<tr>'+
+					  '  <td title="'+r.content[i].idCard+'">'+
+						'	<a href="'+path+'/userMgr/goUserDetail/'+r.content[i].userId+'" title="点击查看详细">'+r.content[i].name+'</a>'+
+						'</td>'+
+						'<td class="hidden-480">'+r.content[i].idCard+'</td>'+
+						'<td class="hidden-480">'+(r.content[i].sex=='1'?'男':(r.content[i].sex=='2'?'女':'保密'))+'</td>'+
+						'<td class="hidden-480">'+r.content[i].level+'级</td>'+
+						'<td>';
+					if(r.content[i].income){
+						htm += '<a class="goIncomeFromBtn" href="#" userId="'+r.content[i].userId+'" title="点击查看提成明细">' + r.content[i].income +'</a>';
+					} else {
+						htm +='暂无数据'
+					}
+					htm += '</td>'+
+						'<td>'+(r.content[i].performance?r.content[i].performance:'暂无数据')+'</td>'+
+					  '</tr>';
+					$(htm).appendTo('.container table tbody');
 				}
 				$('.pagination').jqPaginator('option', {
 					totalPages: r.totalPages
@@ -213,6 +221,14 @@ function doQuery(currentPage){
 			
 		}
 	});
+	
+	$('#userIncomeTable').on('click','.goIncomeFromBtn',function(){
+		var userId = $(this).attr('userId');
+		var year = $('#searchForm .year').val();
+		var month = $('#searchForm .month').val();
+		location.href = path+'/userIncomeMgr/goUserIncomeFrom/'+year+'/'+month+'/'+userId;
+	});
+	//+path+'/userIncomeMgr/goUserIncomeFrom
 }
 function initPagination(totalPages,current){//初始化分页栏
 	$(".pagination").jqPaginator({

@@ -67,6 +67,8 @@ public interface IReachSettingService {
 	 */
 	public void updateDynamic(ReachSettingUpdateObj updateObj);
 	
+	public void updateDynamic(ReachSettingUpdateObj updateObj, ReachSettingUpdateObj updateObj2);
+	
 	public void updateDynamic(ReachSetting oldSetting,Float modifyData);
 	/**
 	 * u-insert-b@note9.0@

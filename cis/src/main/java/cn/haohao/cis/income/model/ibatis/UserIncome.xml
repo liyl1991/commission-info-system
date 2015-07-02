@@ -10,6 +10,7 @@
 		<result property="performance" column="PERFORMANCE" />
 		<result property="settingId" column="SETTING_ID" />
 		<result property="fromIncomeId" column="FROM_INCOME_ID" />
+		<result property="fromDownline" column="FROM_DOWNLINE" />
 	</resultMap>
 	
 	<select id="UserIncome.getById" resultMap="UserIncomeResult">
@@ -31,6 +32,7 @@
 		   <if test="performance != null">and t.PERFORMANCE = #{performance}</if>
 		   <if test="settingId != null">and t.SETTING_ID = #{settingId}</if>
 		   <if test="fromIncomeId != null">and t.FROM_INCOME_ID = #{fromIncomeId}</if>
+		   <if test="fromDownline != null">and t.FROM_DOWNLINE = #{fromDownline}</if>
 	   </trim>
 	 </where>
 	</sql>
@@ -43,15 +45,15 @@
 	
 	<insert id="UserIncome.create">
 		<![CDATA[
-			insert into T_USER_INCOME (  INCOME_ID ,  USER_ID ,  INCOME_DATE ,  INCOME ,  PERFORMANCE ,  SETTING_ID ,  FROM_INCOME_ID   ) 
-			values (  #{incomeId} ,  #{userId} ,  #{incomeDate} ,  #{income} ,  #{performance} ,  #{settingId} ,  #{fromIncomeId}   )
+			insert into T_USER_INCOME (  INCOME_ID ,  USER_ID ,  INCOME_DATE ,  INCOME ,  PERFORMANCE ,  SETTING_ID ,  FROM_INCOME_ID , FROM_DOWNLINE ) 
+			values (  #{incomeId} ,  #{userId} ,  #{incomeDate} ,  #{income} ,  #{performance} ,  #{settingId} , #{fromIncomeId} ,#{fromDownline}   )
 		]]>
 	</insert>
 	
 	<update id="UserIncome.update">
 		<![CDATA[
 			update T_USER_INCOME set 
-			 INCOME_ID=#{incomeId} , USER_ID=#{userId} , INCOME_DATE=#{incomeDate} , INCOME=#{income} , PERFORMANCE=#{performance} , SETTING_ID=#{settingId} , FROM_INCOME_ID=#{fromIncomeId} 
+			 INCOME_ID=#{incomeId} , USER_ID=#{userId} , INCOME_DATE=#{incomeDate} , INCOME=#{income} , PERFORMANCE=#{performance} , SETTING_ID=#{settingId} , FROM_INCOME_ID=#{fromIncomeId}, t.FROM_DOWNLINE = #{fromDownline} 
 			where income_id = #{incomeId}
 		]]>
 	</update>
@@ -66,6 +68,7 @@
 			<if test="newUpdAttObj.performance != null">t.PERFORMANCE = #{newUpdAttObj.performance},</if>	
 			<if test="newUpdAttObj.settingId != null">t.SETTING_ID = #{newUpdAttObj.settingId},</if>	
 			<if test="newUpdAttObj.fromIncomeId != null">t.FROM_INCOME_ID = #{newUpdAttObj.fromIncomeId},</if>	
+			<if test="newUpdAttObj.fromDownline != null">t.FROM_DOWNLINE = #{newUpdAttObj.fromDownline},</if>	
 		</set>
 		<include refid="UserIncome.whereClause" />
 	</update>

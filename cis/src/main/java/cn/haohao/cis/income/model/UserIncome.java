@@ -51,6 +51,10 @@ public class UserIncome implements Serializable{
 	 * 提成来源id
 	 */
 	private java.lang.Integer fromIncomeId;
+	/*
+	 * 提成来源下级
+	 */
+	private Integer fromDownline;
 	//属性 end
 	
 	//方法 begin
@@ -59,6 +63,12 @@ public class UserIncome implements Serializable{
 	 */
 	public java.lang.Integer getIncomeId(){
 		return this.incomeId;
+	}
+	public Integer getFromDownline() {
+		return fromDownline;
+	}
+	public void setFromDownline(Integer fromDownline) {
+		this.fromDownline = fromDownline;
 	}
 	/*
 	 * 设置 收入信息id

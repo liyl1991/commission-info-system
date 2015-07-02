@@ -77,4 +77,10 @@ public class ReachSettingService implements IReachSettingService {
 		this.reachSettingDao.create(newSetting);
 		
 	}
+
+	@Override
+	public void updateDynamic(ReachSettingUpdateObj updateObj,ReachSettingUpdateObj updateObj2) {
+		this.reachSettingDao.updateDynamic(updateObj);
+		this.reachSettingDao.updateDynamic(updateObj2);
+	}
 }

@@ -15,18 +15,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.haohao.cis.income.model.UserIncome;
+import cn.haohao.cis.income.model.VuserFromDownlineDetail;
 import cn.haohao.cis.income.model.VuserIncome;
 import cn.haohao.cis.income.service.IUserIncomeService;
+import cn.haohao.cis.income.service.IVuserFromDownlineDetailService;
 import cn.haohao.cis.income.service.IVuserIncomeService;
 import cn.haohao.cis.income.vo.UserIncomeInputObj;
+import cn.haohao.cis.income.vo.VuserFromDownlineDetailQueryObj;
 import cn.haohao.cis.income.vo.VuserIncomeQueryObj;
 import cn.haohao.cis.rule.model.IncomeRule;
 import cn.haohao.cis.rule.model.IncomeSetting;
-import cn.haohao.cis.rule.model.VUserIncomeSetting;
 import cn.haohao.cis.rule.model.VspecialSetting;
 import cn.haohao.cis.rule.service.IIncomeRuleService;
 import cn.haohao.cis.rule.service.IIncomeSettingService;
@@ -34,7 +36,6 @@ import cn.haohao.cis.rule.service.IVUserIncomeSettingService;
 import cn.haohao.cis.rule.service.IVspecialSettingService;
 import cn.haohao.cis.rule.vo.IncomeRuleQueryObj;
 import cn.haohao.cis.rule.vo.IncomeSettingQueryObj;
-import cn.haohao.cis.rule.vo.VUserIncomeSettingQueryObj;
 import cn.haohao.cis.rule.vo.VspecialSettingQueryObj;
 import cn.haohao.cis.user.model.User;
 import cn.haohao.cis.user.service.IUserService;
@@ -62,6 +63,8 @@ public class UserIncomeMgrController extends MultiActionController{
 	private IIncomeSettingService incomeSettingService;
 	@Autowired
 	private IVuserIncomeService vuserIncomeService;
+	@Autowired
+	private IVuserFromDownlineDetailService vuserFromDownlineDetailService;
 	
 	private Log log = LogFactory.getLog("adminLog");
 	
@@ -92,6 +95,28 @@ public class UserIncomeMgrController extends MultiActionController{
 		return this.vuserIncomeService.pageQueryVuserIncome(queryObj);
 	}
 	
+	@RequestMapping("/goUserIncomeFrom/{year}/{month}/{userId}")
+	public String goUserIncomeFrom(HttpServletRequest request,@PathVariable Integer year,@PathVariable Integer month,@PathVariable Integer userId){
+		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
+		if(loginedUser.isAdmin()){
+			request.setAttribute("year", year);
+			request.setAttribute("month", month);
+			request.setAttribute("user", this.userService.getUserById(userId));
+			return "mgr/income/incomeFrom";
+		}
+		else
+			return "index";
+	}
+	
+	@RequestMapping("/getUserIncomeFrom")
+	public @ResponseBody Page<VuserFromDownlineDetail> getUserIncomeFrom(HttpServletRequest request, VuserFromDownlineDetailQueryObj queryObj, UserIncomeInputObj inputObj){
+		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
+		if(!loginedUser.isAdmin())
+			return null;
+		queryObj.setIncomeDate(inputObj.getDate());
+		
+		return this.vuserFromDownlineDetailService.pageQueryVuserFromDownlineDetail(queryObj);
+	}
 	/**
 	 * 获取x级员工各个上级的人员及提成比例
 	 * @param queryObj

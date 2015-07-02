@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="VuserFromDownlineDetail">
+	
+	<resultMap id="VuserFromDownlineDetailResult" type="cn.haohao.cis.income.model.VuserFromDownlineDetail">
+		<result property="userId" column="USER_ID" />
+		<result property="incomeDate" column="INCOME_DATE" />
+		<result property="fromDownline" column="FROM_DOWNLINE" />
+		<result property="income" column="INCOME" />
+		<result property="performance" column="PERFORMANCE" />
+		<result property="name" column="NAME" />
+		<result property="level" column="LEVEL" />
+		<result property="downlineName" column="DOWNLINE_NAME" />
+		<result property="downlineLevel" column="DOWNLINE_LEVEL" />
+	</resultMap>
+	
+	<select id="VuserFromDownlineDetail.getById" resultMap="VuserFromDownlineDetailResult">
+		<![CDATA[
+			select t.*
+			from V_USER_FROM_DOWNLINE_DETAIL t
+			where user_id = #{userId}
+		]]>
+	</select>
+
+		
+	<sql id="VuserFromDownlineDetail.whereClause">
+	 <where>
+	  <trim prefixOverrides="and">
+		   <if test="userId != null">and t.USER_ID = #{userId}</if>
+		   <if test="incomeDate != null">and t.INCOME_DATE = #{incomeDate}</if>
+		   <if test="fromDownline != null">and t.FROM_DOWNLINE = #{fromDownline}</if>
+		   <if test="income != null">and t.INCOME = #{income}</if>
+		   <if test="performance != null">and t.PERFORMANCE = #{performance}</if>
+		   <if test="name != null">and t.NAME = #{name}</if>
+		   <if test="level != null">and t.LEVEL = #{level}</if>
+		   <if test="downlineName != null">and t.DOWNLINE_NAME = #{downlineName}</if>
+		   <if test="downlineLevel != null">and t.DOWNLINE_LEVEL = #{downlineLevel}</if>
+	   </trim>
+	 </where>
+	</sql>
+	
+	<select id="VuserFromDownlineDetail.getSequence" resultType="java.lang.Long">
+		<![CDATA[
+			select SEQ_V_USER_FROM_DOWNLINE_DETAIL.nextval from dual
+		]]>
+	</select>
+	
+	<insert id="VuserFromDownlineDetail.create">
+		<![CDATA[
+			insert into V_USER_FROM_DOWNLINE_DETAIL (  USER_ID ,  INCOME_DATE ,  FROM_DOWNLINE ,  INCOME ,  PERFORMANCE ,  NAME ,  LEVEL ,  DOWNLINE_NAME ,  DOWNLINE_LEVEL   ) 
+			values (  #{userId} ,  #{incomeDate} ,  #{fromDownline} ,  #{income} ,  #{performance} ,  #{name} ,  #{level} ,  #{downlineName} ,  #{downlineLevel}   )
+		]]>
+	</insert>
+	
+	<update id="VuserFromDownlineDetail.update">
+		<![CDATA[
+			update V_USER_FROM_DOWNLINE_DETAIL set 
+			 USER_ID=#{userId} , INCOME_DATE=#{incomeDate} , FROM_DOWNLINE=#{fromDownline} , INCOME=#{income} , PERFORMANCE=#{performance} , NAME=#{name} , LEVEL=#{level} , DOWNLINE_NAME=#{downlineName} , DOWNLINE_LEVEL=#{downlineLevel} 
+			where user_id = #{userId}
+		]]>
+	</update>
+	
+	<update id="VuserFromDownlineDetail.updateDynamic">
+		update V_USER_FROM_DOWNLINE_DETAIL t 
+		<set>
+			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
+			<if test="newUpdAttObj.incomeDate != null">t.INCOME_DATE = #{newUpdAttObj.incomeDate},</if>	
+			<if test="newUpdAttObj.fromDownline != null">t.FROM_DOWNLINE = #{newUpdAttObj.fromDownline},</if>	
+			<if test="newUpdAttObj.income != null">t.INCOME = #{newUpdAttObj.income},</if>	
+			<if test="newUpdAttObj.performance != null">t.PERFORMANCE = #{newUpdAttObj.performance},</if>	
+			<if test="newUpdAttObj.name != null">t.NAME = #{newUpdAttObj.name},</if>	
+			<if test="newUpdAttObj.level != null">t.LEVEL = #{newUpdAttObj.level},</if>	
+			<if test="newUpdAttObj.downlineName != null">t.DOWNLINE_NAME = #{newUpdAttObj.downlineName},</if>	
+			<if test="newUpdAttObj.downlineLevel != null">t.DOWNLINE_LEVEL = #{newUpdAttObj.downlineLevel},</if>	
+		</set>
+		<include refid="VuserFromDownlineDetail.whereClause" />
+	</update>
+	
+	<delete id="VuserFromDownlineDetail.delete">
+		<![CDATA[
+		delete from V_USER_FROM_DOWNLINE_DETAIL t
+		]]>
+		<include refid="VuserFromDownlineDetail.whereClause" />
+	</delete>
+	
+	<select id="VuserFromDownlineDetail.queryByArgs" resultMap="VuserFromDownlineDetailResult">
+		<![CDATA[
+			select t.*
+		]]>
+		<![CDATA[
+			from V_USER_FROM_DOWNLINE_DETAIL t 
+		]]>
+		<include refid="VuserFromDownlineDetail.whereClause" />
+	</select>
+	
+	<select id="VuserFromDownlineDetail.pageCountByArgs" resultMap="VuserFromDownlineDetailResult">
+		<![CDATA[
+			select t.*
+		]]>
+			from V_USER_FROM_DOWNLINE_DETAIL t 
+		<include refid="VuserFromDownlineDetail.whereClause" />
+		<![CDATA[
+			limit #{startRowNum},#{pageSize}
+		]]>
+	</select>
+	
+	<select id="VuserFromDownlineDetail.pageCountByArgs.count" resultType="java.lang.Long">
+		select count(1) from V_USER_FROM_DOWNLINE_DETAIL t 
+		<include refid="VuserFromDownlineDetail.whereClause" />
+	</select>
+	
+	<select id="VuserFromDownlineDetail.countByArgs" resultType="java.lang.Long">
+		select count(1) from V_USER_FROM_DOWNLINE_DETAIL t 
+		<include refid="VuserFromDownlineDetail.whereClause" />
+	</select>
+</mapper>
