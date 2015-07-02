@@ -215,7 +215,7 @@ public class UserIncomeMgrController extends MultiActionController{
 			vspecialSettingQueryObj.setEffectiveDate(forDate);
 			List<VspecialSetting> specialSettings = this.vspecialService.queryVspecialSetting(vspecialSettingQueryObj);
 			if( BaseUtils.isListOnlyHasOne(specialSettings)){
-				list.get(0).setIncomeSetting(this.incomeSettingService.getIncomeSettingById(specialSettings.get(0).getUserId()));
+				list.get(0).setIncomeSetting(this.incomeSettingService.getIncomeSettingById(specialSettings.get(0).getSettingId()));
 			} else {
 				IncomeSettingQueryObj incomeSettingQueryObj = new IncomeSettingQueryObj();
 				incomeSettingQueryObj.setRuleId(rule.getRuleId());
