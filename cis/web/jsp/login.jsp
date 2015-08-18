@@ -39,7 +39,7 @@
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="text" maxlength="20" name="idCard" class="form-control" placeholder="身份证号" />
+															<input type="text" maxlength="20" name="loginName" class="form-control" placeholder="身份证号" />
 															<i class="icon-user"></i>
 														</span>
 													</label>
@@ -270,7 +270,7 @@
 			$(function(){
 				//登陆事件绑定
 				$(".loginBtn").click(function(){
-					var idCard = $("#loginForm input[name='idCard']").val();
+					var idCard = $("#loginForm input[name='loginName']").val();
 					var pwd = $("#loginForm input[name='password']").val();
 					if(idCard&&pwd)
 						$("#loginForm").submit();

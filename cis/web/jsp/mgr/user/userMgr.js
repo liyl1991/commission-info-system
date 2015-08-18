@@ -52,7 +52,8 @@ function doQuery(currentPage){
 			}
 				
 			$('.pagination').jqPaginator('option', {
-				totalPages: r.totalPages
+				totalPages: r.totalPages,
+				currentPage:currentPage?currentPage:1
 			});
 		},
 		error:function(){
@@ -61,15 +62,15 @@ function doQuery(currentPage){
 	});
 }
 function initPagination(totalPages,current){//初始化分页栏
-$(".pagination").jqPaginator({
-	totalPages: totalPages?totalPages:1,
-	visiblePages: 5,
-	currentPage: current?current:1,
-	first: '<li class="first"><a href="javascript:void(0);">首页<\/a><\/li>',
-	prev: '<li class="prev"><a href="javascript:void(0);"><i class="arrow arrow2"><\/i>上一页<\/a><\/li>',
-	next: '<li class="next"><a href="javascript:void(0);">下一页<i class="arrow arrow3"><\/i><\/a><\/li>',
-	last: '<li class="last"><a href="javascript:void(0);">末页<\/a><\/li>',
-	page: '<li class="page"><a href="javascript:void(0);">{{page}}<\/a><\/li>',
+	$(".pagination").jqPaginator({
+		totalPages: totalPages?totalPages:1,
+		visiblePages: 5,
+		currentPage: current?current:1,
+		first: '<li class="first"><a href="javascript:void(0);">首页<\/a><\/li>',
+		prev: '<li class="prev"><a href="javascript:void(0);"><i class="arrow arrow2"><\/i>上一页<\/a><\/li>',
+		next: '<li class="next"><a href="javascript:void(0);">下一页<i class="arrow arrow3"><\/i><\/a><\/li>',
+		last: '<li class="last"><a href="javascript:void(0);">末页<\/a><\/li>',
+		page: '<li class="page"><a href="javascript:void(0);">{{page}}<\/a><\/li>',
 		onPageChange: function (n) {
 			doQuery(n);
 		}
@@ -85,11 +86,8 @@ function doDelete(userId){
 			if(r.result)
 				doQuery();
 			else{
-				//alert(r.msg);
 				$.gritter.add({
-					// (string | mandatory) the heading of the notification
 					title: '删除失败',
-					// (string | mandatory) the text inside the notification
 					text: r.msg,
 					class_name: 'gritter-error gritter-light'
 					});

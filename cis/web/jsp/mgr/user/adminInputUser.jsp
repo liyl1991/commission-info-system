@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>员工管理</title>
+		<title>新员工录入</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
 		<link rel="stylesheet" href="<%=path %>/assets/css/jquery.gritter.css" />
 	</head>
@@ -52,95 +52,99 @@
 						</h1>
 					</div>
 					<div class="page-content">
-					<form id="inputUserForm" class="form-horizontal" role="form" method="post">
-						<div class="form-group" style="height: 34px;">
-							<label class="col-md-3 control-label no-padding-right" for="form-field-idcard"> 身份证 </label>
-							<div class="col-md-5">
-								<input type="text" name="idCard" id="form-field-idcard" class="col-md-5 form-control" />
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-3 control-label no-padding-right" for="form-field-name"> 姓名 </label>
-							<div class="col-md-5">
-								<input type="text" name="name" id="form-field-name" class="form-control" />
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-3 control-label no-padding-right" for="form-field-sex"> 性别 </label>
-							<div class="col-md-5">
-							  <div class="col-md-3">
-								<label>
-									<input type="radio" class="ace" name="sex" value="1" checked="checked"/>
-									<span class="lbl"> 男</span>
-								</label>
-							  </div>
-							  <div class="col-md-3">
-								<label>
-									<input type="radio" class="ace" name="sex" value="2"/>
-									<span class="lbl"> 女</span>
-								</label>
-							  </div>
-							  <div class="col-md-5">
-								<label>
-									<input type="radio" class="ace" name="sex" value="3"/>
-									<span class="lbl"> 保密</span>
-								</label>
-							  </div>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-md-3 control-label no-padding-right" for="form-field-level"> 等级 </label>
-							<div class="col-md-5">
-								<select class="form-control" id="form-field-level" name="level">
-									<option value="B">B</option>
-									<option value="C">C</option>
-									<option value="D">D</option>
-									<option value="E" selected="selected">E</option>
-									<option value="X">X</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-3 control-label no-padding-right" for="form-field-upline"> 员工上级 </label>
-							<div class="col-md-5">
-								<div class="col-md-12 no-padding-left">
-								<select name="uplineUser" class="col-md-12 chosen-select" id="form-field-upline" data-placeholder="">
-									<c:forEach items="${uplineCandidate }" var="candidate">
-										<option value="${candidate.userId }" <c:if test="${user.uplineUser == candidate.userId}">selected="selected"</c:if>>${candidate.name }(${candidate.level }级)</option>
-									</c:forEach>
-								</select>
+						<form id="inputUserForm" action="<%=path%>/userMgr/doInputUser" class="form-horizontal" role="form" method="post">
+							<div class="form-group" style="height: 34px;">
+								<label class="col-md-3 control-label no-padding-right" for="form-field-name"><span class="required-flag">*</span> 姓名 </label>
+								<div class="col-md-5">
+									<input type="text" name="name" id="form-field-name" maxlength="32" class="form-control" />
 								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-3 control-label no-padding-right" for="form-field-birth"> 出生时间 </label>
-							<div class="col-md-5">
-								<input type="text" value="1970年1月1日" data-date-format="yyyy年mm月dd" id="form-field-birth" class="form-control date-picker" />
-								<input type="hidden" name="birthday"/>
+							<div class="form-group">
+								<label class="col-md-3 control-label no-padding-right" for="form-field-sex"> 性别 </label>
+								<div class="col-md-5">
+								  <div class="col-md-3">
+									<label>
+										<input type="radio" class="ace" name="sex" value="1" checked="checked"/>
+										<span class="lbl"> 男</span>
+									</label>
+								  </div>
+								  <div class="col-md-3">
+									<label>
+										<input type="radio" class="ace" name="sex" value="2"/>
+										<span class="lbl"> 女</span>
+									</label>
+								  </div>
+								  <div class="col-md-5">
+									<label>
+										<input type="radio" class="ace" name="sex" value="3"/>
+										<span class="lbl"> 保密</span>
+									</label>
+								  </div>
+								</div>
+							</div>
+							<div class="form-group" style="height: 34px;">
+								<label class="col-md-3 control-label no-padding-right" for="form-field-idcard"><span class="required-flag">*</span>身份证 </label>
+								<div class="col-md-5">
+									<input type="text" name="idCard" id="form-field-idcard" maxlength="18" class="col-md-5 form-control" />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label no-padding-right" for="form-field-level"> 等级 </label>
+								<div class="col-md-5">
+									<select class="form-control" id="form-field-level" name="level">
+										<option value="B">B</option>
+										<option value="C">C</option>
+										<option value="D">D</option>
+										<option value="E" selected="selected">E</option>
+										<option value="X">X</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label no-padding-right" for="form-field-upline"> 员工上级 </label>
+								<div class="col-md-5">
+									<div class="col-md-12 no-padding-left">
+									<select name="uplineUser" class="col-md-12 chosen-select" id="form-field-upline" data-placeholder="">
+										<c:forEach items="${uplineCandidate }" var="candidate">
+											<option value="${candidate.userId }" <c:if test="${user.uplineUser == candidate.userId}">selected="selected"</c:if>>${candidate.name }(${candidate.level }级)</option>
+										</c:forEach>
+									</select>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="form-group">
+								<label class="col-md-3 control-label no-padding-right" for="form-field-birth"> 出生时间 </label>
+								<div class="col-md-5">
+									<input type="text" value="1970年1月1日" data-date-format="yyyy年mm月dd" id="form-field-birth" class="form-control date-picker" />
+									<input type="hidden" name="birthday"/>
+								</div>
+							</div> -->
+							<div class="form-group">
+								<label class="col-md-3 control-label no-padding-right" for="form-field-addr"> 住址 </label>
+								<div class="col-md-5">
+									<input type="text" name="address" id="form-field-addr" class="form-control" maxlength="255"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label no-padding-right" for="form-field-career"> 职业 </label>
+								<div class="col-md-5">
+									<input type="text" name="career" id="form-field-career" class="form-control" maxlength="128"/>
+								</div>
+							</div>
+						</form>
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<button class="btn btn-primary submitBtn" type="button">
+									<i class="icon-ok bigger-110"></i>
+									确认
+								</button>
+								<button class="btn btn-light" type="button" onclick="history.go(-1)">
+									<i class="icon-reply"></i>
+									返回
+								</button>
 							</div>
 						</div>
-						<div class="form-group">
-							<label class="col-md-3 control-label no-padding-right" for="form-field-addr"> 住址 </label>
-							<div class="col-md-5">
-								<input type="text" name="address" id="form-field-addr" class="form-control" />
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-3 control-label no-padding-right" for="form-field-career"> 职业 </label>
-							<div class="col-md-5">
-								<input type="text" name="career" id="form-field-career" class="form-control" />
-							</div>
-						</div>
-					</form>
-					<div class="clearfix form-actions">
-						<div class="col-md-offset-3 col-md-9">
-							<button class="btn btn-primary submitBtn" type="button">
-								<i class="icon-ok bigger-110"></i>
-								确认
-							</button>
-						</div>
-					</div>
 					<!-- 内容结束 -->
 					</div>
 				</div>
@@ -156,10 +160,10 @@
 		<script src="<%=path %>/jsp/mgr/user/adminInputUser.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			$(".chosen-select").chosen({no_results_text: "未找到匹配项"});
-			$('.date-picker').datepicker({autoclose:true}).on('changeDate', function(ev){
+			/* $('.date-picker').datepicker({autoclose:true}).on('changeDate', function(ev){
 				var dt = new Date(ev.date.valueOf());
 				$('input[name="birthday"]').val(dt);
-			}); 
+			});  */
 			var iu = new InputUser();
 			 //userDetail.showUserInfo();
 		</script>

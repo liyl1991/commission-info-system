@@ -58,18 +58,12 @@
 							<div id="home4" class="tab-pane in active">
 								<form id="updateUserForm" class="form-horizontal" role="form" method="post">
 									<input type="hidden" name="userId" value="${user.userId}"/>
+
 									<div class="form-group" style="height: 34px;">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-idcard">身份证号 </label>
-										<div class="col-sm-9">
-											<input type="text" name="idCard" value="${user.idCard}" id="form-field-idcard" class="col-xs-10 col-sm-5" />
-										</div>
-									</div>
-
-									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-name"> 姓名 </label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-name"><span class="required-flag">*</span>姓名 </label>
 
 										<div class="col-sm-9">
-											<input type="text" name="name" value="${user.name}" id="form-field-name" class="col-xs-10 col-sm-5" />
+											<input type="text" name="name" value="${user.name}" maxlength="32" id="form-field-name" class="col-xs-10 col-sm-5" />
 										</div>
 									</div>
 									
@@ -98,6 +92,12 @@
 										</div>
 									</div>
 									
+									<div class="form-group" style="height: 34px;">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-idcard"><span class="required-flag">*</span>身份证号 </label>
+										<div class="col-sm-9">
+											<input type="text" name="idCard" maxlength="18" value="${user.idCard}" id="form-field-idcard" class="col-xs-10 col-sm-5" />
+										</div>
+									</div>
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-level"> 等级 </label>
 										<div class="col-sm-9">
@@ -122,26 +122,26 @@
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
+									<%-- <div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-birth"> 出生时间 </label>
 
 										<div class="col-sm-9">
 											<input type="text" value="<fmt:formatDate value="${user.birthday }" pattern="yyyy年MM月dd日"/>" data-date-format="yyyy年mm月dd" id="form-field-birth" class="col-xs-10 col-sm-5 date-picker" />
 											<input type="hidden" name="birthday" value="${user.birthday }"/>
 										</div>
-									</div>
+									</div> --%>
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-addr"> 住址 </label>
 
 										<div class="col-sm-9">
-											<input type="text" name="address" value="${user.address}" id="form-field-addr" class="col-xs-10 col-sm-5" />
+											<input type="text" maxlength="255" name="address" value="${user.address}" id="form-field-addr" class="col-xs-10 col-sm-5" />
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-career"> 职业 </label>
 
 										<div class="col-sm-9">
-											<input type="text" name="career" value="${user.career}" id="form-field-career" class="col-xs-10 col-sm-5" />
+											<input type="text" name="career" maxlength="128" value="${user.career}" id="form-field-career" class="col-xs-10 col-sm-5" />
 										</div>
 									</div>
 								</form>
@@ -150,6 +150,10 @@
 											<button class="btn btn-primary submitUpdateBtn" type="button">
 												<i class="icon-ok bigger-110"></i>
 												修改
+											</button>
+											<button class="btn btn-light" type="button" onclick="history.go(-1)">
+												<i class="icon-reply"></i>
+												返回
 											</button>
 										</div>
 									</div>
@@ -214,16 +218,21 @@
 								</div>
 							</div>
 							<div class="col-md-10 column">
-								<table class="table table-hover table-bordered income-table">
+								<table class="table table-hover table-bordered income-table" id="userIncomeTable">
 									<thead>
 										<tr>
 											<th>月份</th>
 											<c:if test="${user.level eq 'X' }">
 												<th>创收</th>
 											</c:if>
-											<c:if test="${user.level != 'X' }">
+											<c:if test="${user.level eq 'B' }">
 												<th>收入</th>
 												<th>业绩</th>
+											</c:if>
+											<c:if test="${user.level eq 'C' || user.level eq 'D' ||user.level eq 'E'}">
+												<th>收入</th>
+												<th>业绩</th>
+												<th>达标指数</th>
 											</c:if>
 											<!-- <th>是否达标</th> -->
 											<!-- <th>操作</th> -->
@@ -264,14 +273,14 @@
 			var userId = ${user.userId};
 			var userDetail = new UserDetail(userId);
 			$(".chosen-select").chosen({no_results_text: "未找到匹配项"});
-			$('.date-picker').datepicker({autoclose:true}).on('changeDate', function(ev){
+			/* $('.date-picker').datepicker({autoclose:true}).on('changeDate', function(ev){
 				var dt = new Date(ev.date.valueOf());
 				$('input[name="birthday"]').val(dt);
 			});
 			$('.income-date-picker').datepicker({autoclose:true}).on('changeDate', function(ev){
 				var dt = new Date(ev.date.valueOf());
 				$('input[name="incomeDate"]').val(dt);
-			});
+			}); */
 			 //userDetail.showUserInfo();
 		</script>
 </body>

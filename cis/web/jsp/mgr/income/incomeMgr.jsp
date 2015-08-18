@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>员工管理</title>
+		<title>员工收入信息</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
 		<link rel="stylesheet" href="<%=path %>/assets/css/jquery.gritter.css" />
 	</head>
@@ -44,7 +44,7 @@
 											<div class="form-group col-md-3 no-margin">
 									          <label for="keyWordSearch" class="col-md-3 col-sm-2 control-label no-padding-left no-padding-right">搜索：</label>
 									          <div class="col-md-9 col-sm-8">
-									            <input type="text" name="nameOrIdCardLike" class="form-control input-sm" id="keyWordSearch" placeholder="姓名或者身份证"/>
+									            <input type="text" name="nameOrIdCardLike" maxlength="32" class="form-control input-sm" id="keyWordSearch" placeholder="姓名或者身份证"/>
 									          </div>
 									        </div>
 									        <div class="form-group col-md-3 no-margin">
@@ -146,7 +146,7 @@
 							<div class="form-group">
 								<label class="col-sm-4 control-label no-padding-right" for="form-field-income"> 创收 </label>
 								<div class="col-sm-8">
-									<input type="text" value="" id="form-field-income" class="col-xs-10 col-sm-6" placeholder="请输入创收金额"/>
+									<input type="text" maxlength="13" value="" id="form-field-income" class="col-xs-10 col-sm-6" placeholder="请输入创收金额"/>
 								</div>
 							</div>
 							<div class="form-group">

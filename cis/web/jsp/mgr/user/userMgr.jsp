@@ -43,7 +43,7 @@
 											<div class="form-group col-md-4 no-margin">
 									          <label for="keyWordSearch" class="col-md-3 col-sm-2 control-label no-padding-left no-padding-right">搜索：</label>
 									          <div class="col-md-9 col-sm-8">
-									            <input type="text" name="nameOrIdCardLike" class="form-control input-sm" id="keyWordSearch" placeholder="姓名或者身份证"/>
+									            <input maxlength="32" type="text" name="nameOrIdCardLike" class="form-control input-sm" id="keyWordSearch" placeholder="姓名或者身份证"/>
 									          </div>
 									        </div>
 									        <div class="form-group col-md-5 no-margin">

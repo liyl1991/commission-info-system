@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>个人首页</title>
+		<title>${downlineIncomeInfo.name }的收入信息</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
 		
 	</head>
@@ -84,12 +84,17 @@
 									<thead>
 										<tr>
 											<th>月份</th>
-											<c:if test="${downlineIncomeInfo.level eq 'X' }">
+											<c:if test="${loginedUser.level eq 'X' }">
 												<th>创收</th>
 											</c:if>
-											<c:if test="${downlineIncomeInfo.level != 'X' }">
+											<c:if test="${loginedUser.level eq 'B' }">
 												<th>收入</th>
 												<th>业绩</th>
+											</c:if>
+											<c:if test="${loginedUser.level eq 'C' || loginedUser.level eq 'D' ||loginedUser.level eq 'E'}">
+												<th>收入</th>
+												<th>业绩</th>
+												<th>达标指数</th>
 											</c:if>
 										</tr>
 									</thead>
@@ -129,17 +134,21 @@
 					$(".container table tbody tr").remove();
 					if(r.incomeList.content.length!=0){
 						$('.pagination').show();
-						for(var i=0;i<r.incomeList.content.length;i++){
-							var isEnough = r.incomeList.content[i].isEnough==1?'ok':'remove';
-							var statusClass = r.incomeList.content[i].isEnough==1?'success':'danger';
-							if(r.incomeList.content[i].incomeDate){
-								$('<tr class="'+statusClass+'">'+
-									'<td>'+formatDate(r.incomeList.content[i].incomeDate)+'</td>'+
-									(r.incomeList.content[i].level != 'X'?('<td>'+r.incomeList.content[i].income+'</td>'):'')+
-									'<td>'+r.incomeList.content[i].performance+'</td>'+
-									/* '<td><i class="icon-'+isEnough+'"></i></td>'+ */
-								  '</tr>').appendTo(".container table tbody");
+						var list = r.incomeList.content;
+						for(var i=0;i<list.length;i++){
+							var isEnough = list[i].isEnough==1?'ok':'remove';
+							var statusClass = '';
+							if(list[i].level !='X' && list[i].level != 'B'){
+								statusClass = list[i].performance >= list[i].reachPerformance?'success':'danger';
 							}
+							var tr =  '<tr class="'+statusClass+'">'+
+										'<td>'+formatDate(list[i].incomeDate)+'</td>'+
+										(list[i].level != 'X'?('<td>'+(list[i].income?('<a class="goIncomeFromBtn" href="#" userId="'+list[i].userId+'" title="点击查看提成明细">' + list[i].income +'</a>'):'暂无数据')+'</td>'):'')+
+										'<td>'+(list[i].performance?list[i].performance:'暂无数据')+'</td>';
+							if(list[i].level == 'C' || list[i].level == 'D' || list[i].level == 'E')
+								tr += '<td>'+(list[i].reachPerformance?list[i].reachPerformance:'暂无数据')+'</td>';
+							tr += '</tr>';
+							$(tr).appendTo(".container table tbody");
 						}
 						$('.pagination').jqPaginator('option', {
 							totalPages: r.incomeList.totalPages

@@ -1,9 +1,10 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <% String path = request.getContextPath();%>
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>个人首页</title>
+		<title>个人收入信息</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
 		
 	</head>
@@ -64,21 +65,22 @@
 								</div>
 							</div>
 							<div class="col-md-10 column">
-								<table class="table table-hover table-bordered">
+								<table class="table table-hover table-bordered" id="userIncomeTable">
 									<thead>
 										<tr>
-											<th>
-												月份
-											</th>
-											<th>
-												收入
-											</th>
-											<th>
-												业绩
-											</th>
-											<th>
-												是否达标
-											</th>
+											<th>月份</th>
+											<c:if test="${loginedUser.level eq 'X' }">
+												<th>创收</th>
+											</c:if>
+											<c:if test="${loginedUser.level eq 'B' }">
+												<th>收入</th>
+												<th>业绩</th>
+											</c:if>
+											<c:if test="${loginedUser.level eq 'C' || loginedUser.level eq 'D' ||loginedUser.level eq 'E'}">
+												<th>收入</th>
+												<th>业绩</th>
+												<th>达标指数</th>
+											</c:if>
 										</tr>
 									</thead>
 									<tbody></tbody>
@@ -100,6 +102,16 @@
 		<script type="text/javascript">
 		$(function(){
 			initPagination();
+			$('#userIncomeTable').on('click','.goIncomeFromBtn',function(){
+				var userId = $(this).attr('userId');
+				var $tr = $(this).closest('tr');
+				var dateStr = $tr.find('td:eq(0)').text();
+				dateStr = dateStr.replace('年',',');
+				dateStr = dateStr.replace('月','');
+				var year = dateStr.split(',')[0];
+				var month = dateStr.split(',')[1];
+				location.href = path+'/userIncome/goUserIncomeFrom/'+year+'/'+month+'/'+userId; 
+			});
 		});
 		function doQuery(currentPage){
 			var dataObj = { 
@@ -114,17 +126,21 @@
 					$(".container table tbody tr").remove();
 					if(r.incomeList.content.length!=0){
 						$('.pagination').show();
-						for(var i=0;i<r.incomeList.content.length;i++){
-							var isEnough = r.incomeList.content[i].isEnough==1?'ok':'remove';
-							var statusClass = r.incomeList.content[i].isEnough==1?'success':'danger';
-							if(r.incomeList.content[i].incomeDate){
-								$('<tr class="'+statusClass+'">'+
-									'<td>'+formatDate(r.incomeList.content[i].incomeDate)+'</td>'+
-									'<td>'+r.incomeList.content[i].income+'</td>'+
-									'<td>'+r.incomeList.content[i].performance+'</td>'+
-									'<td><i class="icon-'+isEnough+'"></i></td>'+
-								  '</tr>').appendTo(".container table tbody");
+						var list = r.incomeList.content;
+						for(var i=0;i<list.length;i++){
+							var isEnough = list[i].isEnough==1?'ok':'remove';
+							var statusClass = '';
+							if(list[i].level !='X' && list[i].level != 'B'){
+								statusClass = list[i].performance >= list[i].reachPerformance?'success':'danger';
 							}
+							var tr =  '<tr class="'+statusClass+'">'+
+										'<td>'+formatDate(list[i].incomeDate)+'</td>'+
+										(list[i].level != 'X'?('<td>'+(list[i].income?('<a class="goIncomeFromBtn" href="#" userId="'+list[i].userId+'" title="点击查看提成明细">' + list[i].income +'</a>'):'暂无数据')+'</td>'):'')+
+										'<td>'+(list[i].performance?list[i].performance:'暂无数据')+'</td>';
+							if(list[i].level == 'C' || list[i].level == 'D' || list[i].level == 'E')
+								tr += '<td>'+(list[i].reachPerformance?list[i].reachPerformance:'暂无数据')+'</td>';
+							tr += '</tr>';
+							$(tr).appendTo(".container table tbody");
 						}
 						$('.pagination').jqPaginator('option', {
 							totalPages: r.incomeList.totalPages

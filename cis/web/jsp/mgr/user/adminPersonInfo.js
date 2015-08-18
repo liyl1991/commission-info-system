@@ -92,6 +92,17 @@ UserDetail.prototype.init = function(){
 			return;
 		}
 	});
+	
+	$('#userIncomeTable').on('click','.goIncomeFromBtn',function(){
+		var userId = $(this).attr('userId');
+		var $tr = $(this).closest('tr');
+		var dateStr = $tr.find('td:eq(0)').text();
+		dateStr = dateStr.replace('年',',');
+		dateStr = dateStr.replace('月','');
+		var year = dateStr.split(',')[0];
+		var month = dateStr.split(',')[1];
+		location.href = path+'/userIncomeMgr/goUserIncomeFrom/'+year+'/'+month+'/'+userId+'/1';
+	});
 };
 //查询用户下线
 UserDetail.prototype.doQueryUserdownlines = function(pageNo){
@@ -153,15 +164,21 @@ UserDetail.prototype.doQueryUserIncome = function(pageNo){
 			$(".income-table tbody tr").remove();
 			if(r.incomeList.content.length!=0){
 				$('#dropdown14 .pagination').show();
-				for(var i=0;i<r.incomeList.content.length;i++){
-					var isEnough = r.incomeList.content[i].isEnough==1?'ok':'remove';
-					var statusClass = r.incomeList.content[i].isEnough==1?'success':'danger';
-					$('<tr class="'+statusClass+'">'+
-						'<td>'+formatDate(r.incomeList.content[i].incomeDate)+'</td>'+
-						(r.incomeList.content[i].level != 'X'?('<td>'+r.incomeList.content[i].income+'</td>'):'')+
-						'<td>'+(r.incomeList.content[i].performance?("￥"+r.incomeList.content[i].performance):'暂无数据')+'</td>'+
-						/*'<td><i class="icon-'+isEnough+'"></i></td>'+*/
-					  '</tr>').appendTo(".income-table tbody");
+				var list = r.incomeList.content;
+				for(var i=0;i<list.length;i++){
+					var isEnough = list[i].isEnough==1?'ok':'remove';
+					var statusClass = '';
+					if(list[i].level !='X' && list[i].level != 'B'){
+						statusClass = list[i].performance >= list[i].reachPerformance?'success':'danger';
+					}
+					var tr =  '<tr class="'+statusClass+'">'+
+								'<td>'+formatDate(list[i].incomeDate)+'</td>'+
+								(list[i].level != 'X'?('<td>'+(list[i].income?('<a class="goIncomeFromBtn" href="#" userId="'+list[i].userId+'" title="点击查看提成明细">' + list[i].income +'</a>'):'暂无数据')+'</td>'):'')+
+								'<td>'+(list[i].performance?list[i].performance:'暂无数据')+'</td>';
+					if(list[i].level == 'C' || list[i].level == 'D' || list[i].level == 'E')
+						tr += '<td>'+(list[i].reachPerformance?list[i].reachPerformance:'暂无数据')+'</td>';
+					tr += '</tr>';
+					$(tr).appendTo(".income-table tbody");
 				}
 			}
 			else{

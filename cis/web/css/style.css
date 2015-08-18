@@ -75,9 +75,17 @@
 .user-list-content{
 	height: 100%;
 }
-
-
-
+#noticeContainer{
+	white-space: pre-wrap;
+	word-break:break-all;
+}
+.required-flag{
+	color: red;
+}
+#successInputedUserTable td.bg-info{
+	background-color: #EDF3F4;
+	text-align: right;
+}
 
 
 

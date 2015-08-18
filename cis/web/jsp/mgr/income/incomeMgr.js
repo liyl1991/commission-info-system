@@ -11,6 +11,14 @@ $(function(){
 		reloadUserUplines();
 	});
 	$('#form-field-income').on('blur',calculateIncome);
+	$('#form-field-income').on('keyup', function(e){
+		var v = $(this).val();
+		if(isNaN(v)){
+			$(this).val(v.substring(0, v.length - 1));
+		} else {
+			calculateIncome();
+		}
+	});
 	
 	$('.submitIncomeBtn').on('click',function(){
 		var now = new Date();
@@ -39,6 +47,14 @@ $(function(){
 			$.gritter.add({
 				title: '操作失败',
 				text: '请输入正确的金额',
+				time:'5700',
+				class_name: 'gritter-error gritter-light'
+			});
+			return;
+		} else if( val >= 1000000000){
+			$.gritter.add({
+				title: '操作失败',
+				text: '金额必须小于1,000,000,000',
 				time:'5700',
 				class_name: 'gritter-error gritter-light'
 			});
@@ -99,6 +115,14 @@ function calculateIncome(){
 			class_name: 'gritter-error gritter-light'
 		});
 		$('#form-field-income').val('')[0].focus();
+		return;
+	} else if( val >= 1000000000){
+		$.gritter.add({
+			title: '操作失败',
+			text: '金额必须小于1,000,000,000',
+			time:'5700',
+			class_name: 'gritter-error gritter-light'
+		});
 		return;
 	}
 	var currentRule = $('.upline-users').data('currentRule');
@@ -208,7 +232,8 @@ function doQuery(currentPage){
 					$(htm).appendTo('.container table tbody');
 				}
 				$('.pagination').jqPaginator('option', {
-					totalPages: r.totalPages
+					totalPages: r.totalPages,
+					'currentPage' : currentPage?currentPage:1
 				});
 			}else{
 				$('.pagination').hide();
@@ -226,7 +251,7 @@ function doQuery(currentPage){
 		var userId = $(this).attr('userId');
 		var year = $('#searchForm .year').val();
 		var month = $('#searchForm .month').val();
-		location.href = path+'/userIncomeMgr/goUserIncomeFrom/'+year+'/'+month+'/'+userId;
+		location.href = path+'/userIncomeMgr/goUserIncomeFrom/'+year+'/'+month+'/'+userId+'/2';
 	});
 	//+path+'/userIncomeMgr/goUserIncomeFrom
 }

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>提成明细</title>
+		<title>提成明细-${year}月${month }日</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
 		<link rel="stylesheet" href="<%=path %>/assets/css/jquery.gritter.css" />
 	</head>
@@ -32,20 +32,14 @@
 								<i class="icon-home home-icon"></i>
 								<a href="#">首页</a>
 							</li>
-							<c:if test="${type == 1 }">
-								<li><a href="<%=path%>/userMgr/goUserMgr">员工管理</a></li>
-								<li><a href="<%=path%>/userMgr/goUserDetail/${user.userId}">员工详情</a></li>
-							</c:if>
-							<c:if test="${type == 2 }">
-								<li><a href="<%=path%>/userIncomeMgr/goIncomeMgr">员工收入</a></li>
-							</c:if>
+							<li><a href="<%=path%>/userIncome/goIncomeInfo">收入与业绩</a></li>
 							<li class="active">提成明细</li>
 						</ul><!-- .breadcrumb -->
 					</div>
 					<div class="container">
 						<div class="page-header">
 							<h1>
-								${user.name }的提成明细
+								${loginedUser.name }的提成明细
 								<small>
 									<i class="icon-double-angle-right"></i>
 									${year}年${month }月
@@ -86,7 +80,6 @@
 	<script src="<%=path %>/assets/js/jquery.gritter.min.js"></script>
 	<script src="<%=path %>/assets/js/chosen.jquery.min.js"></script>
 	<script type="text/javascript">
-	var userId = ${user.userId};
 	var year = ${year};
 	var month = ${month};
 	$(function(){
@@ -95,12 +88,11 @@
 	
 	function doQuery(currentPage){
 		var dataObj = { 
-				"userId":userId,
 				"year":year,
 				"month":month,
 				}; 
 		$.ajax({
-			url:path+'/userIncomeMgr/getUserIncomeFrom',
+			url:path+'/userIncome/getUserIncomeFrom',
 			type:"post",
 			dataType:"json",
 			data:dataObj,

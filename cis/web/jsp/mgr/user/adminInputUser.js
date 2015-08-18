@@ -17,12 +17,13 @@ InputUser.prototype.init = function(){
 	    	"dataType":"json",
 	    	success: function (r) {
 	    		if(r.result){
-	    			$.gritter.add({
+	    			location.href = path + '/userMgr/goInputSuccess/' + r.user.userId;
+	    			/*$.gritter.add({
 						title: '新增员工信息成功',
 						text: '',
 						time:'1600',
 						class_name: 'gritter-success gritter-light'
-					});
+					});*/
 	    		}else{
 	    			$.gritter.add({
 						title: '新增员工信息出错',
@@ -33,6 +34,23 @@ InputUser.prototype.init = function(){
 	    		}
 	    	}
 		});
+	});
+	//修改等级事件
+	$('#form-field-level').on('change',function(){
+		var lvl = $(this).val();
+		var dtime = (new Date()).getTime();
+		var data = {'level':lvl, 'dtime':dtime};
+		$('.chosen-select').html('');
+		$('.chosen-select').chosen('destroy');
+		$.get(path + '/userMgr/getListorUpSelect', data, function(r){
+			for(var i = 0 ; i < r.length; i++){
+				var option = '<option value="'+ r[i].userId +'">'+
+								r[i].name + '(' + r[i].level +')'+
+							 '</option>';
+				$(option).appendTo('.chosen-select');
+			}
+			$('.chosen-select').chosen({no_results_text: "未找到匹配项"});
+		}, 'json');
 	});
 };
 

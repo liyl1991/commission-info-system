@@ -4,21 +4,21 @@
 <!--[if !IE]> -->
 
 <script type="text/javascript">
-	window.jQuery || document.write("<script src='"+path+"/assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+	window.jQuery || document.write("<script src='http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>"+"<"+"script>");
 </script>
 
 <!-- <![endif]-->
 
 <!--[if IE]>
 <script type="text/javascript">
- window.jQuery || document.write("<script src='"+path+"/assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+ window.jQuery || document.write("<script src='http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>"+"<"+"script>");
 </script>
 <![endif]-->
 
 <script type="text/javascript">
 	if("ontouchend" in document) document.write("<script src='"+path+"/assets/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
 </script>
-<script src="<%=path %>/assets/js/bootstrap.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script src="<%=path %>/assets/js/typeahead-bs2.min.js"></script>
 
 <!-- page specific plugin scripts -->

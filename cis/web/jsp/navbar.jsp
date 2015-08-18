@@ -11,7 +11,7 @@
 			<a href="#" class="navbar-brand">
 				<small>
 					<i class="icon-leaf"></i>
-					后台管理系统
+					经纪人系统
 				</small>
 			</a><!-- /.brand -->
 		</div><!-- /.navbar-header -->
