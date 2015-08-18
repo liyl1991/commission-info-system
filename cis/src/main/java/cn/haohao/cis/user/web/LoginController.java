@@ -35,9 +35,10 @@ public class LoginController extends MultiActionController{
 	private IAuditInfoService auditInfoService;
 	private Log log = LogFactory.getLog("adminLog");
 	@RequestMapping("/doLogin")
-	public String doLogin(UserQueryObj loginInfo ,HttpServletRequest request){
-		if(StringUtils.isNotEmpty(loginInfo.getPassword())){
+	public String doLogin(UserQueryObj loginInfo, String loginName, HttpServletRequest request){
+		if(StringUtils.isNotEmpty(loginInfo.getPassword()) && StringUtils.isNotEmpty(loginName)){
 			loginInfo.setPassword(MD5Encoder.encode(loginInfo.getPassword()));
+			loginInfo.setIdCard(loginName);
 			List<User> user = this.userService.queryUser(loginInfo);
 			if(user.size()==1){
 				User current = user.get(0);

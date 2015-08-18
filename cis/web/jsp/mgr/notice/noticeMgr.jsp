@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>员工管理</title>
+		<title>公告管理</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
 		<link rel="stylesheet" href="<%=path %>/assets/css/jquery.gritter.css" />
 	</head>
@@ -35,7 +35,7 @@
 						</ul><!-- .breadcrumb -->
 						<div class="nav-search minimized">
 							<span class="input-icon">
-								<input type="text" autocomplete="off" class="input-small nav-search-input" id="searchField" placeholder="公告搜索" />
+								<input type="text" maxlength="255" autocomplete="off" class="input-small nav-search-input" id="searchField" placeholder="公告搜索" />
 								<i class="icon-search nav-search-icon"></i>
 							</span>
 						</div>
@@ -47,7 +47,7 @@
 									公告列表
 									<small>
 										<i class="icon-double-angle-right"></i>
-										<a href="<%=path%>/noticeMgr/goLaunchNotice">发布新公告</a>
+										<a class="btn btn-xs btn-purple" href="<%=path%>/noticeMgr/goLaunchNotice">发布新公告</a>
 									</small>
 								</h1>
 							</div><!-- /.page-header -->

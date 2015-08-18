@@ -56,6 +56,23 @@ public class UserMgrController extends MultiActionController{
 			return "index";
 	}
 	/**
+	 * 至员工管理页 
+	 * @param request
+	 */
+	@RequestMapping("/goInputSuccess/{userId}")
+	public String goInputSuccess(HttpServletRequest request, @PathVariable Integer userId){
+		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
+		if(loginedUser.isAdmin()){
+			request.setAttribute("adminMgrActive", Constants.ACTIVE_CLASS);
+			User current = this.userService.getUserById(userId);
+			request.setAttribute("user", current);
+			request.setAttribute("upline", this.userService.getUserById(current.getUplineUser()));
+			return "mgr/user/inputUserSuccess";
+		}
+		else
+			return "index";
+	}
+	/**
 	 * 获取员工信息列表
 	 * @param queryObj
 	 * @param request
@@ -134,7 +151,7 @@ public class UserMgrController extends MultiActionController{
 		//上月记录
 		queryObj = new VuserIncomeQueryObj();
 		queryObj.setUserId(userId);
-		queryObj.setIncomeDate(BaseUtils.getFirstDayOnPreMonth());
+		queryObj.setIncomeDate(BaseUtils.getSecondDayOnPreMonth());
 		List<VuserIncome> list = this.vuserIncomeService.queryVuserIncome(queryObj);
 		if(list != null && list.size() == 1)
 			resMap.put("preIncome", list.get(0));
@@ -203,7 +220,7 @@ public class UserMgrController extends MultiActionController{
 	}
 	
 	@RequestMapping("/goInputUser")
-	public String doInputUser(HttpServletRequest request){
+	public String goInputUser(HttpServletRequest request){
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(!loginedUser.isAdmin())
 			return "index";
@@ -211,13 +228,30 @@ public class UserMgrController extends MultiActionController{
 		request.setAttribute("adminMgrActive", Constants.ACTIVE_CLASS);
 		UserQueryObj queryObj = new UserQueryObj();
 		queryObj.setStatus(1);
-		queryObj.setLevelNotEq("X");//x级不可能为上级
+		queryObj.setLevelLt(Constants.USER_LEVEL_E);
+		//queryObj.setLevelNotEq("X");//x级不可能为上级
 		request.setAttribute("uplineCandidate", this.userService.queryUser(queryObj));
 		return "mgr/user/adminInputUser";
 	}
 	
+	@RequestMapping("/getListorUpSelect")
+	public @ResponseBody List<User> getListorUpSelect(HttpServletRequest request, String level){
+		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
+		if(!loginedUser.isAdmin()){
+			return null;
+		}
+		//选中菜单设定
+		UserQueryObj queryObj = new UserQueryObj();
+		queryObj.setStatus(1);
+		queryObj.setLevelLt(level);
+		if(!Constants.USER_LEVEL_B.equalsIgnoreCase(level)){
+			queryObj.setLevelNotEq(Constants.USER_LEVEL_A);
+		}
+		return this.userService.queryUser(queryObj);
+	}
+	
 	@RequestMapping("/doInputUser")
-	public @ResponseBody Map<String,Object> goInputUser(User user,HttpServletRequest request){
+	public @ResponseBody Map<String,Object> doInputUser(User user,HttpServletRequest request){
 		Map<String,Object> resMap = new HashMap<String,Object>();
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(!loginedUser.isAdmin()){
@@ -230,6 +264,7 @@ public class UserMgrController extends MultiActionController{
 			user.setUserRole(1);
 			user.setPassword(MD5Encoder.encode(Constants.DEFAULT_PASSWORD));
 			user = this.userService.createUser(user);
+			resMap.put("user", user);
 			resMap.put("result", true);
 			this.log.info(loginedUser.getName()+"-新增用户->"+user.getName()+"["+user.getIdCard()+"]");
 		}catch(BusinessException be){

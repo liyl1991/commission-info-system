@@ -1,10 +1,9 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
 <% String path = request.getContextPath();%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>员工管理</title>
+		<title>发布新公告</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
 		<link rel="stylesheet" href="<%=path %>/assets/css/jquery.gritter.css" />
 		<script src="<%=path %>/assets/js/ace-extra.min.js"></script>
@@ -34,7 +33,7 @@
 								<a href="#">首页</a>
 							</li>
 							<li class="active"><a href="<%=path%>/noticeMgr/goNoticeMgr">公告管理</a></li>
-							<li class="active">公告修改</li>
+							<li class="active">发布公告</li>
 						</ul><!-- .breadcrumb -->
 					</div>
 					<div class="container">
@@ -44,24 +43,23 @@
 							<div class="row form-elements">
 								<label class="no-padding-left" for="form-field-title">标题：</label>
 								<div class="no-padding-left">
-									<input type="hidden" value="${notice.noticeId }" name="noticeId"/>
-									<input type="text" value="${notice.title }" name="title" id="form-field-title"/>
+									<input type="text" name="title" maxlength="255" id="form-field-title"/>
 								</div>
 							</div>
 							<div class="space-4"></div>
 							<div class="row">
-								<div class="wysiwyg-editor" id="editor">${notice.content }</div>
+								<div class="wysiwyg-editor" id="editor"></div>
 							</div>
 							<div class="row">
 								<div class="checkbox no-padding-left">
 									<label>
-										<input name="form-field-checkbox" type="checkbox" class="ace" id="isTop" <c:if test="${notice.topFlag ==1 }">checked="checked"</c:if>/>
+										<input name="form-field-checkbox" type="checkbox" class="ace" id="isTop"/>
 										<span class="lbl"> 置顶</span>
 									</label>
 								</div>
 							</div>
 							<div>
-								<a class="btn btn-primary" href="#" id="launchNoticeBtn">修改</a>
+								<a class="btn btn-primary" href="#" id="launchNoticeBtn">发布</a>
 							</div>
 						</div>
 					</div>
@@ -79,9 +77,8 @@
 		<script type="text/javascript">
 		$(function(){
 			$('#launchNoticeBtn').click(function(){
-				var id = $('input[name="noticeId"]').val();
 				var title = $('input[name="title"]').val();
-				var content = $('#editor').html(); 
+				var content = $('#editor').html();
 				var topFlag = ($('#isTop').prop('checked')?1:2);
 				if(!title){
 					$.gritter.add({
@@ -93,23 +90,19 @@
 					return;
 				}
 				$.ajax({
-					'url':path+'/noticeMgr/doUpdateNotice',
+					'url':path+'/noticeMgr/doLaunchNotice',
 					'type':'post',
 					'dataType':'json',
-					'data':{'noticeId':id,'title':title,'content':content,'topFlag':topFlag},
+					'data':{'title':title,'content':content,'topFlag':topFlag},
 					'success':function(r){
 						if(r.result)
-							$.gritter.add({
-								title: '公告修改成功',
-								text: '',
-								class_name: 'gritter-success gritter-light'
-							});
+							location.href = path + "/noticeMgr/goNoticeMgr";
 						else{
 							$.gritter.add({
-								title: '公告修改失败',
+								title: '发布公告失败',
 								text: r.msg,
 								class_name: 'gritter-error gritter-light'
-							});
+								});
 						}
 					},
 					'error':function(){

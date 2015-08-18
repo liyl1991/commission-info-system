@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.haohao.cis.income.model.VuserFromDownlineDetail;
 import cn.haohao.cis.income.model.VuserIncome;
 import cn.haohao.cis.income.service.IUserIncomeService;
+import cn.haohao.cis.income.service.IVuserFromDownlineDetailService;
 import cn.haohao.cis.income.service.IVuserIncomeService;
+import cn.haohao.cis.income.vo.UserIncomeInputObj;
+import cn.haohao.cis.income.vo.VuserFromDownlineDetailQueryObj;
 import cn.haohao.cis.income.vo.VuserIncomeQueryObj;
 import cn.haohao.cis.user.model.User;
 import cn.haohao.cis.user.service.IUserService;
@@ -33,6 +37,8 @@ public class UserIncomeController extends MultiActionController{
 	private IVuserIncomeService vuserIncomeService;
 	@Autowired
 	private IUserService userService;
+	@Autowired
+	private IVuserFromDownlineDetailService vuserFromDownlineDetailService;
 	
 	@RequestMapping("/getIncomeInfo")
 	public @ResponseBody Map<String,Object> getIncomeInfo(VuserIncomeQueryObj queryObj,HttpServletRequest request){
@@ -45,7 +51,7 @@ public class UserIncomeController extends MultiActionController{
 		//上月记录
 		queryObj = new VuserIncomeQueryObj();
 		queryObj.setUserId(loginedUser.getUserId());
-		queryObj.setIncomeDate(BaseUtils.getFirstDayOnPreMonth());
+		queryObj.setIncomeDate(BaseUtils.getSecondDayOnPreMonth());
 		List<VuserIncome> list = this.vuserIncomeService.queryVuserIncome(queryObj);
 		if(list != null && list.size() == 1)
 			resMap.put("preIncome", list.get(0));
@@ -70,13 +76,12 @@ public class UserIncomeController extends MultiActionController{
 		//上月记录
 		queryObj = new VuserIncomeQueryObj();
 		queryObj.setUserId(userId);
-		queryObj.setIncomeDate(BaseUtils.getFirstDayOnPreMonth());
+		queryObj.setIncomeDate(BaseUtils.getSecondDayOnPreMonth());
 		List<VuserIncome> list = this.vuserIncomeService.queryVuserIncome(queryObj);
 		if(list != null && list.size() == 1)
 			resMap.put("preIncome", list.get(0));
 		//总记录
 		resMap.put("incomeSum", this.vuserIncomeService.getIncomeSum(userId));
-		
 		return resMap;
 	}
 	
@@ -97,5 +102,20 @@ public class UserIncomeController extends MultiActionController{
 	public String goIndex(HttpServletRequest request){
 		request.setAttribute("indexActive", Constants.ACTIVE_CLASS);
 		return "incomeInfo";
+	}
+	
+	@RequestMapping("/goUserIncomeFrom/{year}/{month}/{userId}")
+	public String goUserIncomeFrom(HttpServletRequest request,@PathVariable Integer year, @PathVariable Integer month, @PathVariable Integer userId){
+		request.setAttribute("year", year);
+		request.setAttribute("month", month);
+		return "incomeFrom";
+	}
+	
+	@RequestMapping("/getUserIncomeFrom")
+	public @ResponseBody Page<VuserFromDownlineDetail> getUserIncomeFrom(HttpServletRequest request, VuserFromDownlineDetailQueryObj queryObj, UserIncomeInputObj inputObj){
+		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
+		queryObj.setIncomeDate(inputObj.getDate());
+		queryObj.setUserId(loginedUser.getUserId());
+		return this.vuserFromDownlineDetailService.pageQueryVuserFromDownlineDetail(queryObj);
 	}
 }

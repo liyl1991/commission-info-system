@@ -90,7 +90,10 @@ public class VuserIncome implements Serializable{
 	 * performance
 	 */
 	private java.lang.Float performance;
-	
+	/*
+	 * 达标业绩值
+	 */
+	private java.lang.Float reachPerformance;
 	private Integer status;
 	//属性 end
 	
@@ -304,6 +307,12 @@ public class VuserIncome implements Serializable{
 	public Long getId(){
 		if (userId==null) return null;
 		return Long.valueOf(this.userId);
+	}
+	public java.lang.Float getReachPerformance() {
+		return reachPerformance;
+	}
+	public void setReachPerformance(java.lang.Float reachPerformance) {
+		this.reachPerformance = reachPerformance;
 	}
 	
 }

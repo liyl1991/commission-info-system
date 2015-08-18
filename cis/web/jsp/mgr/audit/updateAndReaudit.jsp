@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>员工管理</title>
+		<title>用户审核-修改重审</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
 		<link rel="stylesheet" href="<%=path %>/assets/css/jquery.gritter.css" />
 	</head>
@@ -146,7 +146,7 @@
 		<script src="<%=path %>/assets/js/chosen.jquery.min.js"></script>
 		<script src="<%=path %>/assets/js/date-time/bootstrap-datepicker.js"></script>
 		<script src="<%=path %>/assets/js/jquery.form.js" type="text/javascript"></script>
-		<script src="<%=path %>/jsp/mgr/updateAndReaudit.js" type="text/javascript"></script>
+		<script src="<%=path %>/jsp/mgr/audit/updateAndReaudit.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var userId = ${user.userId};
 			var AuditUser = new AuditUser(userId);
@@ -154,7 +154,6 @@
 				var dt = new Date(ev.date.valueOf());
 				$('input[name="birthday"]').val(dt);
 			});
-			 //userDetail.showUserInfo();
 		</script>
 </body>
 </html>

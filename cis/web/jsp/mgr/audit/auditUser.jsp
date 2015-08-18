@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>员工管理</title>
+		<title>用户审核</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
 		<link rel="stylesheet" href="<%=path %>/assets/css/jquery.gritter.css" />
 	</head>
@@ -134,7 +134,7 @@
 		<jsp:include page="/common/inc_js.jsp"></jsp:include>
 		<script src="<%=path %>/assets/js/jqPaginator.js" type="text/javascript"></script>
 		<script src="<%=path %>/assets/js/jquery.gritter.min.js"></script>
-		<script src="<%=path %>/jsp/mgr/auditUser.js"></script>
+		<script src="<%=path %>/jsp/mgr/audit/auditUser.js"></script>
 </body>
 </html>
 

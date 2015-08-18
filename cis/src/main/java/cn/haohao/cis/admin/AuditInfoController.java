@@ -45,7 +45,7 @@ public class AuditInfoController extends MultiActionController{
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(loginedUser.isAdmin()){
 			request.setAttribute("auditUserActive", Constants.ACTIVE_CLASS);
-			return "mgr/auditUser";
+			return "mgr/audit/auditUser";
 		}
 		else
 			return "index";
@@ -137,7 +137,7 @@ public class AuditInfoController extends MultiActionController{
 		User targetUser = this.userService.getUserById(id);
 		request.setAttribute("user", targetUser);
 		
-		return "mgr/updateAndReaudit";
+		return "mgr/audit/updateAndReaudit";
 	}
 	
 	@RequestMapping("/doUpdateUser")

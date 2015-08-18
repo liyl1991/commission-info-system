@@ -47,6 +47,19 @@ public class BaseUtils {
 		}
 	}
 	
+	public static Date getSecondDayOnPreMonth(){
+		Calendar calendar = Calendar.getInstance();
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+		try {
+			return sdf.parse(year+"-"+(month)+"-"+"02");
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static boolean isListOnlyHasOne(List<?> list){
 		if(list != null && list.size() == 1){
 			return true;

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>员工管理</title>
+		<title>公告预览</title>
 		<jsp:include page="/common/inc.jsp"></jsp:include>
 		<link rel="stylesheet" href="<%=path %>/assets/css/jquery.gritter.css" />
 	</head>
@@ -47,7 +47,7 @@
 								</small>
 							</h1>
 						</div><!-- /.page-header -->
-						<div>${notice.content }</div>
+						<div id="noticeContainer">${notice.content }</div>
 					</div>
 				</div>
 		   </div>

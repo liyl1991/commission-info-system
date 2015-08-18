@@ -72,9 +72,9 @@
 	</if>
 	</sql>
 	
-	<select id="User.getSequence" resultType="java.lang.Long">
+	<select id="User.getSequence" resultType="java.lang.Integer">
 		<![CDATA[
-			select SEQ_T_USER.nextval from dual
+			select max(user_id) + 1 from t_user
 		]]>
 	</select>
 	

@@ -32,6 +32,7 @@ public class UserService implements IUserService {
 	}
 
 	public User createUser(User user) {
+		user.setUserId(userDao.getSequence());
 		userDao.create(user);
 		return user;
 	}

@@ -95,13 +95,19 @@ public class UserIncomeMgrController extends MultiActionController{
 		return this.vuserIncomeService.pageQueryVuserIncome(queryObj);
 	}
 	
-	@RequestMapping("/goUserIncomeFrom/{year}/{month}/{userId}")
-	public String goUserIncomeFrom(HttpServletRequest request,@PathVariable Integer year,@PathVariable Integer month,@PathVariable Integer userId){
+	@RequestMapping("/goUserIncomeFrom/{year}/{month}/{userId}/{type}")
+	public String goUserIncomeFrom(HttpServletRequest request,@PathVariable Integer year, @PathVariable Integer month, @PathVariable Integer userId, @PathVariable Integer type){
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(loginedUser.isAdmin()){
 			request.setAttribute("year", year);
 			request.setAttribute("month", month);
 			request.setAttribute("user", this.userService.getUserById(userId));
+			request.setAttribute("type", type);
+			if(type == 1){
+				request.setAttribute("adminMgrActive", Constants.ACTIVE_CLASS);
+			} else {
+				request.setAttribute("incomeMgrActive", Constants.ACTIVE_CLASS);
+			}
 			return "mgr/income/incomeFrom";
 		}
 		else

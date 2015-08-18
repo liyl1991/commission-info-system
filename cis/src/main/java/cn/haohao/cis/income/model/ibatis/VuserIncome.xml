@@ -20,6 +20,7 @@
 		<result property="incomeDate" column="INCOME_DATE" />
 		<result property="income" column="INCOME" />
 		<result property="performance" column="PERFORMANCE" />
+		<result property="reachPerformance" column="REACH_PERFORMANCE" />
 	</resultMap>
 	
 	<resultMap id="VuserIncomeSumResult" type="cn.haohao.cis.income.model.VuserIncome">
@@ -65,6 +66,7 @@
 		   <if test="incomeDate != null">and t.INCOME_DATE = #{incomeDate}</if>
 		   <if test="income != null">and t.INCOME = #{income}</if>
 		   <if test="performance != null">and t.PERFORMANCE = #{performance}</if>
+		   <if test="reachPerformance != null">and t.REACH_PERFORMANCE = #{reachPerformance}</if>
 		   <if test="nameOrIdCardLike != null">and (t.NAME like #{nameOrIdCardLike} or t.ID_CARD like #{nameOrIdCardLike})</if>
 		   <if test="levelIn != null">
 		   		and t.level in 
@@ -80,60 +82,8 @@
 			<foreach collection="sort" item="order" separator=",">
 				t.${order.property} ${order.direction}
 			</foreach>
-	</if>
+	 </if>
 	</sql>
-	
-	<select id="VuserIncome.getSequence" resultType="java.lang.Long">
-		<![CDATA[
-			select SEQ_V_USER_INCOME.nextval from dual
-		]]>
-	</select>
-	
-	<insert id="VuserIncome.create">
-		<![CDATA[
-			insert into V_USER_INCOME (  USER_ID ,  ID_CARD ,  NAME ,  PASSWORD ,  SEX ,  BIRTHDAY ,  ADDRESS ,  CAREER ,  LEVEL ,  STATUS ,  USER_ROLE ,  UPLINE_USER ,  EXTEND1 ,  EXTEND2 ,  INCOME_DATE ,  INCOME ,  PERFORMANCE   ) 
-			values (  #{userId} ,  #{idCard} ,  #{name} ,  #{password} ,  #{sex} ,  #{birthday} ,  #{address} ,  #{career} ,  #{level} ,  #{status} ,  #{userRole} ,  #{uplineUser} ,  #{extend1} ,  #{extend2} ,  #{incomeDate} ,  #{income} ,  #{performance}   )
-		]]>
-	</insert>
-	
-	<update id="VuserIncome.update">
-		<![CDATA[
-			update V_USER_INCOME set 
-			 USER_ID=#{userId} , ID_CARD=#{idCard} , NAME=#{name} , PASSWORD=#{password} , SEX=#{sex} , BIRTHDAY=#{birthday} , ADDRESS=#{address} , CAREER=#{career} , LEVEL=#{level} , STATUS=#{status} , USER_ROLE=#{userRole} , UPLINE_USER=#{uplineUser} , EXTEND1=#{extend1} , EXTEND2=#{extend2} , INCOME_DATE=#{incomeDate} , INCOME=#{income} , PERFORMANCE=#{performance} 
-			where user_id = #{userId}
-		]]>
-	</update>
-	
-	<update id="VuserIncome.updateDynamic">
-		update V_USER_INCOME t 
-		<set>
-			<if test="newUpdAttObj.userId != null">t.USER_ID = #{newUpdAttObj.userId},</if>	
-			<if test="newUpdAttObj.idCard != null">t.ID_CARD = #{newUpdAttObj.idCard},</if>	
-			<if test="newUpdAttObj.name != null">t.NAME = #{newUpdAttObj.name},</if>	
-			<if test="newUpdAttObj.password != null">t.PASSWORD = #{newUpdAttObj.password},</if>	
-			<if test="newUpdAttObj.sex != null">t.SEX = #{newUpdAttObj.sex},</if>	
-			<if test="newUpdAttObj.birthday != null">t.BIRTHDAY = #{newUpdAttObj.birthday},</if>	
-			<if test="newUpdAttObj.address != null">t.ADDRESS = #{newUpdAttObj.address},</if>	
-			<if test="newUpdAttObj.career != null">t.CAREER = #{newUpdAttObj.career},</if>	
-			<if test="newUpdAttObj.level != null">t.LEVEL = #{newUpdAttObj.level},</if>	
-			<if test="newUpdAttObj.status != null">t.STATUS = #{newUpdAttObj.status},</if>	
-			<if test="newUpdAttObj.userRole != null">t.USER_ROLE = #{newUpdAttObj.userRole},</if>	
-			<if test="newUpdAttObj.uplineUser != null">t.UPLINE_USER = #{newUpdAttObj.uplineUser},</if>	
-			<if test="newUpdAttObj.extend1 != null">t.EXTEND1 = #{newUpdAttObj.extend1},</if>	
-			<if test="newUpdAttObj.extend2 != null">t.EXTEND2 = #{newUpdAttObj.extend2},</if>	
-			<if test="newUpdAttObj.incomeDate != null">t.INCOME_DATE = #{newUpdAttObj.incomeDate},</if>	
-			<if test="newUpdAttObj.income != null">t.INCOME = #{newUpdAttObj.income},</if>	
-			<if test="newUpdAttObj.performance != null">t.PERFORMANCE = #{newUpdAttObj.performance},</if>	
-		</set>
-		<include refid="VuserIncome.whereClause" />
-	</update>
-	
-	<delete id="VuserIncome.delete">
-		<![CDATA[
-		delete from V_USER_INCOME t
-		]]>
-		<include refid="VuserIncome.whereClause" />
-	</delete>
 	
 	<select id="VuserIncome.queryByArgs" resultMap="VuserIncomeResult">
 		<![CDATA[

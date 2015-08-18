@@ -123,11 +123,16 @@ public class VuserIncomeQueryObj extends VuserIncome implements IPageable{
 	}
 	public Date getDateSearch(){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		try {
-			return sdf.parse(this.year + "/" + this.month + "/01");
-		} catch (ParseException e) {
-			e.printStackTrace();
+		if(this.year != null && this.month != null){
+			try {
+				return sdf.parse(this.year + "/" + this.month + "/02");
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return null;
+			}
+		} else {
 			return null;
 		}
+		 
 	}
 }

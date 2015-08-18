@@ -36,7 +36,7 @@ public class NoticeMgrController extends MultiActionController{
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(loginedUser.isAdmin()){
 			request.setAttribute("noticeMgrActive", Constants.ACTIVE_CLASS);
-			return "mgr/launchNotice";
+			return "mgr/notice/launchNotice";
 		}
 		else
 			return "index";
@@ -47,7 +47,7 @@ public class NoticeMgrController extends MultiActionController{
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(loginedUser.isAdmin()){
 			request.setAttribute("noticeMgrActive", Constants.ACTIVE_CLASS);
-			return "mgr/noticeMgr";
+			return "mgr/notice/noticeMgr";
 		}
 		else
 			return "index";
@@ -60,7 +60,7 @@ public class NoticeMgrController extends MultiActionController{
 			Notice notice = this.noticeService.getNoticeById(noticeId);
 			request.setAttribute("notice", notice);
 			request.setAttribute("noticeMgrActive", Constants.ACTIVE_CLASS);
-			return "mgr/noticeView";
+			return "mgr/notice/noticeView";
 		}
 		else
 			return "index";
@@ -73,7 +73,7 @@ public class NoticeMgrController extends MultiActionController{
 			Notice notice = this.noticeService.getNoticeById(noticeId);
 			request.setAttribute("notice", notice);
 			request.setAttribute("noticeMgrActive", Constants.ACTIVE_CLASS);
-			return "mgr/updateNotice";
+			return "mgr/notice/updateNotice";
 		}
 		else
 			return "index";
