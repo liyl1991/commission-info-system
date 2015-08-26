@@ -13,6 +13,8 @@ import cn.haohao.cis.rule.model.ReachSetting;
 public class ReachSettingQueryObj extends ReachSetting implements IPageable{
 	
 	private static final long serialVersionUID = 1L;
+	
+	private boolean usingEndDateEq = false;
 	/**
 	 * 页面大小
 	 */
@@ -79,5 +81,11 @@ public class ReachSettingQueryObj extends ReachSetting implements IPageable{
 	}
 	public void setSort(List<Order> orders){
 		this.sort = new Sort(orders);
+	}
+	public boolean isUsingEndDateEq() {
+		return usingEndDateEq;
+	}
+	public void setUsingEndDateEq(boolean usingEndDateEq) {
+		this.usingEndDateEq = usingEndDateEq;
 	}
 }

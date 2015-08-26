@@ -116,7 +116,7 @@ public class IncomeRuleController extends MultiActionController{
 	 * @param request
 	 */
 	@RequestMapping("/doUpdateReach")
-	public @ResponseBody Map<String,Object> doDeleteUser(HttpServletRequest request,
+	public @ResponseBody Map<String,Object> doUpdateReach(HttpServletRequest request,
 			Float reachC, Float reachD, Float reachE, Integer usingFlag){
 		Map<String,Object> resMap = new HashMap<String,Object>();
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
@@ -159,7 +159,7 @@ public class IncomeRuleController extends MultiActionController{
 					olderUpdateObj.getNewUpdAttObj().setEndDate(usingDate);
 					this.reachSettingService.updateDynamic(reachSettingUpdateObj, olderUpdateObj);
 				} else {
-					this.reachSettingService.updateDynamic(reachSetting, modifyData);
+					this.reachSettingService.updateDynamic(reachSetting, modifyData ,usingDate);
 				}
 				updatedList.add(reachSetting);
 			}
@@ -262,6 +262,9 @@ public class IncomeRuleController extends MultiActionController{
 		IncomeSetting oldSetting = this.incomeSettingService.getIncomeSetting(incomeSettingQueryObj);
 		Boolean updatedFlag = false;
 		if(Arith.mul(oldSetting.getProportion().floatValue(), 100F) != newProportion.floatValue()){
+			if(Arith.mul(oldSetting.getProportion().floatValue(), 100F) < newProportion.floatValue()){
+				
+			}
 			IncomeSettingUpdateObj settingUpdateObj = new IncomeSettingUpdateObj();
 			settingUpdateObj.setSettingId(oldSetting.getSettingId());
 			Date usingDate = usingFlag == 1 ? BaseUtils.getFirstDayOnCurrentMonth() : BaseUtils.getFirstDayOnNextMonth();
@@ -298,7 +301,7 @@ public class IncomeRuleController extends MultiActionController{
 		resMap.put("updatedFlag", updatedFlag);
 		resMap.put("result", true);
 		if (updatedFlag) 
-			log.info(loginedUser.getName()+"-修改了基础提成比例为" + newProportion*100 + "%");
+			log.info(loginedUser.getName()+"-修改了基础提成比例为" + newProportion + "%");
 		return resMap;
 	}
 	
@@ -376,8 +379,13 @@ public class IncomeRuleController extends MultiActionController{
 		IncomeRule incomeRule = this.incomeRuleService.getIncomeRuleById(ruleId);
 		resMap.put("currentRule", incomeRule);
 		resMap.put("currentUser", currentUser);
-		//获取该主线各个等级正常配置
+		//基础比例
 		IncomeSettingQueryObj incomeSettingQueryObj = new IncomeSettingQueryObj();
+		incomeSettingQueryObj.setRuleId(0);
+		incomeSettingQueryObj.setStatus(1);
+		resMap.put("baseRuleSetting", this.incomeSettingService.getIncomeSetting(incomeSettingQueryObj));
+		//获取该主线各个等级正常配置
+		incomeSettingQueryObj = new IncomeSettingQueryObj();
 		incomeSettingQueryObj.setRuleId(ruleId);
 		incomeSettingQueryObj.setType(1);
 		incomeSettingQueryObj.setStatus(1);
@@ -546,14 +554,24 @@ public class IncomeRuleController extends MultiActionController{
 		vIncomeSettingQueryObj.setRuleId(ruleId);
 		return this.vUserIncomeSettingService.getDownlineSpecialMax(vIncomeSettingQueryObj);
 	}
-	
+	/**
+	 * 获取当前主线中的当前等级的上一级
+	 * @param ruleContent 主线串
+	 * @param level 要查找的等级
+	 * @return 匹配等级，没有返回null
+	 */
 	private String getPreLevel(String ruleContent, String level){
 		int index = ruleContent.indexOf(level);
 		if(index > 0)
 			return ruleContent.substring(index - 1, index);
 		return null;
 	}
-	
+	/**
+	 * 获取当前主线中的当前等级的下一级
+	 * @param ruleContent 主线串
+	 * @param level 要查找的等级
+	 * @return 匹配等级，没有返回null
+	 */
 	private String getNextLevel(String ruleContent, String level){
 		int index = ruleContent.indexOf(level);
 		if(index < ruleContent.length() - 1)
@@ -561,4 +579,7 @@ public class IncomeRuleController extends MultiActionController{
 		return null;
 	}
 	
+	private void isBaseSettingUsable(Float base){
+		
+	}
 }

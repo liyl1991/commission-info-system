@@ -5,7 +5,7 @@ import cn.haohao.cis.rule.model.ReachSetting;
 /**
  *	VO
  */
-public class ReachSettingUpdateObj extends ReachSetting {
+public class ReachSettingUpdateObj extends ReachSettingQueryObj {
 	
 	private static final long serialVersionUID = 1L;
 	private ReachSetting newUpdAttObj=new ReachSetting();

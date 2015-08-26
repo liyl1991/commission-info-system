@@ -1,4 +1,5 @@
 package cn.haohao.cis.rule.service;
+import java.util.Date;
 //j-import-b
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -70,6 +71,8 @@ public interface IReachSettingService {
 	public void updateDynamic(ReachSettingUpdateObj updateObj, ReachSettingUpdateObj updateObj2);
 	
 	public void updateDynamic(ReachSetting oldSetting,Float modifyData);
+	
+	public void updateDynamic(ReachSetting oldSetting,Float modifyData, Date usingDate);
 	/**
 	 * u-insert-b@note9.0@
 	 * u-insert-e@note9.0@

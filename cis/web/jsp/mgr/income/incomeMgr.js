@@ -23,9 +23,9 @@ $(function(){
 	$('.submitIncomeBtn').on('click',function(){
 		var now = new Date();
 		var y = now.getFullYear();
-		var m = now.getMonth();
+		var m = now.getMonth() + 1;
 		if( $('#inputUserIncomeForm .year').val() > y ||
-				($('#inputUserIncomeForm .year').val() == y && $('#inputUserIncomeForm .month').val() >m)){
+				($('#inputUserIncomeForm .year').val() == y && $('#inputUserIncomeForm .month').val() > m )){
 			$.gritter.add({
 				title: '操作失败',
 				text: '只允许录入当月及之前的收入信息！',

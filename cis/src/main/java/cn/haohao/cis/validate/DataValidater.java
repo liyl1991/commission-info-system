@@ -1,6 +1,5 @@
 package cn.haohao.cis.validate;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
 import cn.haohao.cis.income.model.UserIncome;
 import cn.haohao.cis.income.service.IUserIncomeService;
 import cn.haohao.cis.income.vo.UserIncomeQueryObj;
-import cn.haohao.cis.rule.model.IncomeRule;
 import cn.haohao.cis.rule.model.IncomeSetting;
 import cn.haohao.cis.rule.service.IIncomeSettingService;
 import cn.haohao.cis.rule.vo.IncomeSettingQueryObj;
@@ -125,10 +123,10 @@ public class DataValidater {
 		//验证当前录入信息的月份不能大于当前月
 		Calendar now = Calendar.getInstance();
 		now.setTime(new Date());
-		if(objDate.get(Calendar.YEAR)>now.get(Calendar.YEAR))
+		if(objDate.get(Calendar.YEAR) > now.get(Calendar.YEAR))
 			throw new BusinessException("您只能录入当前月份及之前的收入信息，请检查收入月份");
-		else if(objDate.get(Calendar.YEAR)==now.get(Calendar.YEAR)
-				&&objDate.get(Calendar.MONTH)>now.get(Calendar.MONTH))
+		else if(objDate.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+				&& objDate.get(Calendar.MONTH) > now.get(Calendar.MONTH))
 			throw new BusinessException("您只能录入当前月份及之前的收入信息，请检查收入月份");
 	}
 	

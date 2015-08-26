@@ -37,9 +37,16 @@ function eventInit(){
 	    	success: function (r) {
 	    		if(r.result){
 	    			if(r.updatedCnt != 0){
+	    				var usingFlag = $('#updateRuleForm input[name="usingFlag"]:checked').val();
+	    				var txt = '您成功修改当前主线各级提成比例，将于';
+	    				if(usingFlag == 1){
+	    					txt += '本月开始生效';
+	    				} else {
+	    					txt += '于下月开始生效';
+	    				}
 		    			$.gritter.add({
 							title: '操作成功',
-							text: '您成功修改当前主线各级提成比例，将于本月开始生效',
+							text: txt,
 							time:'3600',
 							class_name: 'gritter-success gritter-light'
 						});
@@ -86,7 +93,13 @@ function eventInit(){
 							lvl += r.updatedList[i].settingLevel;
 							if(i < r.updatedList.length-1) lvl += ",";
 						}
-	    				var txt = '您成功修改'+lvl+'级别的达标业绩值，将于本月开始生效';
+	    				var usingFlag = $('#updateReachForm input[name="usingFlag"]:checked').val();
+	    				var txt = '您成功修改'+lvl+'级别的达标业绩值，将于';
+	    				if(usingFlag == 1){
+	    					txt += '本月开始生效';
+	    				} else {
+	    					txt += '于下月开始生效';
+	    				}
 		    			$.gritter.add({
 							title: '操作成功',
 							text: txt,
@@ -137,7 +150,13 @@ function eventInit(){
 	    	success: function (r) {
 	    		if(r.result){
 	    			if(r.updatedFlag){
-	    				var txt = '您成功基础提成比例，将于本月开始生效';
+	    				var usingFlag = $('#updateBaseRuleForm input[name="usingFlag"]:checked').val();
+	    				var txt = '';
+	    				if(usingFlag == 1){
+	    					txt = '您成功基础提成比例，将于本月开始生效';
+	    				} else {
+	    					txt = '您成功基础提成比例，将于下月开始生效';
+	    				}
 		    			$.gritter.add({
 							title: '操作成功',
 							text: txt,
@@ -173,6 +192,19 @@ function eventInit(){
 	$('#userNameSearch').on('keyup',function(e){
 		if(e.keyCode == 13) reLoadUsers();
 	});
+	
+	$('#updateRuleForm').on('keyup', 'input:text', function(){
+		var v = $(this).val();
+		validateIncomeSetting();
+		if(!$.trim(v)){
+			$(this).val(0);
+		}
+		else if(isNaN(v)){
+			v += '';
+			$(this).val(v.substring(0, v.length - 1));
+		}
+	});
+	
 	
 	$('#updateRuleForm').on('blur',' .rule-setting input:text',function(){
 		var rule = $('#ruleId').find("option:selected").text();
@@ -316,7 +348,7 @@ function buildSpecialSettingForm(data,own){
 	var currentSetting = 0;
 	var formHtm = 
 			'<div class="row">'+
-			'	<blockquote class="col-sm-3 panel-primary">总提成：<span>'+FloatMul(baseProportion,100)+'</span>%</blockquote>';
+			'	<blockquote class="col-sm-3 panel-primary">总提成：<span>'+FloatMul(data.baseRuleSetting.proportion,100)+'</span>%</blockquote>';
 	if( currentRule.detailContent != 'BX'){
 		for (var i = 0; i < data.commonSettings.length; i++) {
 			var specialStr = 'max' + data.commonSettings[i].settingLevel;
@@ -336,7 +368,7 @@ function buildSpecialSettingForm(data,own){
 			}
 			otherTotal = FloatAdd(forAdd, otherTotal);
 		}
-		var lvBpro = FloatSub(baseProportion, otherTotal);
+		var lvBpro = FloatSub(data.baseRuleSetting.proportion, otherTotal);
 		formHtm +='	<blockquote class="col-sm-3 panel-primary lvb-proportion">B最低提成：<span>'+FloatMul(lvBpro,100)+'</span>%</blockquote>';
 	}
 	for (var i = 0; i < data.commonSettings.length; i++) {

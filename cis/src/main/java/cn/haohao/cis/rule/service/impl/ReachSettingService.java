@@ -1,4 +1,5 @@
 package cn.haohao.cis.rule.service.impl;
+import java.util.Date;
 //j-import-b
 import java.util.List;
 
@@ -77,10 +78,32 @@ public class ReachSettingService implements IReachSettingService {
 		this.reachSettingDao.create(newSetting);
 		
 	}
+	
+	@Override
+	public void updateDynamic(ReachSetting oldSetting, Float modifyData, Date usingDate) {
+		ReachSettingUpdateObj updateObj = new ReachSettingUpdateObj();
+		updateObj.setReachId(oldSetting.getReachId());
+		oldSetting.setEndDate(usingDate);
+		oldSetting.setStatus(2);
+		updateObj.setNewUpdAttObj(oldSetting);
+		this.reachSettingDao.updateDynamic(updateObj);
+		
+		ReachSetting newSetting = new ReachSetting();
+		newSetting.setUsingDate(usingDate);
+		newSetting.setSettingLevel(oldSetting.getSettingLevel());
+		newSetting.setReachPerformance(modifyData);
+		newSetting.setStatus(1);
+		newSetting.setType(1);
+		this.reachSettingDao.create(newSetting);
+		
+	}
 
 	@Override
 	public void updateDynamic(ReachSettingUpdateObj updateObj,ReachSettingUpdateObj updateObj2) {
 		this.reachSettingDao.updateDynamic(updateObj);
 		this.reachSettingDao.updateDynamic(updateObj2);
+		ReachSettingQueryObj delQueryObj = new ReachSettingQueryObj();
+		delQueryObj.setUsingEndDateEq(true);
+		this.reachSettingDao.delete(delQueryObj);
 	}
 }

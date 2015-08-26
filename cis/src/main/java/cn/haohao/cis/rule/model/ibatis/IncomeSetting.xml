@@ -78,11 +78,10 @@
 	</update>
 	
 	<delete id="IncomeSetting.delete">
-		<![CDATA[
+	  <![CDATA[
 		delete from T_INCOME_SETTING
-		]]>
-		<where>
-	  <trim prefixOverrides="and">
+	  ]]>
+	  <where>
 		   <if test="settingId != null">and SETTING_ID = #{settingId}</if>
 		   <if test="type != null">and TYPE = #{type}</if>
 		   <if test="proportion != null">and PROPORTION = #{proportion}</if>
@@ -91,8 +90,8 @@
 		   <if test="usingDate != null">and USING_DATE = #{usingDate}</if>
 		   <if test="endDate != null">and END_DATE = #{endDate}</if>
 		   <if test="status != null">and STATUS = #{status}</if>
-	   </trim>
-	 </where>
+		   <if test="usingEndDateEq">and USING_DATE = END_DATE</if>
+	  </where>
 	</delete>
 	
 	<select id="IncomeSetting.queryByArgs" resultMap="IncomeSettingResult">

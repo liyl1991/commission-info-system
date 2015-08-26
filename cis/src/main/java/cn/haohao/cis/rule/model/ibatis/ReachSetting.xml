@@ -31,6 +31,7 @@
 		   <if test="usingDate != null">and t.USING_DATE = #{usingDate}</if>
 		   <if test="endDate != null">and t.END_DATE = #{endDate}</if>
 		   <if test="status != null">and t.STATUS = #{status}</if>
+		   <if test="usingEndDateEq">and t.USING_DATE = t.END_DATE</if>
 	   </trim>
 	 </where>
 	</sql>
@@ -72,19 +73,29 @@
 	
 	<delete id="ReachSetting.delete">
 		<![CDATA[
-		delete from T_REACH_SETTING t
+		delete from T_REACH_SETTING
 		]]>
-		<include refid="ReachSetting.whereClause" />
+		<where>
+		   <if test="reachId != null">and REACH_ID = #{reachId}</if>
+		   <if test="type != null">and TYPE = #{type}</if>
+		   <if test="reachPerformance != null">and REACH_PERFORMANCE = #{reachPerformance}</if>
+		   <if test="settingLevel != null">and SETTING_LEVEL = #{settingLevel}</if>
+		   <if test="usingDate != null">and USING_DATE = #{usingDate}</if>
+		   <if test="endDate != null">and END_DATE = #{endDate}</if>
+		   <if test="status != null">and STATUS = #{status}</if>
+		   <if test="usingEndDateEq">and USING_DATE = END_DATE</if>
+	    </where>
 	</delete>
 	
 	<select id="ReachSetting.queryByArgs" resultMap="ReachSettingResult">
 		<![CDATA[
 			select t.*
-		]]>
-		<![CDATA[
 			from T_REACH_SETTING t 
 		]]>
 		<include refid="ReachSetting.whereClause" />
+		<![CDATA[
+			order by t.SETTING_LEVEL 
+		]]>
 	</select>
 	
 	<select id="ReachSetting.pageCountByArgs" resultMap="ReachSettingResult">

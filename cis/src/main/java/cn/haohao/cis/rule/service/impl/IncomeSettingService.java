@@ -140,6 +140,9 @@ public class IncomeSettingService implements IIncomeSettingService {
 	public void updateDynamic(IncomeSettingUpdateObj updateObj1,IncomeSettingUpdateObj updateObj2) {
 		this.incomeSettingDao.updateDynamic(updateObj1);
 		this.incomeSettingDao.updateDynamic(updateObj2);
+		IncomeSettingQueryObj delQueryObj = new IncomeSettingQueryObj();
+		delQueryObj.setUsingEndDateEq(true);
+		this.incomeSettingDao.delete(delQueryObj);
 	}
 
 }

@@ -15,7 +15,7 @@ import cn.haohao.cis.rule.model.IncomeSetting;
 public class IncomeSettingQueryObj extends IncomeSetting implements IPageable{
 	
 	private static final long serialVersionUID = 1L;
-	
+	private boolean usingEndDateEq = false;
 	private Date effectiveDate;
 	/**
 	 * 页面大小
@@ -90,5 +90,10 @@ public class IncomeSettingQueryObj extends IncomeSetting implements IPageable{
 	public void setEffectiveDate(Date effectiveDate) {
 		this.effectiveDate = effectiveDate;
 	}
-	
+	public boolean isUsingEndDateEq() {
+		return usingEndDateEq;
+	}
+	public void setUsingEndDateEq(boolean usingEndDateEq) {
+		this.usingEndDateEq = usingEndDateEq;
+	}
 }
