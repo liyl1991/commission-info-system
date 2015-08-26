@@ -59,13 +59,14 @@ public class UserMgrController extends MultiActionController{
 	 * 至员工管理页 
 	 * @param request
 	 */
-	@RequestMapping("/goInputSuccess/{userId}")
-	public String goInputSuccess(HttpServletRequest request, @PathVariable Integer userId){
+	@RequestMapping("/goInputSuccess/{type}/{userId}")
+	public String goInputSuccess(HttpServletRequest request, @PathVariable Integer userId, @PathVariable String type){
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(loginedUser.isAdmin()){
 			request.setAttribute("adminMgrActive", Constants.ACTIVE_CLASS);
 			User current = this.userService.getUserById(userId);
 			request.setAttribute("user", current);
+			request.setAttribute("type", type);
 			request.setAttribute("upline", this.userService.getUserById(current.getUplineUser()));
 			return "mgr/user/inputUserSuccess";
 		}
@@ -130,6 +131,7 @@ public class UserMgrController extends MultiActionController{
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
 		if(!loginedUser.isAdmin())
 			return null;
+		queryObj.setStatus(Constants.USER_STATUS_ENABLED);
 		return this.userService.pageQueryUser(queryObj);
 	}
 	
@@ -219,6 +221,72 @@ public class UserMgrController extends MultiActionController{
 		return resMap;
 	}
 	
+	@RequestMapping("/doInputUser")
+	public @ResponseBody Map<String,Object> doInputUser(User user, HttpServletRequest request){
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
+		if(!loginedUser.isAdmin()){
+			resMap.put("result", false);
+			return resMap;
+		}
+		try{
+			DataValidater.userInputValidate(user, userService);
+			//身份证是否已存在
+			UserQueryObj queryObj = new UserQueryObj();
+			queryObj.setIdCard(user.getIdCard());
+			List<User> existList = userService.queryUser(queryObj);
+			if(existList.size() > 0){
+				if(existList.size() == 1 && existList.get(0).getStatus() == Constants.USER_STATUS_DISABLED){
+					resMap.put("result", false);
+					resMap.put("deletedUser", existList.get(0));
+					resMap.put("deletedUpline", this.userService.getUserById(existList.get(0).getUplineUser()));
+					return resMap;
+				} 
+				throw new BusinessException("该员工身份证"+user.getIdCard()+",已存在,请确认");
+			}
+				
+			user.setStatus(1);
+			user.setUserRole(1);
+			user.setPassword(MD5Encoder.encode(Constants.DEFAULT_PASSWORD));
+			user = this.userService.createUser(user);
+			resMap.put("user", user);
+			resMap.put("result", true);
+			this.log.info(loginedUser.getName()+"-新增用户->"+user.getName()+"["+user.getIdCard()+"]");
+		}catch(BusinessException be){
+			resMap.put("result", false);
+			resMap.put("msg", be.getMessage());
+		}catch (Exception e) {
+			resMap.put("result", false);
+			resMap.put("msg", "新增失败");
+		}
+		return resMap;
+	}
+	
+	@RequestMapping("/doRecoverUser")
+	public @ResponseBody Map<String,Object> doRecoverUser(Integer userId, HttpServletRequest request){
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
+		if(!loginedUser.isAdmin()){
+			resMap.put("result", false);
+			return resMap;
+		}
+		
+		UserUpdateObj updateObj = new UserUpdateObj();
+		updateObj.setUserId(userId);
+		updateObj.getNewUpdAttObj().setStatus(Constants.USER_STATUS_ENABLED);
+		User user = this.userService.getUserById(userId);
+		try {
+			this.userService.updateDynamic(updateObj);
+			resMap.put("result", true);
+			resMap.put("user", user);
+		} catch (Exception e) {
+			resMap.put("result", false);
+			resMap.put("msg", "失败");
+		}
+		this.log.info(loginedUser.getName()+"-恢复用户->"+user.getName()+"["+user.getIdCard()+"]");
+		return resMap;
+	}
+	
 	@RequestMapping("/goInputUser")
 	public String goInputUser(HttpServletRequest request){
 		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
@@ -248,33 +316,6 @@ public class UserMgrController extends MultiActionController{
 			queryObj.setLevelNotEq(Constants.USER_LEVEL_A);
 		}
 		return this.userService.queryUser(queryObj);
-	}
-	
-	@RequestMapping("/doInputUser")
-	public @ResponseBody Map<String,Object> doInputUser(User user,HttpServletRequest request){
-		Map<String,Object> resMap = new HashMap<String,Object>();
-		User loginedUser = (User)request.getSession().getAttribute(Constants.LOGINED_USER_BEAN_NAME);
-		if(!loginedUser.isAdmin()){
-			resMap.put("result", false);
-			return resMap;
-		}
-		try{
-			DataValidater.userInputValidate(user, userService);
-			user.setStatus(1);
-			user.setUserRole(1);
-			user.setPassword(MD5Encoder.encode(Constants.DEFAULT_PASSWORD));
-			user = this.userService.createUser(user);
-			resMap.put("user", user);
-			resMap.put("result", true);
-			this.log.info(loginedUser.getName()+"-新增用户->"+user.getName()+"["+user.getIdCard()+"]");
-		}catch(BusinessException be){
-			resMap.put("result", false);
-			resMap.put("msg", be.getMessage());
-		}catch (Exception e) {
-			resMap.put("result", false);
-			resMap.put("msg", "新增失败");
-		}
-		return resMap;
 	}
 	
 }

@@ -96,11 +96,6 @@ public class DataValidater {
 			throw new BusinessException("员工身份证号不能为空");
 		}else
 			IDCard.IDCardValidate(newObj.getIdCard());
-		//身份证是否已存在
-		UserQueryObj queryObj = new UserQueryObj();
-		queryObj.setIdCard(newObj.getIdCard());
-		if(userService.queryUser(queryObj).size()>0)
-			throw new BusinessException("该员工身份证"+newObj.getIdCard()+",已存在,请确认");
 		if(newObj.getName()==null||newObj.getName().trim().length()==0)
 			throw new BusinessException("员工姓名不能为空");
 		//等级验证，自身等级必须低于上级

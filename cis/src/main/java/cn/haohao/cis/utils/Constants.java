@@ -17,4 +17,13 @@ public class Constants {
 	public final static String USER_LEVEL_D = "D";
 	public final static String USER_LEVEL_E = "E";
 	public final static String USER_LEVEL_X = "X";
+	
+	/**
+	 * 用户状态： 正常
+	 */
+	public final static Integer USER_STATUS_ENABLED = 1;
+	/**
+	 * 用户状态：删除
+	 */
+	public final static Integer USER_STATUS_DISABLED = 2;
 }

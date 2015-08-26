@@ -91,13 +91,13 @@
 
 									<div class="space-2"></div>
 
-									<div class="form-group">
+									<%-- <div class="form-group">
 										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 出生时间 </label>
 
 										<div class="col-sm-9">
 											<input type="text" value="<fmt:formatDate value="${loginedUser.birthday }" pattern="yyyy年MM月dd日"/>" readonly id="form-field-1" class="col-xs-10 col-sm-5" />
 										</div>
-									</div>
+									</div> --%>
 
 									<div class="space-2"></div>
 

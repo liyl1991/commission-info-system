@@ -471,7 +471,7 @@ function reLoadUsers(){
 	$.ajax({
 		url:path+"/incomeRuleMgr/getUserList",
 		type:'post',
-		data:{'nameMatch':username},
+		data:{'nameOrIdCardLike':username},
     	"dataType":"json",
     	success: function (r) {
     		for (var i = 0; i < r.users.length; i++) {

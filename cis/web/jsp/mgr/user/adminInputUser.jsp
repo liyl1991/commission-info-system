@@ -150,8 +150,61 @@
 				</div>
 		   </div>
 		</div>
-		<!-- basic scripts -->
+		<!-- modal start -->
+		<div id="existDeletedUserDlg" class="modal" tabindex="-1">
+			<div class="modal-dialog margin-top-55" style="width: 900px;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="blue bigger">您输入的身份证已存在，该用户已被删除，您可以选择恢复使用</h3>
+					</div>
+					<div class="modal-body overflow-visible">
+						<div class="success-content" style="height: 255px;">
+						  <div class="table-responsive col-md-offset-2 col-md-8">
+							<table id="successInputedUserTable" class="table table-striped table-bordered table-hover">
+							  <tr>
+							    <td class="bg-info text-primary" width="30%">姓名</td>
+							    <td width="70%" prop-name="name"></td>
+							  </tr>
+							  <tr>
+							    <td class="bg-info text-primary">身份证</td>
+							    <td prop-name="idCard"></td>
+							  </tr>
+							  <tr>
+							    <td class="bg-info text-primary">等级</td>
+							    <td prop-name="level"></td>
+							  </tr>
+							  <tr>
+							    <td class="bg-info text-primary">上级</td>
+							    <td prop-name="upline"></td>
+							  </tr>
+							  <tr>
+							    <td class="bg-info text-primary">住址</td>
+							    <td prop-name="address"></td>
+							  </tr>
+							  <tr>
+							    <td class="bg-info text-primary">职业</td>
+							    <td prop-name="career"></td>
+							  </tr>
+							</table>
+						  </div>
+						</div>
+					</div>
 
+					<div class="modal-footer">
+						<button class="btn btn-sm" data-dismiss="modal">
+							<i class="icon-remove"></i>
+							取消
+						</button>
+						<button class="btn btn-sm btn-primary recoverUserBtn">
+							<i class="icon-retweet"></i>
+							恢复
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- modal end -->
+		<!-- basic scripts -->
 		<jsp:include page="/common/inc_js.jsp"></jsp:include>
 		<script src="<%=path %>/assets/js/jquery.gritter.min.js"></script>
 		<script src="<%=path %>/assets/js/chosen.jquery.min.js"></script>
@@ -160,12 +213,7 @@
 		<script src="<%=path %>/jsp/mgr/user/adminInputUser.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			$(".chosen-select").chosen({no_results_text: "未找到匹配项"});
-			/* $('.date-picker').datepicker({autoclose:true}).on('changeDate', function(ev){
-				var dt = new Date(ev.date.valueOf());
-				$('input[name="birthday"]').val(dt);
-			});  */
 			var iu = new InputUser();
-			 //userDetail.showUserInfo();
 		</script>
 </body>
 </html>

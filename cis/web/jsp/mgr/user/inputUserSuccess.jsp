@@ -44,7 +44,8 @@
 					<!-- 内容始 -->
 					<div class="page-header">
 						<h1>
-							新员工录入成功
+							<c:if test="${type eq 'a'}">新员工录入成功</c:if>
+							<c:if test="${type eq 'r'}">员工恢复成功</c:if>
 						</h1>
 					</div>
 					<div class="page-content success-content">
