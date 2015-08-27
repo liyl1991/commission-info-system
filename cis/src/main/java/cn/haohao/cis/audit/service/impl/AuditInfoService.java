@@ -14,9 +14,7 @@ import cn.haohao.cis.audit.vo.AuditInfoQueryObj;
 import cn.haohao.cis.audit.vo.AuditInfoUpdateObj;
 import cn.haohao.cis.user.dao.IUserDao;
 import cn.haohao.cis.user.model.User;
-import cn.haohao.cis.user.service.IUserService;
 import cn.haohao.cis.user.vo.UserUpdateObj;
-import cn.haohao.vas.core.exception.BusinessException;
 //j-import-e
 /**
  *	SERVICE IMPL

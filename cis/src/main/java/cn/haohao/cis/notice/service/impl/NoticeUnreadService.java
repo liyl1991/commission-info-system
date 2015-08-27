@@ -11,7 +11,6 @@ import cn.haohao.cis.notice.service.INoticeUnreadService;
 import cn.haohao.cis.notice.model.NoticeUnread;
 import cn.haohao.cis.notice.vo.NoticeUnreadQueryObj;
 import cn.haohao.cis.notice.vo.NoticeUnreadUpdateObj;
-import cn.haohao.vas.core.exception.BusinessException;
 //j-import-e
 /**
  *	SERVICE IMPL

@@ -32,7 +32,6 @@ import cn.haohao.cis.rule.model.IncomeSetting;
 import cn.haohao.cis.rule.model.VspecialSetting;
 import cn.haohao.cis.rule.service.IIncomeRuleService;
 import cn.haohao.cis.rule.service.IIncomeSettingService;
-import cn.haohao.cis.rule.service.IVUserIncomeSettingService;
 import cn.haohao.cis.rule.service.IVspecialSettingService;
 import cn.haohao.cis.rule.vo.IncomeRuleQueryObj;
 import cn.haohao.cis.rule.vo.IncomeSettingQueryObj;
@@ -55,8 +54,6 @@ public class UserIncomeMgrController extends MultiActionController{
 	private IUserIncomeService userIncomeService;
 	@Autowired
 	private IIncomeRuleService incomeRuleService;
-	@Autowired
-	private IVUserIncomeSettingService vUserIncomeSettingService;
 	@Autowired
 	private IVspecialSettingService vspecialService;
 	@Autowired

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.haohao.cis.income.model.VuserFromDownlineDetail;
 import cn.haohao.cis.income.model.VuserIncome;
-import cn.haohao.cis.income.service.IUserIncomeService;
 import cn.haohao.cis.income.service.IVuserFromDownlineDetailService;
 import cn.haohao.cis.income.service.IVuserIncomeService;
 import cn.haohao.cis.income.vo.UserIncomeInputObj;
@@ -31,8 +30,6 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 @RequestMapping("/userIncome")
 public class UserIncomeController extends MultiActionController{
 	
-	@Autowired
-	private IUserIncomeService userIncomeService;
 	@Autowired
 	private IVuserIncomeService vuserIncomeService;
 	@Autowired

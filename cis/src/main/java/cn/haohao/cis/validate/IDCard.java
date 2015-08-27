@@ -32,7 +32,7 @@ public class IDCard {
     * @return 有效： 无效：抛出BusinessException
     * @throws ParseException
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "restriction", "rawtypes" })
     public static void IDCardValidate(String IDStr) throws ParseException {
        String[] ValCodeArr = { "1", "0", "x", "9", "8", "7", "6", "5", "4",
                 "3", "2" };
@@ -116,7 +116,7 @@ public class IDCard {
     * 
      * @return Hashtable 对象
     */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private static Hashtable GetAreaCode() {
         Hashtable hashtable = new Hashtable();
         hashtable.put("11", "北京");
